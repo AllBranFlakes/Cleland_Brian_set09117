@@ -5,7 +5,7 @@ using System.Text;
 
 /*
 TO-DO
-add scoring and movement logic
+add scoring and game logic
 refactor code and create some seperate classes for common tasks inc.:
     - Redrawing the board
      
