@@ -40,14 +40,14 @@ namespace ConsoleApplication1
                 4 - occupied (Black King)
              */
 
-            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
+            int[,] board = { { 0, 1, 0, 3, 0, 4, 0, 1 },
                              { 1, 0, 1, 0, 1, 0, 1, 0 },
                              { 0, 1, 0, 1, 0, 1, 0, 1 },
-                             { 0, 0, 0, 3, 3, 0, 0, 0 },
-                             { 0, 0, 0, 4, 4, 0, 0, 0 },
+                             { 0, 0, 0, 0, 0, 0, 0, 0 },
+                             { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
-                             { 2, 0, 2, 0, 2, 0, 2, 0 } };
+                             { 2, 0, 4, 0, 3, 0, 2, 0 } };
 
             // define variables for cursor movement
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
@@ -76,23 +76,23 @@ namespace ConsoleApplication1
 
             // draw play area
 
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+");
-            Console.WriteLine("  |   |░░░|   |░░░|   |░░░|   |░░░|           ╔═════════════════════════════════════════════╗");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+           ║    An Insanely Basic Checkers Game v:0.1    ║");
-            Console.WriteLine("  |░░░|   |░░░|   |░░░|   |░░░|   |           ╚═════════════════════════════════════════════╝");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+            - Move the cursor with the arrow keys.");
-            Console.WriteLine("  |   |░░░|   |░░░|   |░░░|   |░░░|            - Press space to select/move.");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+");
-            Console.WriteLine("  |░░░|   |░░░|   |░░░|   |░░░|   |            - Select a piece.");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+            - Select the space you want to move it to.");
-            Console.WriteLine("  |   |░░░|   |░░░|   |░░░|   |░░░|            - ???");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+            - Profit!");
-            Console.WriteLine("  |░░░|   |░░░|   |░░░|   |░░░|   |");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+");
-            Console.WriteLine("  |   |░░░|   |░░░|   |░░░|   |░░░|");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+");
-            Console.WriteLine("  |░░░|   |░░░|   |░░░|   |░░░|   |");
-            Console.WriteLine("  +---+---+---+---+---+---+---+---+            - Made by Brian 'BranFlakes' Cleland 2017");
+            Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║           ╔═════════════════════════════════════════════╗");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣           ║    An Insanely Basic Checkers Game v:0.1    ║");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║           ╚═════════════════════════════════════════════╝");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select a piece.");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select the space you want to move it to.");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - ???");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Profit!");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
+            Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝            - Made by Brian 'BranFlakes' Cleland 2017");
             Console.WriteLine();
 
 
@@ -195,7 +195,7 @@ namespace ConsoleApplication1
                         switch (board[pieceY, pieceX])
                         {
                             case 0:
-                                if ((holding != 0 && ((x % 2 == 0) && (y % 2 != 0))) || (holding != 0 && ((x % 2 != 0) && (y % 2 == 0))))
+                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
@@ -224,41 +224,51 @@ namespace ConsoleApplication1
                                     }
                                     holding = 0;
                                 }
-                                else
-                                {
-                                    board[pieceY, pieceX] = 0;
-                                    holding = 0;
-                                }
+                                
                                 break;
                             case 1:
-                                if (holding != 0)
+                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 1;
                                     }
                                     else if (holding == 2)
                                     {
+                                        // very hacky method for detecting hits
+                                        // ensure that the position the piece moves to is correct
+                                        // will have to compare the position of the piece that was 
+                                        // picked up with the position it is being placed
+                                        Console.ForegroundColor = ConsoleColor.Black;
+                                        Console.Write("░");
+                                        board[pieceY, pieceX] = 0;
+                                        board[pieceY-1, pieceX-1] = 2;
+                                        Console.SetCursorPosition(x - 4, y - 2);
                                         Console.ForegroundColor = ConsoleColor.Black;
                                         Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 0;
                                     }
                                     else if (holding == 3)
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 3;
                                     }
                                     else if (holding == 4)
                                     {
+                                        // very hacky method for detecting hits
+                                        // ensure that the position the piece moves to is correct
+                                        // will have to compare the position of the piece that was 
+                                        // picked up with the position it is being placed
+                                        Console.ForegroundColor = ConsoleColor.Black;
+                                        Console.Write("░");
+                                        board[pieceY, pieceX] = 0;
+                                        board[pieceY - 1, pieceX - 1] = 4;
+                                        // this is the super hacky bit make sure and set proper rules for the movement of the piece
+                                        Console.SetCursorPosition(x - 4, y - 2);
                                         Console.ForegroundColor = ConsoleColor.Black;
                                         Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 0;
                                     }
-                                    holding = 0;
                                 }
                                 else
                                 {
@@ -270,14 +280,23 @@ namespace ConsoleApplication1
                                 }
                                 break;
                             case 2:
-                                if (holding != 0)
+                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
                                     {
+                                        // very hacky method for detecting hits
+                                        // ensure that the position the piece moves to is correct
+                                        // will have to compare the position of the piece that was 
+                                        // picked up with the position it is being placed
+                                        Console.ForegroundColor = ConsoleColor.Black;
+                                        Console.Write("░");
+                                        board[pieceY, pieceX] = 0;
+                                        board[pieceY + 1, pieceX + 1] = 1;
+                                        Console.SetCursorPosition(x + 4, y + 2);
                                         Console.ForegroundColor = ConsoleColor.Red;
                                         Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 0;
                                     }
                                     else if (holding == 2)
                                     {
@@ -308,7 +327,7 @@ namespace ConsoleApplication1
                                 }
                                 break;
                             case 3:
-                                if (holding != 0)
+                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
@@ -347,7 +366,7 @@ namespace ConsoleApplication1
                                 }
                                 break;
                             case 4:
-                                if (holding != 0)
+                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
