@@ -77,9 +77,9 @@ namespace ConsoleApplication1
             // draw play area
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║           ╔═════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣           ║    An Insanely Basic Checkers Game v:0.1    ║");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║           ╚═════════════════════════════════════════════╝");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║      ╔═══════════════════════════════════════════════════════╗");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣      ║ GenericaL Artifical Draughts Organizing System v:0.2  ║");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║      ╚═══════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
@@ -293,6 +293,8 @@ namespace ConsoleApplication1
                                         Console.Write("░");
                                         board[pieceY, pieceX] = 0;
                                         board[pieceY + 1, pieceX + 1] = 1;
+                                        // program bugs out if you place a red square on the bottom 
+                                        // of the board as it trys to push the curser out of range
                                         Console.SetCursorPosition(x + 4, y + 2);
                                         Console.ForegroundColor = ConsoleColor.Red;
                                         Console.Write("■");
