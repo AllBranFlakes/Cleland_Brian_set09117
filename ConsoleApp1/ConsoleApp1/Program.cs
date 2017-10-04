@@ -7,7 +7,37 @@ using System.Text;
 TO-DO
 refactor code and create some seperate classes for common tasks inc.:
     - Redrawing the board
-     
+   
+    
+// code dump
+    
+// accidentally made a cool little piece counter save this for later could have uses as a score board etc?
+// maybe mod it for a turn by turn report if you load a game?
+    Console.SetCursorPosition(2, 22);
+    foreach (int square in board)
+    {
+        switch (square)
+            {
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("■");
+                break;
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write("■");
+                break;
+                case 3:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("K");
+                break;
+                case 4:
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write("K");
+                break;
+                default:
+                break;
+            }
+    }
 */
 
 
@@ -26,6 +56,7 @@ namespace ConsoleApplication1
 
 
             // Set variables for game
+
             //  1 - random for use later in CPU moves
             Random rand = new Random();
 
@@ -48,27 +79,27 @@ namespace ConsoleApplication1
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 4, 0, 3, 0, 2, 0 } };
 
-            // define variables for cursor movement
+            // 3 - define variables for cursor movement
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
             int x = 4;
             int y = 1;
 
-            // Variables for moving through the board
+            // 4 - variables for moving through the board
             int moveX = 0;
             int moveY = 0;
 
-            // define variables for locating pieces in board array (remember to adjust offsets so you dont fly off the end of the array!!)
+            // 5 - define variables for locating pieces in board array (remember to adjust offsets so you dont fly off the end of the array!!)
             int boardColumn = 0;
             int boardRow = 0;
 
-            // Variables used to define the offsets that need to be adjusted as per previous comments
+            // 6 - Variables used to define the offsets that need to be adjusted as per previous comments
             int boardArrayX = 0;
             int boardArrayY = 0;
 
-            // int for held pieces
+            // 7 - int for held pieces
             int holding = 0;
 
-            // player score variables
+            // 8 - player score variables
             int player1score = 0;
             int player2score = 0;
 
@@ -77,7 +108,7 @@ namespace ConsoleApplication1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║ General Linear Array Draughts Organizing System v:0.4  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║   Grid Like Arrayed Draughts Organizing System v:0.5   ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
@@ -103,39 +134,6 @@ namespace ConsoleApplication1
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(0, 18);
             Console.Write(" -->");
-            
-
-            // accidentally made a cool little piece counter save this for later could have uses as a score board etc?
-            // maybe mod it for a turn by turn report if you load a game?
-            /*
-            Console.SetCursorPosition(2, 22);
-            foreach (int square in board)
-            {
-                switch (square)
-                {
-                    case 1:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("■");
-                        break;
-                    case 2:
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write("■");
-                        break;
-                    case 3:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("K");
-                        break;
-                    case 4:
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write("K");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            */
-           
-
 
 
             // draw pieces
@@ -170,7 +168,7 @@ namespace ConsoleApplication1
                     }
                 }
             }
-            
+
             Console.SetCursorPosition(4, 1);
 
             while (player1score + player2score < 16)
@@ -208,13 +206,13 @@ namespace ConsoleApplication1
                     {
                         for (int xCount2 = 0; xCount2 < 8; xCount2++)
                         {
-                            
+
                             for (int yCount2 = 0; yCount2 < 8; yCount2++)
                             {
                                 switch (board[xCount2, yCount2])
                                 {
                                     case 0:
-                                        Console.SetCursorPosition(yCount2+2, xCount2+22);
+                                        Console.SetCursorPosition(yCount2 + 2, xCount2 + 22);
                                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                                         Console.Write("0");
                                         break;
@@ -242,17 +240,17 @@ namespace ConsoleApplication1
                         }
 
 
-                        Console.SetCursorPosition(x,y);
+                        Console.SetCursorPosition(x, y);
 
                     }
                     /*
                     //End of test code*/
 
 
-                    // test for piece interaction
+                    // Player interaction code
                     if (key == ConsoleKey.Spacebar)
                     {
-                       
+
                         // When spacebar is pressed check the board array item at the representative cursor location 
                         switch (board[boardRow, boardColumn])
                         {
@@ -260,7 +258,7 @@ namespace ConsoleApplication1
                                 // If holding is not null while interacting with a blank square
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
                                 // then put down held piece
-                                if (holding != 0 && ((((boardRow+1) % 2 != 0) && ((boardColumn+1) % 2 == 0)) || (((boardRow+1) % 2 == 0) && ((boardColumn+1) % 2 != 0))))
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
@@ -307,7 +305,7 @@ namespace ConsoleApplication1
                                     {
                                         // determines if the selected space is at the boundries of the board
                                         // if not proceed with the move
-                                        if (boardRow != 0 && boardColumn !=0)
+                                        if ((boardRow != 0 && boardColumn != 0) && (boardRow != 0 && boardColumn != 7))
                                         {
                                             // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
                                             if (board[boardRow - 1, boardColumn - 1] == 0)
@@ -322,9 +320,7 @@ namespace ConsoleApplication1
                                                 // having succesfully taken the piece drop the piece
                                                 holding = 0;
                                             }
-                                        }
-                                        else if (boardRow!=0 && boardColumn != 7)
-                                        {
+
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
                                             if (board[boardRow - 1, boardColumn + 1] == 0)
@@ -355,7 +351,7 @@ namespace ConsoleApplication1
                                     {
                                         // determines if the selected space is at the boundries of the board
                                         // if not proceed with the move
-                                        if (boardRow != 0 && boardColumn != 0)
+                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7))
                                         {
                                             // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
                                             if (board[boardRow - 1, boardColumn - 1] == 0)
@@ -370,9 +366,7 @@ namespace ConsoleApplication1
                                                 // having succesfully taken the piece drop the piece
                                                 holding = 0;
                                             }
-                                        }
-                                        else if (boardRow != 0 && boardColumn != 7)
-                                        {
+
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
                                             if (board[boardRow - 1, boardColumn + 1] == 0)
@@ -458,7 +452,7 @@ namespace ConsoleApplication1
                                     {
                                         // determines if the selected space is at the boundries of the board
                                         // if not proceed with the move
-                                        if ((boardRow != 7 && boardColumn != 0)&&(boardRow != 7 && boardColumn != 7))
+                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7))
                                         {
                                             // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
                                             if (board[boardRow + 1, boardColumn - 1] == 0)
@@ -473,7 +467,7 @@ namespace ConsoleApplication1
                                                 // having succesfully taken the piece drop the piece
                                                 holding = 0;
                                             }
-                                        
+
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
                                             if (board[boardRow + 1, boardColumn + 1] == 0)
@@ -515,61 +509,101 @@ namespace ConsoleApplication1
                                 if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
+                                    // if holding a red piece already take no action
                                     if (holding == 1)
                                     {
                                         holding = 1;
                                     }
+                                    // if holding a black piece
                                     else if (holding == 2)
                                     {
-                                        if (board[boardRow - 1, boardColumn - 1] == 0)
+                                        // determines if the selected space is at the boundries of the board
+                                        // if not proceed with the move
+                                        if (boardRow != 0 && boardColumn != 0)
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn - 1] = 2;
-                                            Console.SetCursorPosition(x - 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("■");
+                                            // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
+                                            if (board[boardRow - 1, boardColumn - 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow - 1, boardColumn - 1] = 2;
+                                                Console.SetCursorPosition(x - 4, y - 2);
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("■");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
                                         }
-                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        else if (boardRow != 0 && boardColumn != 7)
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn + 1] = 2;
-                                            Console.SetCursorPosition(x + 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("■");
+                                            // determines if the selected space is at the boundries of the board
+                                            // if not proceed with the move
+                                            if (board[boardRow - 1, boardColumn + 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow - 1, boardColumn + 1] = 2;
+                                                Console.SetCursorPosition(x + 4, y - 2);
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("■");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
                                         }
-                                        holding = 0;
+                                        else
+                                        {
+                                            holding = 2;
+                                        }
                                     }
+                                    // if holding a red piece already take no action
                                     else if (holding == 3)
                                     {
                                         holding = 3;
                                     }
+                                    // if holding a black king
                                     else if (holding == 4)
                                     {
-                                        if (board[boardRow - 1, boardColumn - 1] == 0)
+                                        // determines if the selected space is at the boundries of the board
+                                        // if not proceed with the move
+                                        if (boardRow != 0 && boardColumn != 0)
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn - 1] = 4;
-                                            Console.SetCursorPosition(x - 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("K");
+                                            // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
+                                            if (board[boardRow - 1, boardColumn - 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow - 1, boardColumn - 1] = 4;
+                                                Console.SetCursorPosition(x - 4, y - 2);
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("K");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
                                         }
-                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        else if (boardRow != 0 && boardColumn != 7)
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn + 1] = 4;
-                                            Console.SetCursorPosition(x + 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("K");
+                                            // determines if the selected space is at the boundries of the board
+                                            // if not proceed with the move
+                                            if (board[boardRow - 1, boardColumn + 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow - 1, boardColumn + 1] = 4;
+                                                Console.SetCursorPosition(x + 4, y - 2);
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("K");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
                                         }
-                                        holding = 0;
+                                        else
+                                        {
+                                            holding = 4;
+                                        }
                                     }
                                 }
                                 else
@@ -590,27 +624,43 @@ namespace ConsoleApplication1
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
                                     {
-                                        if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        // determines if the selected space is at the boundries of the board
+                                        // if not proceed with the move
+                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7))
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn - 1] = 1;
-                                            Console.SetCursorPosition(x - 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write("■");
+                                            // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
+                                            if (board[boardRow + 1, boardColumn - 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow + 1, boardColumn - 1] = 1;
+                                                Console.SetCursorPosition(x - 4, y + 2);
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.Write("■");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
+
+                                            // determines if the selected space is at the boundries of the board
+                                            // if not proceed with the move
+                                            if (board[boardRow + 1, boardColumn + 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow + 1, boardColumn + 1] = 1;
+                                                Console.SetCursorPosition(x + 4, y + 2);
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.Write("■");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
                                         }
-                                        else if (board[boardRow + 1, boardColumn + 1] == 0)
+                                        else
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn + 1] = 1;
-                                            Console.SetCursorPosition(x + 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write("■");
+                                            holding = 1;
                                         }
-                                        holding = 0;
                                     }
                                     else if (holding == 2)
                                     {
@@ -618,27 +668,43 @@ namespace ConsoleApplication1
                                     }
                                     else if (holding == 3)
                                     {
-                                        if (board[boardRow + 1, boardColumn + 1] == 0)
+                                        // determines if the selected space is at the boundries of the board
+                                        // if not proceed with the move
+                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7))
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn - 1] = 3;
-                                            Console.SetCursorPosition(x - 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write("K");
+                                            // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
+                                            if (board[boardRow + 1, boardColumn - 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow + 1, boardColumn - 1] = 3;
+                                                Console.SetCursorPosition(x - 4, y + 2);
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.Write("K");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
+
+                                            // determines if the selected space is at the boundries of the board
+                                            // if not proceed with the move
+                                            if (board[boardRow + 1, boardColumn + 1] == 0)
+                                            {
+                                                Console.ForegroundColor = ConsoleColor.Black;
+                                                Console.Write("░");
+                                                board[boardRow, boardColumn] = 0;
+                                                board[boardRow + 1, boardColumn + 1] = 3;
+                                                Console.SetCursorPosition(x + 4, y + 2);
+                                                Console.ForegroundColor = ConsoleColor.Red;
+                                                Console.Write("K");
+                                                // having succesfully taken the piece drop the piece
+                                                holding = 0;
+                                            }
                                         }
-                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        else
                                         {
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("░");
-                                            board[boardRow, boardColumn] = 0;
-                                            board[boardRow - 1, boardColumn + 1] = 3;
-                                            Console.SetCursorPosition(x + 4, y - 2);
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write("K");
+                                            holding = 3;
                                         }
-                                        holding = 0;
                                     }
                                     else if (holding == 4)
                                     {
@@ -653,9 +719,9 @@ namespace ConsoleApplication1
                                     board[boardRow, boardColumn] = 0;
                                     holding = 4;
                                 }
-                                    break;
+                                break;
                             default:
-                        break;
+                                break;
                         }
 
                     }
