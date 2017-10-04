@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 /*
 TO-DO
-add scoring and game logic
+ensure valid moves for taking pieces does nto run off the ends of the board array
 refactor code and create some seperate classes for common tasks inc.:
     - Redrawing the board
      
@@ -59,8 +59,8 @@ namespace ConsoleApplication1
             int moveY = 0;
 
             // define variables for locating pieces in board array (remember to adjust offsets so you dont fly off the end of the array!!)
-            int pieceX = 0;
-            int pieceY = 0;
+            int boardColumn = 0;
+            int boardRow = 0;
 
             // Variables used to define the offsets that need to be adjusted as per previous comments
             int boardArrayX = 0;
@@ -78,7 +78,7 @@ namespace ConsoleApplication1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║      ╔═══════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣      ║ GenericaL Artifical Draughts Organizing System v:0.2  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣      ║ GenericaL Artifical Draughts Organizing System v:0.3  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║      ╚═══════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
@@ -104,6 +104,39 @@ namespace ConsoleApplication1
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(0, 18);
             Console.Write(" -->");
+            
+
+            // accidentally made a cool little piece counter save this for later could have uses as a score board etc?
+            // maybe mod it for a turn by turn report if you load a game?
+            /*
+            Console.SetCursorPosition(2, 22);
+            foreach (int square in board)
+            {
+                switch (square)
+                {
+                    case 1:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("■");
+                        break;
+                    case 2:
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write("■");
+                        break;
+                    case 3:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("K");
+                        break;
+                    case 4:
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write("K");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            */
+           
+
 
 
             // draw pieces
@@ -138,27 +171,7 @@ namespace ConsoleApplication1
                     }
                 }
             }
-
-            // accidentally made a cool little piece counter save this for later could have uses as a score board etc?
-            // maybe mod it for a turn by turn report if you load a game?
-
-            /*foreach (int square in board) 
-            {
-                switch (square)
-                {
-                    case 1:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("■");
-                        break;
-                    case 2:
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write("■");
-                        break;
-                    default:
-                        break;
-                }
-            }*/
-
+            
             Console.SetCursorPosition(4, 1);
 
             while (player1score + player2score < 16)
@@ -189,45 +202,264 @@ namespace ConsoleApplication1
                         boardArrayX = -1; boardArrayY = 0;
                     }
 
+                    /* this code allows you to see the values stored in all spaces of the array
+                     * this portion of code can be uncommented for testing purposes
+                     */
+                    if (key == ConsoleKey.Enter)
+                    {
+                        for (int xCount2 = 0; xCount2 < 8; xCount2++)
+                        {
+                            
+                            for (int yCount2 = 0; yCount2 < 8; yCount2++)
+                            {
+                                switch (board[xCount2, yCount2])
+                                {
+                                    case 0:
+                                        Console.SetCursorPosition(yCount2+2, xCount2+22);
+                                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                                        Console.Write("0");
+                                        break;
+                                    case 1:
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.Write("1");
+                                        break;
+                                    case 2:
+                                        Console.ForegroundColor = ConsoleColor.Black;
+                                        Console.Write("2");
+                                        break;
+                                    case 3:
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.Write("3");
+                                        break;
+                                    case 4:
+                                        Console.ForegroundColor = ConsoleColor.Black;
+                                        Console.Write("4");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+                        }
+
+
+                        Console.SetCursorPosition(x,y);
+
+                    }
+                    /*
+                    //End of test code*/
+
+
                     // test for piece interaction
                     if (key == ConsoleKey.Spacebar)
                     {
-                        switch (board[pieceY, pieceX])
+                       
+                        // When spacebar is pressed check the board array item at the representative cursor location 
+                        switch (board[boardRow, boardColumn])
                         {
                             case 0:
-                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
+                                // If holding is not null while interacting with a blank square
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
+                                // then put down held piece
+                                if (holding != 0 && ((((boardRow+1) % 2 != 0) && ((boardColumn+1) % 2 == 0)) || (((boardRow+1) % 2 == 0) && ((boardColumn+1) % 2 != 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
                                     {
                                         Console.ForegroundColor = ConsoleColor.Red;
                                         Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        board[boardRow, boardColumn] = holding;
                                     }
                                     else if (holding == 2)
                                     {
                                         Console.ForegroundColor = ConsoleColor.Black;
                                         Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        board[boardRow, boardColumn] = holding;
                                     }
                                     else if (holding == 3)
                                     {
                                         Console.ForegroundColor = ConsoleColor.Red;
                                         Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
+                                        board[boardRow, boardColumn] = holding;
                                     }
                                     else if (holding == 4)
                                     {
                                         Console.ForegroundColor = ConsoleColor.Black;
                                         Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
+                                        board[boardRow, boardColumn] = holding;
                                     }
                                     holding = 0;
                                 }
-                                
                                 break;
+
+                            // If holding is not null while interacting with a Red Piece
                             case 1:
-                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                {
+                                    Console.SetCursorPosition(x, y);
+                                    // if holding a red piece already take no action
+                                    if (holding == 1)
+                                    {
+                                        holding = 1;
+                                    }
+                                    // if holding a black piece
+                                    else if (holding == 2)
+                                    {
+                                        // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
+                                        if (board[boardRow-1,boardColumn-1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow-1, boardColumn-1] = 2;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("■");
+                                            // having succesfully taken the piece drop the piece
+                                            holding = 0;
+                                        }
+                                        // check for an empty space beyond the piece you wish to take (-1 row,+1 column)
+                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 2;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("■");
+                                            // having succesfully taken the piece drop the piece
+                                            holding = 0;
+                                        }
+                                        else
+                                        {
+                                            holding = 2;
+                                        }
+                                    }
+                                    // if holding a red piece already take no action
+                                    else if (holding == 3)
+                                    {
+                                        holding = 3;
+                                    }
+                                    // if holding a black king
+                                    else if (holding == 4)
+                                    {
+                                        // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
+                                        if (board[boardRow - 1, boardColumn - 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 4;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("K");
+                                            // having succesfully taken the piece drop the piece
+                                            holding = 0;
+                                        }
+                                        // check for an empty space beyond the piece you wish to take (-1 row,+1 column)
+                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 4;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("K");
+                                            // having succesfully taken the piece drop the piece
+                                            holding = 0;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Console.SetCursorPosition(x, y);
+                                    Console.ForegroundColor = ConsoleColor.Black;
+                                    Console.Write("░");
+                                    board[boardRow, boardColumn] = 0;
+                                    holding = 1;
+                                }
+                                break;
+
+                            // If you are holding any piece and interact with a black piece
+                            case 2:
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                {
+                                    Console.SetCursorPosition(x, y);
+                                    if (holding == 1)
+                                    {
+                                        if (board[boardRow - 1, boardColumn  +1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 1;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("■");
+                                        }
+                                        else if (board[boardRow + 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 1;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("■");
+                                        }
+                                        holding = 0;
+                                    }
+                                    else if (holding == 2)
+                                    {
+                                        holding = 2;
+                                    }
+                                    else if (holding == 3)
+                                    {
+                                        if (board[boardRow + 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 3;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("K");
+                                        }
+                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 3;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("K");
+                                        }
+                                        holding = 0;
+                                    }
+                                    else if (holding == 4)
+                                    {
+                                        holding = 4;
+                                    }
+                                }
+                                else
+                                {
+                                    Console.SetCursorPosition(x, y);
+                                    Console.ForegroundColor = ConsoleColor.Black;
+                                    Console.Write("░");
+                                    board[boardRow, boardColumn] = 0;
+                                    holding = 2;
+                                }
+                                break;
+
+                            // If you are holding any piece and you interact with a Red King
+                            case 3:
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
@@ -236,17 +468,26 @@ namespace ConsoleApplication1
                                     }
                                     else if (holding == 2)
                                     {
-                                        // very hacky method for detecting hits
-                                        // ensure that the position the piece moves to is correct
-                                        // will have to compare the position of the piece that was 
-                                        // picked up with the position it is being placed
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("░");
-                                        board[pieceY, pieceX] = 0;
-                                        board[pieceY-1, pieceX-1] = 2;
-                                        Console.SetCursorPosition(x - 4, y - 2);
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("■");
+                                        if (board[boardRow - 1, boardColumn - 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 2;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("■");
+                                        }
+                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 2;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("■");
+                                        }
                                         holding = 0;
                                     }
                                     else if (holding == 3)
@@ -255,18 +496,26 @@ namespace ConsoleApplication1
                                     }
                                     else if (holding == 4)
                                     {
-                                        // very hacky method for detecting hits
-                                        // ensure that the position the piece moves to is correct
-                                        // will have to compare the position of the piece that was 
-                                        // picked up with the position it is being placed
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("░");
-                                        board[pieceY, pieceX] = 0;
-                                        board[pieceY - 1, pieceX - 1] = 4;
-                                        // this is the super hacky bit make sure and set proper rules for the movement of the piece
-                                        Console.SetCursorPosition(x - 4, y - 2);
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("K");
+                                        if (board[boardRow - 1, boardColumn - 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 4;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("K");
+                                        }
+                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 4;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("K");
+                                        }
                                         holding = 0;
                                     }
                                 }
@@ -275,138 +524,85 @@ namespace ConsoleApplication1
                                     Console.SetCursorPosition(x, y);
                                     Console.ForegroundColor = ConsoleColor.Black;
                                     Console.Write("░");
-                                    board[pieceY, pieceX] = 0;
-                                    holding = 1;
-                                }
-                                break;
-                            case 2:
-                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
-                                {
-                                    Console.SetCursorPosition(x, y);
-                                    if (holding == 1)
-                                    {
-                                        // very hacky method for detecting hits
-                                        // ensure that the position the piece moves to is correct
-                                        // will have to compare the position of the piece that was 
-                                        // picked up with the position it is being placed
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("░");
-                                        board[pieceY, pieceX] = 0;
-                                        board[pieceY + 1, pieceX + 1] = 1;
-                                        // program bugs out if you place a red square on the bottom 
-                                        // of the board as it trys to push the curser out of range
-                                        Console.SetCursorPosition(x + 4, y + 2);
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("■");
-                                        holding = 0;
-                                    }
-                                    else if (holding == 2)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    else if (holding == 3)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    else if (holding == 4)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    holding = 0;
-                                }
-                                else
-                                {
-                                    Console.SetCursorPosition(x, y);
-                                    Console.ForegroundColor = ConsoleColor.Black;
-                                    Console.Write("░");
-                                    holding = 2;
-                                }
-                                break;
-                            case 3:
-                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
-                                {
-                                    Console.SetCursorPosition(x, y);
-                                    if (holding == 1)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    else if (holding == 2)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    else if (holding == 3)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    else if (holding == 4)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
-                                    }
-                                    holding = 0;
-                                }
-                                else
-                                {
-                                    Console.SetCursorPosition(x, y);
-                                    Console.ForegroundColor = ConsoleColor.Black;
-                                    Console.Write("░");
-                                    board[pieceY, pieceX] = 0;
+                                    board[boardRow, boardColumn] = 0;
                                     holding = 3;
                                 }
                                 break;
+
+                            // If you are holding any piece and you interact with a Black King
                             case 4:
-                                if (holding != 0 && ((((pieceX+1) % 2 == 0) && ((pieceY+1) % 2 != 0)) || (((pieceX+1) % 2 != 0) && ((pieceY+1) % 2 == 0))))
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 1;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("■");
+                                        }
+                                        else if (board[boardRow + 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 1;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("■");
+                                        }
+                                        holding = 0;
                                     }
                                     else if (holding == 2)
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("■");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 2;
                                     }
                                     else if (holding == 3)
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
+                                        if (board[boardRow + 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn - 1] = 3;
+                                            Console.SetCursorPosition(x - 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("K");
+                                        }
+                                        else if (board[boardRow - 1, boardColumn + 1] == 0)
+                                        {
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("░");
+                                            board[boardRow, boardColumn] = 0;
+                                            board[boardRow - 1, boardColumn + 1] = 3;
+                                            Console.SetCursorPosition(x + 4, y - 2);
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.Write("K");
+                                        }
+                                        holding = 0;
                                     }
                                     else if (holding == 4)
                                     {
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("K");
-                                        board[pieceY, pieceX] = holding;
+                                        holding = 4;
                                     }
-                                    holding = 0;
                                 }
                                 else
                                 {
                                     Console.SetCursorPosition(x, y);
                                     Console.ForegroundColor = ConsoleColor.Black;
                                     Console.Write("░");
+                                    board[boardRow, boardColumn] = 0;
                                     holding = 4;
                                 }
-                                break;
+                                    break;
                             default:
-                                break;
+                        break;
                         }
 
                     }
@@ -437,8 +633,8 @@ namespace ConsoleApplication1
                     {
                         x = x + moveX;
                         y = y + moveY;
-                        pieceX = pieceX + boardArrayX;
-                        pieceY = pieceY + boardArrayY;
+                        boardColumn = boardColumn + boardArrayX;
+                        boardRow = boardRow + boardArrayY;
                     }
                     // ensure the cursor cannot move outwith the bounds of the board
                     if (x < 3 || x > 33 || y < 0 || y > 15)
@@ -447,10 +643,10 @@ namespace ConsoleApplication1
                         y = y - moveY;
                     }
                     // ensure the pieces dont move out of the board array
-                    if (pieceX < 0 || pieceY < 0 || pieceX > 7 || pieceY > 7)
+                    if (boardColumn < 0 || boardRow < 0 || boardColumn > 7 || boardRow > 7)
                     {
-                        pieceX = pieceX - boardArrayX;
-                        pieceY = pieceY - boardArrayY;
+                        boardColumn = boardColumn - boardArrayX;
+                        boardRow = boardRow - boardArrayY;
                     }
                     Console.SetCursorPosition(x, y);
                 }
