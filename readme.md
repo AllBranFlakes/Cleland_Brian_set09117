@@ -1,4 +1,4 @@
-GenericaL Artifical Draughts Organizing System v:0.3 
+Grid Like Arrayed Draughts Organizing System v:0.5 
 
 - Move the cursor with the arrow keys.
 - Press space to select/move.
