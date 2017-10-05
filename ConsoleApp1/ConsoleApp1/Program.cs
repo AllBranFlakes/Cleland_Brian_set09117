@@ -99,7 +99,18 @@ namespace ConsoleApplication1
             // 7 - int for held pieces
             int holding = 0;
 
-            // 8 - player score variables
+            // 8 - variables for move list (used for undo/redo and comparison of origin square versus destination square)
+            int originX = 0;
+            int originY = 0;
+            int destX = 0;
+            int destY = 0;
+            //List<int> masterMove = new List<int>();
+            //List<int> moveList1 = new List<int>();
+            //List<int> moveList2 = new List<int>();
+            //to add an array to a list use
+            // moveList.AddRange(arrayName);(
+
+            // 9 - player score variables
             int player1score = 0;
             int player2score = 0;
 
@@ -250,7 +261,8 @@ namespace ConsoleApplication1
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
                     {
-
+                        destX = boardRow;
+                        destY = boardColumn;
                         // When spacebar is pressed check the board array item at the representative cursor location 
                         switch (board[boardRow, boardColumn])
                         {
@@ -258,11 +270,12 @@ namespace ConsoleApplication1
                                 // If holding is not null while interacting with a blank square
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
                                 // then put down held piece
-                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                if (holding != 0 && (((originX-destX)<=1)&&((originY-destY)<=1) && ((originX - destX) >= -1) && ((originY - destY) >= -1)) && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
                                     {
+
                                         Console.ForegroundColor = ConsoleColor.Red;
                                         Console.Write("■");
                                         board[boardRow, boardColumn] = holding;
@@ -292,7 +305,8 @@ namespace ConsoleApplication1
                             // If holding is not null while interacting with a Red Piece
                             case 1:
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                if (holding != 0 && (((originX - destX) <= 1) && ((originY - destY) <= 1) && ((originX - destX) >= -1) && ((originY - destY) >= -1)) && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+
                                 {
                                     Console.SetCursorPosition(x, y);
                                     // if holding a red piece already take no action
@@ -305,7 +319,7 @@ namespace ConsoleApplication1
                                     {
                                         // determines if the selected space is at the boundries of the board
                                         // if not proceed with the move
-                                        if ((boardRow != 0 && boardColumn != 0) && (boardRow != 0 && boardColumn != 7))
+                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7) && (boardRow != 0 && boardColumn != 0) && (boardRow != 0 && boardColumn != 7))
                                         {
                                             // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
                                             if (board[boardRow - 1, boardColumn - 1] == 0)
@@ -351,7 +365,7 @@ namespace ConsoleApplication1
                                     {
                                         // determines if the selected space is at the boundries of the board
                                         // if not proceed with the move
-                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7))
+                                        if ((boardRow != 7 && boardColumn != 0) && (boardRow != 7 && boardColumn != 7) && (boardRow != 0 && boardColumn != 0) && (boardRow != 0 && boardColumn != 7))
                                         {
                                             // check for an empty space beyond the piece you wish to take (-1 row,-1 column)
                                             if (board[boardRow - 1, boardColumn - 1] == 0)
@@ -395,13 +409,16 @@ namespace ConsoleApplication1
                                     Console.Write("░");
                                     board[boardRow, boardColumn] = 0;
                                     holding = 1;
+                                    originX = boardRow;
+                                    originY = boardColumn;
                                 }
                                 break;
 
                             // If you are holding any piece and interact with a black piece
                             case 2:
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                if (holding != 0 && (((originX - destX) <= 1) && ((originY - destY) <= 1) && ((originX - destX) >= -1) && ((originY - destY) >= -1)) && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
@@ -500,13 +517,16 @@ namespace ConsoleApplication1
                                     Console.Write("░");
                                     board[boardRow, boardColumn] = 0;
                                     holding = 2;
+                                    originX = boardRow;
+                                    originY = boardColumn;
                                 }
                                 break;
 
                             // If you are holding any piece and you interact with a Red King
                             case 3:
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                if (holding != 0 && (((originX - destX) <= 1) && ((originY - destY) <= 1) && ((originX - destX) >= -1) && ((originY - destY) >= -1)) && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+
                                 {
                                     Console.SetCursorPosition(x, y);
                                     // if holding a red piece already take no action
@@ -613,13 +633,16 @@ namespace ConsoleApplication1
                                     Console.Write("░");
                                     board[boardRow, boardColumn] = 0;
                                     holding = 3;
+                                    originX = boardRow;
+                                    originY = boardColumn;
                                 }
                                 break;
 
                             // If you are holding any piece and you interact with a Black King
                             case 4:
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                if (holding != 0 && (((originX - destX) <= 1) && ((originY - destY) <= 1) && ((originX - destX) >= -1) && ((originY - destY) >= -1)) && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+
                                 {
                                     Console.SetCursorPosition(x, y);
                                     if (holding == 1)
@@ -718,6 +741,8 @@ namespace ConsoleApplication1
                                     Console.Write("░");
                                     board[boardRow, boardColumn] = 0;
                                     holding = 4;
+                                    originX = boardRow;
+                                    originY = boardColumn;
                                 }
                                 break;
                             default:
