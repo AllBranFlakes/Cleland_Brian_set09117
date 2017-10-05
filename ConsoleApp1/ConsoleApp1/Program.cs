@@ -323,7 +323,7 @@ namespace ConsoleApplication1
 
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
-                                            if (board[boardRow - 1, boardColumn + 1] == 0)
+                                            else if (board[boardRow - 1, boardColumn + 1] == 0)
                                             {
                                                 Console.ForegroundColor = ConsoleColor.Black;
                                                 Console.Write("░");
@@ -369,7 +369,7 @@ namespace ConsoleApplication1
 
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
-                                            if (board[boardRow - 1, boardColumn + 1] == 0)
+                                            else if (board[boardRow - 1, boardColumn + 1] == 0)
                                             {
                                                 Console.ForegroundColor = ConsoleColor.Black;
                                                 Console.Write("░");
@@ -426,7 +426,7 @@ namespace ConsoleApplication1
 
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
-                                            if (board[boardRow + 1, boardColumn + 1] == 0)
+                                            else if (board[boardRow + 1, boardColumn + 1] == 0)
                                             {
                                                 Console.ForegroundColor = ConsoleColor.Black;
                                                 Console.Write("░");
@@ -470,7 +470,7 @@ namespace ConsoleApplication1
 
                                             // determines if the selected space is at the boundries of the board
                                             // if not proceed with the move
-                                            if (board[boardRow + 1, boardColumn + 1] == 0)
+                                            else if (board[boardRow + 1, boardColumn + 1] == 0)
                                             {
                                                 Console.ForegroundColor = ConsoleColor.Black;
                                                 Console.Write("░");
