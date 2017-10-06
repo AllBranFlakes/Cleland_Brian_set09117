@@ -264,23 +264,20 @@ namespace ConsoleApplication1
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
                     {
-                        destX = boardRow;
-                        destY = boardColumn;
-                        if (originX - destX > 1 || originY - destY > 1 || originX - destX < -1 || originY - destY < -1)
+                        // When spacebar is pressed check the board array item at the representative cursor location 
+                        switch (board[boardRow, boardColumn])
                         {
-                            Console.SetCursorPosition(2, 25);
-                            Console.Write("invalid!");
-                        }
-                        else
-                        {
-                            // When spacebar is pressed check the board array item at the representative cursor location 
-                            switch (board[boardRow, boardColumn])
-                            {
-                                case 0:
-                                    // If holding is not null while interacting with a blank square
-                                    // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                    // then put down held piece
-                                    if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                            case 0:
+                                // If holding is not null while interacting with a blank square
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
+                                // then put down held piece
+
+
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                {
+                                    destX = originX - boardRow;
+                                    destY = originY - boardColumn;
+                                    if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
                                     {
                                         Console.SetCursorPosition(x, y);
                                         if (holding == 1)
@@ -309,14 +306,20 @@ namespace ConsoleApplication1
                                             board[boardRow, boardColumn] = holding;
                                         }
                                         holding = 0;
+
                                     }
-                                    break;
+                                }
+                                break;
 
-                                // If holding is not null while interacting with a Red Piece
-                                case 1:
-                                    // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                    if (holding != 0 && (((originX - destX) <= 1) || ((originY - destY) <= 1) || ((originX - destX) >= -1) || ((originY - destY) >= -1)) && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                            // If holding is not null while interacting with a Red Piece
+                            case 1:
+                                // determine if the square is valid (if the row is even the column must be odd and vice versa)
 
+                                if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                destX = originX - boardRow;
+                                destY = originY - boardColumn;
+                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
+                                {
                                     {
                                         Console.SetCursorPosition(x, y);
                                         // if holding a red piece already take no action
@@ -412,22 +415,28 @@ namespace ConsoleApplication1
                                             }
                                         }
                                     }
-                                    else
-                                    {
-                                        Console.SetCursorPosition(x, y);
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("░");
-                                        board[boardRow, boardColumn] = 0;
-                                        holding = 1;
-                                        originX = boardRow;
-                                        originY = boardColumn;
-                                    }
-                                    break;
+                                }
+                                else
+                                {
+                                    Console.SetCursorPosition(x, y);
+                                    Console.ForegroundColor = ConsoleColor.Black;
+                                    Console.Write("░");
+                                    board[boardRow, boardColumn] = 0;
+                                    holding = 1;
+                                    originX = boardRow;
+                                    originY = boardColumn;
+                                }
+                                
+                                break;
 
-                                // If you are holding any piece and interact with a black piece
-                                case 2:
+                            // If you are holding any piece and interact with a black piece
+                            case 2:
+                                destX = originX - boardRow;
+                                destY = originY - boardColumn;
+                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
+                                {
                                     // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                    if (holding != 0  && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                    if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
 
                                     {
                                         Console.SetCursorPosition(x, y);
@@ -530,12 +539,17 @@ namespace ConsoleApplication1
                                         originX = boardRow;
                                         originY = boardColumn;
                                     }
-                                    break;
+                                }
+                                break;
 
-                                // If you are holding any piece and you interact with a Red King
-                                case 3:
+                            // If you are holding any piece and you interact with a Red King
+                            case 3:
+                                destX = originX - boardRow;
+                                destY = originY - boardColumn;
+                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
+                                {
                                     // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                    if (holding != 0  && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                    if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
 
                                     {
                                         Console.SetCursorPosition(x, y);
@@ -646,12 +660,17 @@ namespace ConsoleApplication1
                                         originX = boardRow;
                                         originY = boardColumn;
                                     }
-                                    break;
+                                }
+                                break;
 
-                                // If you are holding any piece and you interact with a Black King
-                                case 4:
+                            // If you are holding any piece and you interact with a Black King
+                            case 4:
+                                destX = originX - boardRow;
+                                destY = originY - boardColumn;
+                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
+                                {
                                     // determine if the square is valid (if the row is even the column must be odd and vice versa)
-                                    if (holding != 0  && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                                    if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
 
                                     {
                                         Console.SetCursorPosition(x, y);
@@ -754,13 +773,12 @@ namespace ConsoleApplication1
                                         originX = boardRow;
                                         originY = boardColumn;
                                     }
-                                    break;
-                                default:
-                                    break;
-                            }
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        originX = boardRow;
-                        originY = boardColumn;
+
                     }
 
 
