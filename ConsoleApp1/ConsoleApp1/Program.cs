@@ -7,41 +7,6 @@ using System.Text;
 TO-DO
 refactor code and create some seperate classes for common tasks inc.:
 - Redrawing the board
-//checking
- * 
-
-// code dump
-
-// accidentally made a cool little piece counter save this for later could have uses as a score board etc?
-// maybe mod it for a turn by turn report if you load a game?
-Console.SetCursorPosition(2, 22);
-foreach (int square in board)
-{
-    switch (square)
-        {
-            case 1:
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("■");
-            break;
-            case 2:
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.Write("■");
-            break;
-            case 3:
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("K");
-            break;
-            case 4:
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.Write("K");
-            break;
-            default:
-            break;
-        }
-}
-
-    original code snippet for judging if move was valid, didn't work
-    && (((originX - destX) <= 1) && ((originY - destY) <= 1) && ((originX - destX) >= -1) && ((originY - destY) >= -1)) 
 */
 
 
@@ -61,10 +26,8 @@ namespace ConsoleApplication1
 
             // Set variables for game
 
-            //  1 - random for use later in CPU moves
-            Random rand = new Random();
 
-            //  2 - define the board structure (default value for a given board space is 0 - empty)
+            // define the board structure (default value for a given board space is 0 - empty)
             /*
              In order to properly map the game pieces a state for each 'square' on the board is defined as:
                 0 - empty
@@ -83,107 +46,46 @@ namespace ConsoleApplication1
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 4, 0, 3, 0, 2, 0 } };
 
-            // 3 - define variables for cursor movement
+            // define variables for cursor movement
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
             int x = 4;
             int y = 1;
 
-            // 4 - variables for moving through the board
+            // variables for moving through the board
             int moveX = 0;
             int moveY = 0;
 
-            // 5 - define variables for locating pieces in board array (remember to adjust offsets so you dont fly off the end of the array!!)
+            // define variables for locating pieces in board array (remember to adjust offsets so you dont fly off the end of the array!!)
             int boardColumn = 0;
             int boardRow = 0;
 
-            // 6 - Variables used to define the offsets that need to be adjusted as per previous comments
+            // variables used to define the offsets that need to be adjusted as per previous comments
             int boardArrayX = 0;
             int boardArrayY = 0;
 
-            // 7 - int for held pieces
+            // int for held pieces
             int holding = 0;
 
-            // 8 - variables for move list (used for undo/redo and comparison of origin square versus destination square)
+            // variables for move list (used for undo/redo and comparison of origin square versus destination square)
             int originX = 0;
             int originY = 0;
-            int destX = 0;
-            int destY = 0;
             //List<int> masterMove = new List<int>();
             //List<int> moveList1 = new List<int>();
             //List<int> moveList2 = new List<int>();
             //to add an array to a list use
             // moveList.AddRange(arrayName);(
 
-            // 9 - player score variables
+            // player score variables
             int player1score = 0;
             int player2score = 0;
 
-
-            // draw play area
-
-            Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║   Grid Like Arrayed Draughts Organizing System v:0.5   ║");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select a piece.");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select the space you want to move it to.");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - ???");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Profit!");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
-            Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝            - Made by Brian 'BranFlakes' Cleland 2017");
-            Console.WriteLine();
-
-
-            // set player score and turn tracker
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("     Player 1: 0");
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine("     player 2: 0");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.SetCursorPosition(0, 18);
-            Console.Write(" -->");
-
-
-            // draw pieces
-            for (int xCount = 0; xCount < 8; xCount++)
-            {
-                for (int yCount = 0; yCount < 8; yCount++)
-                {
-                    switch (board[xCount, yCount])
-                    {
-                        case 1:
-                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("■");
-                            break;
-                        case 2:
-                            Console.SetCursorPosition((yCount * 4) + 4, ((xCount * 2) + 1));
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.Write("■");
-                            break;
-                        case 3:
-                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("K");
-                            break;
-                        case 4:
-                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.Write("K");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-
+            // draw the board
+            drawBoard();
+     
+            // draw the pieces
+            drawPieces(board);
+           
+            // play the game
             Console.SetCursorPosition(4, 1);
 
             while (player1score + player2score < 16)
@@ -276,11 +178,7 @@ namespace ConsoleApplication1
 
                                 if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                                 {
-                                    destX = originX - boardRow;
-                                    destY = originY - boardColumn;
-                                    if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
-                                    {
-                                        Console.SetCursorPosition(x, y);
+                                      Console.SetCursorPosition(x, y);
                                         if (holding == 1)
                                         {
 
@@ -309,7 +207,7 @@ namespace ConsoleApplication1
                                         holding = 0;
 
                                     }
-                                }
+                                
                                 break;
 
                             // If holding is not null while interacting with a Red Piece
@@ -317,10 +215,7 @@ namespace ConsoleApplication1
                                 // determine if the square is valid (if the row is even the column must be odd and vice versa)
 
                                 if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
-                                destX = originX - boardRow;
-                                destY = originY - boardColumn;
-                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
-                                {
+                                
                                     {
                                         Console.SetCursorPosition(x, y);
                                         // if holding a red piece already take no action
@@ -416,7 +311,7 @@ namespace ConsoleApplication1
                                             }
                                         }
                                     }
-                                }
+                                
                                 else
                                 {
                                     Console.SetCursorPosition(x, y);
@@ -432,10 +327,7 @@ namespace ConsoleApplication1
 
                             // If you are holding any piece and interact with a black piece
                             case 2:
-                                destX = originX - boardRow;
-                                destY = originY - boardColumn;
-                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
-                                {
+                              
                                     // determine if the square is valid (if the row is even the column must be odd and vice versa)
                                     if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
 
@@ -540,15 +432,12 @@ namespace ConsoleApplication1
                                         originX = boardRow;
                                         originY = boardColumn;
                                     }
-                                }
+                                
                                 break;
 
                             // If you are holding any piece and you interact with a Red King
                             case 3:
-                                destX = originX - boardRow;
-                                destY = originY - boardColumn;
-                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
-                                {
+                                
                                     // determine if the square is valid (if the row is even the column must be odd and vice versa)
                                     if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
 
@@ -661,15 +550,12 @@ namespace ConsoleApplication1
                                         originX = boardRow;
                                         originY = boardColumn;
                                     }
-                                }
+                                
                                 break;
 
                             // If you are holding any piece and you interact with a Black King
                             case 4:
-                                destX = originX - boardRow;
-                                destY = originY - boardColumn;
-                                if (destY < 1 && destX < 1 && destY > -1 && destX > -1)
-                                {
+                                
                                     // determine if the square is valid (if the row is even the column must be odd and vice versa)
                                     if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
 
@@ -774,7 +660,7 @@ namespace ConsoleApplication1
                                         originX = boardRow;
                                         originY = boardColumn;
                                     }
-                                }
+                                
                                 break;
                             default:
                                 break;
@@ -848,6 +734,77 @@ namespace ConsoleApplication1
                 Console.SetCursorPosition(0, 13);
 
                 Console.Write("It's a draw.");
+            }
+        }
+
+
+        static void drawBoard()
+        {
+            // draw play area
+
+            Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║   Grid Like Arrayed Draughts Organizing System v:0.5   ║");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select a piece.");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select the space you want to move it to.");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - ???");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Profit!");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
+            Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝            - Made by Brian 'BranFlakes' Cleland 2017");
+            Console.WriteLine();
+
+
+            // set player score and turn tracker
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("     Player 1: 0");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("     player 2: 0");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.SetCursorPosition(0, 18);
+            Console.Write(" -->");
+        }
+
+
+        static void drawPieces(int[,] arr)
+        {
+            for (int xCount = 0; xCount < 8; xCount++)
+            {
+                for (int yCount = 0; yCount < 8; yCount++)
+                {
+                    switch (arr[xCount, yCount])
+                    {
+                        case 1:
+                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("■");
+                            break;
+                        case 2:
+                            Console.SetCursorPosition((yCount * 4) + 4, ((xCount * 2) + 1));
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.Write("■");
+                            break;
+                        case 3:
+                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("K");
+                            break;
+                        case 4:
+                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.Write("K");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
     }
