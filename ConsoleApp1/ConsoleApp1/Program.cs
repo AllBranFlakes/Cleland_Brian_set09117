@@ -7,7 +7,8 @@ using System.Text;
 TO-DO
 refactor code and create some seperate classes for common tasks inc.:
 - Redrawing the board
-
+//checking
+ * 
 
 // code dump
 
