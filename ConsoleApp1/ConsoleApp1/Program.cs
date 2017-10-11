@@ -14,11 +14,6 @@ namespace ConsoleApplication1
 {
     class Program
     {
-
-        //public variables
-        public bool boolPickPlace = false;
-
-
         static void Main(string[] args)
         {
             // Set title and console window display 
@@ -743,65 +738,80 @@ namespace ConsoleApplication1
 
         public static void PickPlace(int boardPiece, int x, int y, ref int[,] board, ref int boardRow, ref int boardColumn, ref int holding)
         {
+            //define variables for origin and destination
+            int[] originXY = { 0, 0 };
+            int[] destinationXY = { 0, 0 };
 
-            // if (holding != 0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
             if (holding == 0)
             {
-                if (boardPiece == 0)
-                {
-                    //record destination
-                    //compare destination and origin
-                    //is move valid? validMove(orig,dest,x)
-                    //if yes do move
-                    //else do nothing
-                    Console.Write("!!!!XXXX!!!! board piece has no value");
-
-                }
-                else if (boardPiece != 0)
-                {
-                    //record destination
-                    //determine boardpiece at destination
-                    //if boardpiece same as held piece do nothing
-                    //else determine if "take space" is available
-                    //if yes do take
-                    //if no do nothing
-                    Console.SetCursorPosition(x, y);
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write("░");
-                    board[boardRow, boardColumn] = 0;
-                    holding = boardPiece;
-                    Console.Write("aSDERGHEHberbqerber board piece has value");
-                }
-            }
-
-
-            /*
                 if (boardPiece != 0)
                 {
-                    //pick up
-                    //record starting position
-
+                    board[boardRow, boardColumn] = 0;
+                    DrawPieces(board);
+                    holding = boardPiece;
+                    originXY[0] = boardRow;
+                    originXY[1] = boardColumn;
                 }
-                else
+                else if (boardPiece == 0)
                 {
                     //do nothing
-                    //pick up
-                    //record starting position
-                    
-           }*/
+                    originXY[0] = boardRow;
+                    originXY[1] = boardColumn;
+                }
+            }
+            else
+            {
+                bool isValid = false;
+                if ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0)))
+                {
+                    //record destination
+                    destinationXY[0] = boardRow;
+                    destinationXY[1] = boardColumn;
+                    ValidMove(originXY, destinationXY, boardPiece, isValid);
+                    if (isValid == true)
+                    {
+                        board[boardRow, boardColumn] = holding;
+                        holding = 0;
+                        DrawPieces(board);
+                    }
+
+                }
+            }
 
         }
 
 
-        public static void ValidMove(int[,] orig, int[,] dest, int x)
-        {
-            //switch/case with x as trigger?
-            //case (x%2==0) would it determine black pieces?
-            //if x>=3 it's a king and can move in x+/-
-            //  break;
-            //case (x%2!=0) would it determine red pieces?
-            //if x>=3 it's a king and can move in x+/-
-            //  break;
+        public static bool ValidMove(int[] orig, int[] dest, int x, bool isValid)
+        {            
+            if ((x % 2) == 0)
+            {
+                if (((orig[1] - dest[1]) < 1) || ((orig[1] - dest[1]) > -1))
+                {
+                    Console.Write(orig[0]);
+                    Console.Write(orig[1]);
+                    isValid = false;
+                }
+                else if (((orig[0] < dest[0]) && x == 4) || (orig[0] > dest[0]))
+                {
+                    Console.Write("true black");
+                    isValid = true;
+                }
+                
+            }
+            else if ((x % 2) != 0)
+            {
+                if (((orig[1]- dest[1]) > 1) || ((orig[1] - dest[1]) < -1))
+                {
+                    Console.Write("false red");
+                    isValid = false;
+                }
+                else if (((orig[0] > dest[0]) && x == 3) || (orig[0] < dest[0]))
+                {
+                    Console.Write("true red");
+                    isValid = true;
+                }
+            }
+            return isValid;
         }
 
 
@@ -848,6 +858,14 @@ namespace ConsoleApplication1
                 {
                     switch (arr[xCount, yCount])
                     {
+                        case 0:
+                            if ((((xCount + 1) % 2 != 0) && ((yCount + 1) % 2 == 0)) || (((xCount + 1) % 2 == 0) && ((yCount + 1) % 2 != 0)))
+                            {
+                            Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.Write("░"); 
+                            }
+                            break;
                         case 1:
                             Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
                             Console.ForegroundColor = ConsoleColor.Red;
