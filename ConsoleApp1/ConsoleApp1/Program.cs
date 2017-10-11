@@ -173,9 +173,9 @@ namespace ConsoleApplication1
                     if (key == ConsoleKey.Spacebar)
                     {
                         int boardPiece = board[boardRow,boardColumn];
-                        if (boolPickPlace == false && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                        if (holding !=0 && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
                         {
-                            pickPlace(boardPiece, x, y, ref boolPickPlace);
+                            pickPlace(boardPiece, x, y, holding);
 
                         }
 
@@ -751,9 +751,9 @@ namespace ConsoleApplication1
         }
 
 
-        static void pickPlace(int boardPiece,int x,int y, bool holding)
+        public static void pickPlace(int boardPiece,int x,int y, int holding)
         {
-            if (holding == true)
+            if (holding != 0)
             {
                 if (boardPiece == 0)
                 {
@@ -775,13 +775,13 @@ namespace ConsoleApplication1
                     //if no do nothing
                 }
             }
-            else if (holding == false)
+            else if (holding == 0)
             {
                 if (boardPiece != 0)
                 {
                     //pick up
                     //record starting position
-                    holding = true;
+                    
                 }
                 else
                 {
@@ -792,7 +792,7 @@ namespace ConsoleApplication1
         }
 
 
-        static void validMove(int[,] orig, int[,] dest, int x)
+        public static void validMove(int[,] orig, int[,] dest, int x)
         {
             //switch/case with x as trigger?
             //case (x%2==0) would it determine black pieces?
@@ -804,7 +804,7 @@ namespace ConsoleApplication1
         }
 
 
-        static void drawBoard()
+        public static void drawBoard()
         {
             // draw play area
 
@@ -839,7 +839,7 @@ namespace ConsoleApplication1
         }
 
 
-        static void drawPieces(int[,] arr)
+        public static void drawPieces(int[,] arr)
         {
             for (int xCount = 0; xCount < 8; xCount++)
             {
