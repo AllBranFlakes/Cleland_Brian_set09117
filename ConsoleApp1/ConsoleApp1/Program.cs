@@ -14,6 +14,11 @@ namespace ConsoleApplication1
 {
     class Program
     {
+
+        //public variables
+        public bool boolPickPlace = false;
+
+
         static void Main(string[] args)
         {
             // Set title and console window display 
@@ -167,6 +172,14 @@ namespace ConsoleApplication1
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
                     {
+                        int boardPiece = board[boardRow,boardColumn];
+                        if (boolPickPlace == false && ((((boardRow + 1) % 2 != 0) && ((boardColumn + 1) % 2 == 0)) || (((boardRow + 1) % 2 == 0) && ((boardColumn + 1) % 2 != 0))))
+                        {
+                            pickPlace(boardPiece, x, y, ref boolPickPlace);
+
+                        }
+
+
                         // When spacebar is pressed check the board array item at the representative cursor location 
                         switch (board[boardRow, boardColumn])
                         {
@@ -735,6 +748,59 @@ namespace ConsoleApplication1
 
                 Console.Write("It's a draw.");
             }
+        }
+
+
+        static void pickPlace(int boardPiece,int x,int y, bool holding)
+        {
+            if (holding == true)
+            {
+                if (boardPiece == 0)
+                {
+                    //record destination
+                    //compare destination and origin
+                    //is move valid? validMove(orig,dest,x)
+                    //if yes do move
+                    //else do nothing
+                   
+
+                }
+                else if (boardPiece != 0)
+                {
+                    //record destination
+                    //determine boardpiece at destination
+                    //if boardpiece same as held piece do nothing
+                    //else determine if "take space" is available
+                    //if yes do take
+                    //if no do nothing
+                }
+            }
+            else if (holding == false)
+            {
+                if (boardPiece != 0)
+                {
+                    //pick up
+                    //record starting position
+                    holding = true;
+                }
+                else
+                {
+                    //do nothing
+                }
+            }
+           
+        }
+
+
+        static void validMove(int[,] orig, int[,] dest, int x)
+        {
+            //switch/case with x as trigger?
+            //case (x%2==0) would it determine black pieces?
+            //if x>=3 it's a king and can move in x+/-
+            //  break;
+            //case (x%2!=0) would it determine red pieces?
+            //if x>=3 it's a king and can move in x+/-
+            //  break;
         }
 
 
