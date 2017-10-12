@@ -7,8 +7,8 @@ using System.Text;
 TO-DO
 Version 0.6.1
 
--needs AI
 -needs win condition implementation
+-needs AI
 -needs list for moves
 -needs undo/redo function
 -needs save game function
@@ -90,6 +90,7 @@ namespace ConsoleApplication1
             int player1score = 0;
             int player2score = 0;
 
+            bool play = true;
             // draw the board
             DrawBoard();
 
@@ -99,7 +100,7 @@ namespace ConsoleApplication1
             // play the game
             Console.SetCursorPosition(4, 1);
 
-            while ((player1score < 12) || (player2score < 12))
+            while (play == true)
             {
                 if (Console.KeyAvailable)
                 {
@@ -207,6 +208,14 @@ namespace ConsoleApplication1
                                 if ((holding == 1 && boardRow == 7) || (holding == 2 && boardRow == 0))
                                 {
                                     board[boardRow, boardColumn] = holding + 2;
+                                    if (holding == 1)
+                                    {
+                                        player1score++;
+                                    }
+                                    else if (holding == 2)
+                                    {
+                                        player2score++;
+                                    }
                                     holding = 0;
                                     DrawPieces(board);
                                     if (origXY[0] != destXY[0])
@@ -217,6 +226,14 @@ namespace ConsoleApplication1
                                 else
                                 {
                                     board[boardRow, boardColumn] = holding;
+                                    if (holding == 1)
+                                    {
+                                        player1score++;
+                                    }
+                                    else if (holding == 2)
+                                    {
+                                        player2score++;
+                                    }
                                     holding = 0;
                                     DrawPieces(board);
                                     if (origXY[0] != destXY[0])
@@ -230,29 +247,48 @@ namespace ConsoleApplication1
                                 int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                                 int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
 
-                                if (board[spaceX, spaceY] == 0)
+                                if (spaceX >= 0 || spaceY >= 0 || spaceX <= 7 || spaceY <= 7)
                                 {
-                                    if ((holding == 1 && spaceX == 7) || (holding == 2 && spaceX == 0))
+                                    if (board[spaceX, spaceY] == 0)
                                     {
-                                        board[spaceX, spaceY] = holding + 2;
-                                        board[boardRow, boardColumn] = 0;
-                                        holding = 0;
-                                        DrawPieces(board);
-                                        if (origXY[0] != destXY[0])
+                                        if ((holding == 1 && spaceX == 7) || (holding == 2 && spaceX == 0))
                                         {
-                                            turn++;
+                                            board[spaceX, spaceY] = holding + 2;
+                                            board[boardRow, boardColumn] = 0;
+                                            if (holding == 1)
+                                            {
+                                                player1score++;
+                                            }
+                                            else if (holding == 2)
+                                            {
+                                                player2score++;
+                                            }
+                                            holding = 0;
+                                            DrawPieces(board);
+                                            if (origXY[0] != destXY[0])
+                                            {
+                                                turn++;
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        board[spaceX, spaceY] = holding;
-                                        board[boardRow, boardColumn] = 0;
-                                        holding = 0;
-                                        if (origXY[0] != destXY[0])
+                                        else
                                         {
-                                            turn++;
+                                            board[spaceX, spaceY] = holding;
+                                            board[boardRow, boardColumn] = 0;
+                                            if (holding == 3)
+                                            {
+                                                player1score++;
+                                            }
+                                            else if (holding == 4)
+                                            {
+                                                player2score++;
+                                            }
+                                            holding = 0;
+                                            if (origXY[0] != destXY[0])
+                                            {
+                                                turn++;
+                                            }
+                                            DrawPieces(board);
                                         }
-                                        DrawPieces(board);
                                     }
                                 }
                             }
@@ -289,6 +325,9 @@ namespace ConsoleApplication1
                         Console.Write(" ->");
                         Console.SetCursorPosition(1, 19);
                         Console.Write("   ");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.SetCursorPosition(15, 18);
+                        Console.Write(player1score);
                     }
                     else if ((turn % 2) == 0)
                     {
@@ -297,6 +336,9 @@ namespace ConsoleApplication1
                         Console.Write("   ");
                         Console.SetCursorPosition(1, 19);
                         Console.Write(" ->");
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.SetCursorPosition(15, 19);
+                        Console.Write(player2score);
                     }
                     
                     Console.SetCursorPosition(x, y);
