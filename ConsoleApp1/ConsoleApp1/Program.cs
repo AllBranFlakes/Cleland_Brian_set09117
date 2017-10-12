@@ -7,7 +7,8 @@ using System.Text;
 TO-DO
 Version 0.6.1
 
--needs win condition implementation
+-win condition implementation is in place but needs tweaking
+
 -needs AI
 -needs list for moves
 -needs undo/redo function
