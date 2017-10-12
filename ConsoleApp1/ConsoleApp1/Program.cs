@@ -5,12 +5,7 @@ using System.Text;
 
 /*
 TO-DO
-Version 0.6
-
-+working logic for all pieces
-+pieces will now take other pieces
-+draw board/pieces and move validation all refactored into new functions
-+removed large sections of un-needed old code (including previous broken "switch/case" logic)
+Version 0.6.1
 
 -needs turn counter implementation
 -needs AI
@@ -49,14 +44,14 @@ namespace ConsoleApplication1
                 4 - occupied (Black King)
              */
 
-            int[,] board = { { 0, 1, 0, 3, 0, 4, 0, 1 },
+            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 1, 0, 1, 0, 1, 0, 1, 0 },
                              { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
-                             { 2, 0, 4, 0, 3, 0, 2, 0 } };
+                             { 2, 0, 2, 0, 2, 0, 2, 0 } };
 
             // define variables for cursor movement
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
@@ -192,9 +187,19 @@ namespace ConsoleApplication1
                             destXY[1] = boardColumn;
                             if ((ValidMove(holding, boardPiece, origXY, destXY) == true) && board[boardRow,boardColumn] == 0)
                             {
-                                board[boardRow, boardColumn] = holding;
-                                holding = 0;
-                                DrawPieces(board);
+                                if((holding == 1 && boardRow == 7)||(holding == 2 && boardRow == 0))
+                                {
+                                    board[boardRow, boardColumn] = holding+2;
+                                    holding = 0;
+                                    DrawPieces(board);
+                                }
+                                else
+                                {
+                                    board[boardRow, boardColumn] = holding;
+                                    holding = 0;
+                                    DrawPieces(board);
+                                }
+                                
                             }
                             else if ((ValidMove(holding, boardPiece, origXY, destXY) == true) && board[boardRow, boardColumn] != 0 && ((board[boardRow,boardColumn] != holding) || board[boardRow, boardColumn] != (holding-2)))
                             {
@@ -297,7 +302,7 @@ namespace ConsoleApplication1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║   Grid Like Arrayed Draughts Organizing System v:0.6   ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.6.1  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
