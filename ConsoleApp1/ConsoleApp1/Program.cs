@@ -7,7 +7,6 @@ using System.Text;
 TO-DO
 Version 0.6.1
 
--needs turn counter implementation
 -needs AI
 -needs win condition implementation
 -needs list for moves
@@ -24,7 +23,7 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             // Set title and console window display 
-            Console.Title = "Checkers";
+            Console.Title = "G.L.A.D.O.S.";
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Clear();
@@ -73,10 +72,15 @@ namespace ConsoleApplication1
             // int for held pieces
             int holding = 0;
 
+            // int for turn
+            int turn = 1;
+
+
             // variables for move list (used for undo/redo and comparison of origin square versus destination square)
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
-            //List<int> masterMove = new List<int>();
+            Dictionary<int, int[,]> masterMove = new Dictionary<int, int[,]>();
+            //List<int[]> masterMove = new List<int[]>();
             //List<int> moveList1 = new List<int>();
             //List<int> moveList2 = new List<int>();
             //to add an array to a list use
@@ -95,7 +99,7 @@ namespace ConsoleApplication1
             // play the game
             Console.SetCursorPosition(4, 1);
 
-            while (player1score + player2score < 16)
+            while ((player1score < 12) || (player2score < 12))
             {
                 if (Console.KeyAvailable)
                 {
@@ -175,45 +179,82 @@ namespace ConsoleApplication1
 
                         if (holding == 0)
                         {
-                            origXY[0] = boardRow;
-                            origXY[1] = boardColumn;
-                            holding = boardPiece;
-                            board[boardRow, boardColumn] = 0;
-                            DrawPieces(board);
+                            if ((turn % 2 == 0) && (boardPiece%2==0))
+                            {
+                                origXY[0] = boardRow;
+                                origXY[1] = boardColumn;
+                                holding = boardPiece;
+                                board[boardRow, boardColumn] = 0;
+                                DrawPieces(board);
+                            }
+                            else if ((turn % 2 != 0) && (boardPiece % 2 != 0))
+                            {
+                                origXY[0] = boardRow;
+                                origXY[1] = boardColumn;
+                                holding = boardPiece;
+                                board[boardRow, boardColumn] = 0;
+                                DrawPieces(board);
+                            }
+
+
                         }
                         else
-                        {   
+                        {
                             destXY[0] = boardRow;
                             destXY[1] = boardColumn;
-                            if ((ValidMove(holding, boardPiece, origXY, destXY) == true) && board[boardRow,boardColumn] == 0)
+                            if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] == 0)
                             {
-                                if((holding == 1 && boardRow == 7)||(holding == 2 && boardRow == 0))
+                                if ((holding == 1 && boardRow == 7) || (holding == 2 && boardRow == 0))
                                 {
-                                    board[boardRow, boardColumn] = holding+2;
+                                    board[boardRow, boardColumn] = holding + 2;
                                     holding = 0;
                                     DrawPieces(board);
+                                    if (origXY[0] != destXY[0])
+                                    {
+                                        turn++;
+                                    }
                                 }
                                 else
                                 {
                                     board[boardRow, boardColumn] = holding;
                                     holding = 0;
                                     DrawPieces(board);
+                                    if (origXY[0] != destXY[0])
+                                    {
+                                        turn++;
+                                    }
                                 }
-                                
                             }
-                            else if ((ValidMove(holding, boardPiece, origXY, destXY) == true) && board[boardRow, boardColumn] != 0 && ((board[boardRow,boardColumn] != holding) || board[boardRow, boardColumn] != (holding-2)))
+                            else if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] != 0 && ((board[boardRow, boardColumn] != holding) || board[boardRow, boardColumn] != (holding - 2)))
                             {
                                 int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                                 int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
 
-                                if (board[spaceX,spaceY] == 0)
+                                if (board[spaceX, spaceY] == 0)
                                 {
-                                    board[spaceX, spaceY] = holding;
-                                    board[boardRow, boardColumn] = 0;
-                                    holding = 0;
-                                    DrawPieces(board);
+                                    if ((holding == 1 && spaceX == 7) || (holding == 2 && spaceX == 0))
+                                    {
+                                        board[spaceX, spaceY] = holding + 2;
+                                        board[boardRow, boardColumn] = 0;
+                                        holding = 0;
+                                        DrawPieces(board);
+                                        if (origXY[0] != destXY[0])
+                                        {
+                                            turn++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        board[spaceX, spaceY] = holding;
+                                        board[boardRow, boardColumn] = 0;
+                                        holding = 0;
+                                        if (origXY[0] != destXY[0])
+                                        {
+                                            turn++;
+                                        }
+                                        DrawPieces(board);
+                                    }
                                 }
-                                
                             }
                         }
                     }
@@ -239,54 +280,67 @@ namespace ConsoleApplication1
                         boardColumn = boardColumn - boardArrayX;
                         boardRow = boardRow - boardArrayY;
                     }
+                    // Change player indicator (to player two swap the console write for the cursor and blank space or swap the cursor values)
+                    
+                    if ((turn % 2) != 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.SetCursorPosition(1, 18);
+                        Console.Write(" ->");
+                        Console.SetCursorPosition(1, 19);
+                        Console.Write("   ");
+                    }
+                    else if ((turn % 2) == 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.SetCursorPosition(1, 18);
+                        Console.Write("   ");
+                        Console.SetCursorPosition(1, 19);
+                        Console.Write(" ->");
+                    }
+                    
                     Console.SetCursorPosition(x, y);
                 }
+               
             }
 
             // win conditions
-            if (player1score > player2score)
+            if (player1score == 12)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition(0, 13);
 
                 Console.Write("Player 1 Wins!");
             }
-            if (player2score > player1score)
+            if (player2score == 12)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.SetCursorPosition(0, 13);
 
                 Console.Write("Player 2 Wins!");
             }
-            if (player1score == player2score)
-            {
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.SetCursorPosition(0, 13);
-
-                Console.Write("It's a draw.");
-            }
         }
 
-        static bool ValidMove(int holding, int boardPiece, int[] origXY, int[] destXY)
+        static bool ValidMove(int holding, int boardPiece, int[] origXY, int[] destXY, int turn)
         {
             bool isValid = false;
-            if (holding == 1)
+            if (holding == 1 && boardPiece != holding)
             {
                 if (((origXY[0] + 1) == destXY[0] && ((origXY[1] - 1) == destXY[1] || (origXY[1] + 1) == destXY[1])) || (origXY[0] == destXY[0] && origXY[1] == destXY[1]))
                 {
                     isValid = true;
                 }
             }
-            else if (holding == 2)
+            else if (holding == 2 && boardPiece != holding)
             {
                 if (((origXY[0] - 1) == destXY[0] && ((origXY[1] - 1) == destXY[1] || (origXY[1] + 1) == destXY[1])) || (origXY[0] == destXY[0] && origXY[1] == destXY[1]))
                 {
                     isValid = true;
                 }
             }
-            else
+            else if ((boardPiece != holding) || (boardPiece != holding - 2))
             {
-                if ((((origXY[0] - 1) == destXY[0]) || ((origXY[0] + 1) == destXY[0])) && (((origXY[1] - 1) == destXY[1]) || ((origXY[1] + 1) == destXY[1])) || ((origXY[0] == destXY[0]) && (origXY[1] == destXY[1]))) 
+                if ((((origXY[0] - 1) == destXY[0]) || ((origXY[0] + 1) == destXY[0])) && (((origXY[1] - 1) == destXY[1]) || ((origXY[1] + 1) == destXY[1])) || ((origXY[0] == destXY[0]) && (origXY[1] == destXY[1])))
                 {
                     isValid = true;
                 }
@@ -325,11 +379,10 @@ namespace ConsoleApplication1
             Console.WriteLine("     Player 1: 0");
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("     player 2: 0");
+            Console.SetCursorPosition(1, 18);
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.SetCursorPosition(0, 18);
-            Console.Write(" -->");
+            Console.Write(" ->");
         }
-
 
         static void DrawPieces(int[,] arr)
         {
@@ -375,3 +428,12 @@ namespace ConsoleApplication1
         }
     }
 }
+
+
+
+
+
+
+// two second pause timer
+// System.Threading.Thread.Sleep(2000);
+
