@@ -28,10 +28,6 @@ namespace ConsoleApplication1
             Console.Clear();
             Console.SetWindowSize(110, 30);
 
-
-            // Set variables for game
-
-
             // define the board structure (default value for a given board space is 0 - empty)
             /*
              In order to properly map the game pieces a state for each 'square' on the board is defined as:
@@ -42,39 +38,34 @@ namespace ConsoleApplication1
                 4 - occupied (Black King)
              */
 
-            int[,] board = { { 0, 3, 0, 1, 0, 4, 0, 1 },
+            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 1, 0, 1, 0, 1, 0, 1, 0 },
                              { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
-                             { 2, 0, 3, 0, 2, 0, 4, 0 } };
+                             { 2, 0, 2, 0, 2, 0, 2, 0 } };
 
-            // define variables for cursor movement
+            /* define variables for cursor movement */
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
             int x = 4;
             int y = 1;
-
             // variables for moving through the board
             int moveX = 0;
             int moveY = 0;
-
             // define variables for locating pieces in board array (remember to adjust offsets so you dont fly off the end of the array!!)
             int boardColumn = 0;
             int boardRow = 0;
-
             // variables used to define the offsets that need to be adjusted as per previous comments
             int boardArrayX = 0;
             int boardArrayY = 0;
 
+            /* Various Variables */
             // int for held pieces
             int holding = 0;
-
             // int for turn
             int turn = 1;
-
-
             // variables for move list (used for undo/redo and comparison of origin square versus destination square)
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
@@ -89,16 +80,11 @@ namespace ConsoleApplication1
             int player1score = 0;
             int player2score = 0;
 
-            bool play = true;
-            // draw the board
+            // Start the game
             DrawBoard();
-
-            // draw the pieces
             DrawPieces(board);
-
-            // play the game
+            bool play = true;
             Console.SetCursorPosition(4, 1);
-
             while (play == true)
             {
                 if (Console.KeyAvailable)
@@ -127,9 +113,7 @@ namespace ConsoleApplication1
                         boardArrayX = -1; boardArrayY = 0;
                     }
 
-                    /* this code allows you to see the values stored in all spaces of the array
-                     * this portion of code can be uncommented for testing purposes
-                     */
+                    /* this code allows you to see background stuff (for testing purposes only need to remve in final release) */
                     if (key == ConsoleKey.Enter)
                     {
                         for (int xCount2 = 0; xCount2 < 8; xCount2++)
@@ -226,10 +210,12 @@ namespace ConsoleApplication1
                                     }
                                 }
                             }
-                            else if (ValidMove(holding, boardPiece, origXY, destXY, turn) == true && board[boardRow, boardColumn] != 0 && board[boardRow, boardColumn] != holding && board[boardRow,boardColumn] != (holding+2) && board[boardRow, boardColumn] != (holding - 2))
+                            else if (ValidMove(holding, boardPiece, origXY, destXY, turn) == true && board[boardRow, boardColumn] != 0 && board[boardRow, boardColumn] != holding && board[boardRow, boardColumn] != (holding + 2) && board[boardRow, boardColumn] != (holding - 2))
                             {
                                 int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                                 int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
+
+                                /* stops spaceX & spaceY from running of the ends of the array */
                                 if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
                                 {
                                     spaceX = destXY[0];
@@ -243,16 +229,19 @@ namespace ConsoleApplication1
                                     {
                                         board[spaceX, spaceY] = holding + 2;
                                         board[boardRow, boardColumn] = 0;
-                                        if (holding %2 != 0)
+                                        if (holding % 2 != 0)
                                         {
                                             player1score++;
+                                            Hop();
                                             turn--;
                                         }
-                                        else if (holding %2 == 0)
+                                        else if (holding % 2 == 0)
                                         {
                                             player2score++;
+                                            Hop();
                                             turn--;
                                         }
+
                                         holding = 0;
                                         DrawPieces(board);
                                         if (origXY[0] != destXY[0])
@@ -268,11 +257,14 @@ namespace ConsoleApplication1
                                         if (holding % 2 != 0)
                                         {
                                             player1score++;
+                                            Hop();
                                             turn--;
                                         }
                                         else if (holding % 2 == 0)
                                         {
+
                                             player2score++;
+                                            Hop();
                                             turn--;
                                         }
                                         holding = 0;
@@ -294,7 +286,7 @@ namespace ConsoleApplication1
                         Console.Write(player2score);
                     }
 
-
+                    /* Move Mechanics */
                     //take input from move and adjust cursor position for output and array position for board
                     if (moveX != 0 || moveY != 0)
                     {
@@ -315,8 +307,9 @@ namespace ConsoleApplication1
                         boardColumn = boardColumn - boardArrayX;
                         boardRow = boardRow - boardArrayY;
                     }
-                    
-                    // player turn indicator
+
+
+                    /* Player Turn Indicator */
                     if ((turn % 2) != 0)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -333,27 +326,45 @@ namespace ConsoleApplication1
                         Console.SetCursorPosition(1, 19);
                         Console.Write(" ->");
                     }
+                    /* Win Conditions */
+                    if (player1score == 12)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.SetCursorPosition(47, 13);
+
+                        Console.Write("Player 1 Wins!");
+                        // 5 second pause timer
+                        Thinking(5);
+                        play = false;
+                    }
+                    if (player2score == 12)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.SetCursorPosition(47, 13);
+
+                        Console.Write("Player 2 Wins!");
+                        // 5 second pause timer
+                        Thinking(5);
+                        play = false;
+                    }
 
                     Console.SetCursorPosition(x, y);
                 }
-
             }
+        }
 
-            // win conditions
-            if (player1score == 12)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.SetCursorPosition(0, 13);
+        static void Thinking(int wait)
+        {
+            System.Threading.Thread.Sleep(wait * 1000);
+        }
 
-                Console.Write("Player 1 Wins!");
-            }
-            if (player2score == 12)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.SetCursorPosition(0, 13);
-
-                Console.Write("Player 2 Wins!");
-            }
+        static bool Hop()
+        {
+            bool hop = false;
+            // check the destXY coords for spaces containing opposing pieces
+            // check the destXY coords +/- 1 for empty spaces
+            // if opposing piece is followed by an empty space hop allowed?
+            return hop;
         }
 
         static bool ValidMove(int holding, int boardPiece, int[] origXY, int[] destXY, int turn)
@@ -469,6 +480,5 @@ namespace ConsoleApplication1
 
 
 
-// two second pause timer
-// System.Threading.Thread.Sleep(2000);
+
 
