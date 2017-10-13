@@ -42,14 +42,14 @@ namespace ConsoleApplication1
                 4 - occupied (Black King)
              */
 
-            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
+            int[,] board = { { 0, 3, 0, 1, 0, 4, 0, 1 },
                              { 1, 0, 1, 0, 1, 0, 1, 0 },
                              { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
-                             { 2, 0, 2, 0, 2, 0, 2, 0 } };
+                             { 2, 0, 3, 0, 2, 0, 4, 0 } };
 
             // define variables for cursor movement
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
@@ -226,11 +226,15 @@ namespace ConsoleApplication1
                                     }
                                 }
                             }
-                            else if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] != 0 && ((board[boardRow, boardColumn] != holding) || board[boardRow, boardColumn] != (holding - 2)))
+                            else if (ValidMove(holding, boardPiece, origXY, destXY, turn) == true && board[boardRow, boardColumn] != 0 && board[boardRow, boardColumn] != holding && board[boardRow,boardColumn] != (holding+2) && board[boardRow, boardColumn] != (holding - 2))
                             {
                                 int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                                 int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
-                                
+                                if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
+                                {
+                                    spaceX = destXY[0];
+                                    spaceY = destXY[1];
+                                }
 
                                 if (board[spaceX, spaceY] == 0)
                                 {
@@ -242,10 +246,12 @@ namespace ConsoleApplication1
                                         if (holding %2 != 0)
                                         {
                                             player1score++;
+                                            turn--;
                                         }
                                         else if (holding %2 == 0)
                                         {
                                             player2score++;
+                                            turn--;
                                         }
                                         holding = 0;
                                         DrawPieces(board);
@@ -262,10 +268,12 @@ namespace ConsoleApplication1
                                         if (holding % 2 != 0)
                                         {
                                             player1score++;
+                                            turn--;
                                         }
                                         else if (holding % 2 == 0)
                                         {
                                             player2score++;
+                                            turn--;
                                         }
                                         holding = 0;
                                         if (origXY[0] != destXY[0])
@@ -307,8 +315,8 @@ namespace ConsoleApplication1
                         boardColumn = boardColumn - boardArrayX;
                         boardRow = boardRow - boardArrayY;
                     }
-                    // Change player indicator (to player two swap the console write for the cursor and blank space or swap the cursor values)
-
+                    
+                    // player turn indicator
                     if ((turn % 2) != 0)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -365,7 +373,7 @@ namespace ConsoleApplication1
                     isValid = true;
                 }
             }
-            else if ((boardPiece != holding) || (boardPiece != holding - 2))
+            else if (boardPiece != holding || boardPiece != holding - 2)
             {
                 if ((((origXY[0] - 1) == destXY[0]) || ((origXY[0] + 1) == destXY[0])) && (((origXY[1] - 1) == destXY[1]) || ((origXY[1] + 1) == destXY[1])) || ((origXY[0] == destXY[0]) && (origXY[1] == destXY[1])))
                 {
@@ -383,7 +391,7 @@ namespace ConsoleApplication1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.6.1  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.6.2  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
