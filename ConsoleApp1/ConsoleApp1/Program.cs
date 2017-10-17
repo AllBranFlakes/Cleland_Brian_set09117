@@ -5,7 +5,7 @@ using System.Text;
 
 /*
 TO-DO
-Version 0.7.1
+Version 0.7.2
 
 -needs AI
 -needs list for moves
@@ -60,7 +60,7 @@ namespace ConsoleApplication1
             // variables used to define the offsets that need to be adjusted as per previous comments
             int boardArrayX = 0;
             int boardArrayY = 0;
-
+            bool hop = false;
             /* Various Variables */
             // int for held pieces
             int holding = 0;
@@ -255,37 +255,11 @@ namespace ConsoleApplication1
                                     {
                                         board[spaceX, spaceY] = holding + 2;
                                         board[boardRow, boardColumn] = 0;
-                                        if (holding % 2 != 0)
+                                        if (hop == true)
                                         {
-                                            player1score++;
-                                            if ((board[spaceX + 1, spaceY + 1] == 0)
-                                                || (board[spaceX + 1, spaceY - 1] == 0))
-                                            {
-                                                origXY[0] = spaceX;
-                                                origXY[1] = spaceY;
-                                                turn--;
-                                            }
-                                            else
-                                            {
-                                                holding = 0;
-                                            }
-
+                                            board[origXY[0], origXY[1]] = 0;
                                         }
-                                        else if (holding % 2 == 0)
-                                        {
-                                            player2score++;
-                                            if ((board[spaceX - 1, spaceY + 1] == 0)
-                                                || (board[spaceX - 1, spaceY - 1] == 0))
-                                            {
-                                                origXY[0] = spaceX;
-                                                origXY[1] = spaceY;
-                                                turn--;
-                                            }
-                                            else
-                                            {
-                                                holding = 0;
-                                            }
-                                        }
+                                        holding = 0;
                                         DrawPieces(board);
                                         if (origXY[0] != destXY[0])
                                         {
@@ -296,39 +270,53 @@ namespace ConsoleApplication1
                                     {
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
-                                        if (holding % 2 != 0)
+
+                                        if (holding == 1 || holding == 3)
                                         {
+
                                             player1score++;
-                                            if (board[spaceX + 1, spaceY + 1] == 0
-                                                 || board[spaceX + 1, spaceY - 1] == 0)
+                                            try
                                             {
-                                                origXY[0] = spaceX;
-                                                origXY[1] = spaceY;
-                                                turn--;
-                                                Console.SetCursorPosition(25, 25);
-                                                Console.Write(spaceX);
-                                                Console.Write(spaceY);
+                                                if ((board[spaceX + 1, spaceY + 1] == 2 && board[spaceX + 2, spaceY + 2] == 0)
+                                                     || (board[spaceX + 1, spaceY - 1] == 2 && board[spaceX + 2, spaceY - 2] == 0))
+                                                {
+                                                    origXY[0] = spaceX;
+                                                    origXY[1] = spaceY;
+                                                    hop = true;
+                                                    turn--;
+                                                }
+                                                else
+                                                {
+                                                    holding = 0;
+                                                }
                                             }
-                                            else
-                                            { 
+                                            catch (Exception)
+                                            {
                                                 holding = 0;
+                                                hop = true;
                                             }
 
                                         }
-                                        else if (holding % 2 == 0)
+                                        else if (holding == 2 || holding == 4)
                                         {
                                             player2score++;
-                                            if (board[spaceX - 1, spaceY + 1] == 0
-                                                  || board[spaceX - 1, spaceY - 1] == 0)
+                                            try
                                             {
-                                                origXY[0] = spaceX;
-                                                origXY[1] = spaceY;
-                                                turn--;
-                                                Console.SetCursorPosition(25, 25);
-                                                Console.Write(spaceX);
-                                                Console.Write(spaceY);
+                                                if ((board[spaceX - 1, spaceY + 1] == 1 && board[spaceX - 2, spaceY + 2] == 0)
+                                                 || (board[spaceX - 1, spaceY - 1] == 1 && board[spaceX - 2, spaceY - 2] == 0))
+                                                {
+                                                    origXY[0] = spaceX;
+                                                    origXY[1] = spaceY;
+                                                    hop = true;
+                                                    turn--;
+                                                }
+                                                else
+                                                {
+                                                    holding = 0;
+                                                    hop = true;
+                                                }
                                             }
-                                            else
+                                            catch (Exception)
                                             {
                                                 holding = 0;
                                             }
@@ -461,7 +449,7 @@ namespace ConsoleApplication1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.6.2  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.7.2  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
