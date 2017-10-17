@@ -69,12 +69,6 @@ namespace ConsoleApplication1
             // variables for move list (used for undo/redo and comparison of origin square versus destination square)
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
-            Dictionary<int, int[,]> masterMove = new Dictionary<int, int[,]>();
-            //List<int[]> masterMove = new List<int[]>();
-            //List<int> moveList1 = new List<int>();
-            //List<int> moveList2 = new List<int>();
-            //to add an array to a list use
-            // moveList.AddRange(arrayName);(
 
             // player score variables
             int player1score = 0;
@@ -116,6 +110,11 @@ namespace ConsoleApplication1
                     /* this code allows you to see background stuff (for testing purposes only need to remve in final release) */
                     if (key == ConsoleKey.Enter)
                     {
+                        Console.SetCursorPosition(20, 25);
+                        Console.Write(turn);
+                        Console.SetCursorPosition(22, 25);
+                        Console.Write(destXY[0]+1);
+                        Console.Write(destXY[1]+1);
                         for (int xCount2 = 0; xCount2 < 8; xCount2++)
                         {
 
@@ -232,17 +231,17 @@ namespace ConsoleApplication1
                                         if (holding % 2 != 0)
                                         {
                                             player1score++;
-                                            Hop();
+                                            origXY[0] = spaceX;
+                                            origXY[1] = spaceY;
                                             turn--;
                                         }
                                         else if (holding % 2 == 0)
                                         {
                                             player2score++;
-                                            Hop();
+                                            origXY[0] = spaceX;
+                                            origXY[1] = spaceY;
                                             turn--;
                                         }
-
-                                        holding = 0;
                                         DrawPieces(board);
                                         if (origXY[0] != destXY[0])
                                         {
@@ -251,23 +250,24 @@ namespace ConsoleApplication1
                                     }
                                     else
                                     {
-
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
                                         if (holding % 2 != 0)
                                         {
                                             player1score++;
-                                            Hop();
+                                            origXY[0] = spaceX;
+                                            origXY[1] = spaceY;
                                             turn--;
+
                                         }
                                         else if (holding % 2 == 0)
                                         {
-
                                             player2score++;
-                                            Hop();
+                                            origXY[0] = spaceX;
+                                            origXY[1] = spaceY;
                                             turn--;
+
                                         }
-                                        holding = 0;
                                         if (origXY[0] != destXY[0])
                                         {
                                             turn++;
@@ -353,18 +353,11 @@ namespace ConsoleApplication1
             }
         }
 
+
+
         static void Thinking(int wait)
         {
             System.Threading.Thread.Sleep(wait * 1000);
-        }
-
-        static bool Hop()
-        {
-            bool hop = false;
-            // check the destXY coords for spaces containing opposing pieces
-            // check the destXY coords +/- 1 for empty spaces
-            // if opposing piece is followed by an empty space hop allowed?
-            return hop;
         }
 
         static bool ValidMove(int holding, int boardPiece, int[] origXY, int[] destXY, int turn)
