@@ -38,7 +38,7 @@ namespace ConsoleApplication1
                 4 - occupied (Black King)
              */
 
-            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
+            /*int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 1, 0, 1, 0, 1, 0, 1, 0 },
                              { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -46,6 +46,15 @@ namespace ConsoleApplication1
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 } };
+            */
+            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
+                             { 1, 0, 1, 0, 1, 0, 1, 0 },
+                             { 0, 1, 0, 1, 0, 1, 0, 1 },
+                             { 0, 0, 0, 0, 1, 0, 0, 0 },
+                             { 0, 2, 0, 0, 0, 2, 0, 0 },
+                             { 2, 0, 0, 0, 2, 0, 0, 0 },
+                             { 0, 2, 0, 2, 0, 2, 0, 2 },
+                             { 2, 0, 2, 0, 0, 0, 2, 0 } };
 
             /* define variables for cursor movement */
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
@@ -271,14 +280,17 @@ namespace ConsoleApplication1
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
 
-                                        if (holding == 1 || holding == 3)
+                                        if (holding % 2 != 0)
                                         {
+                                            if (hop == true)
+                                            {
+                                                board[origXY[0], origXY[1]] = 0;
+                                            }
 
                                             player1score++;
                                             try
                                             {
-                                                if ((board[spaceX + 1, spaceY + 1] == 2 && board[spaceX + 2, spaceY + 2] == 0)
-                                                     || (board[spaceX + 1, spaceY - 1] == 2 && board[spaceX + 2, spaceY - 2] == 0))
+                                                if (board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
                                                 {
                                                     origXY[0] = spaceX;
                                                     origXY[1] = spaceY;
@@ -292,18 +304,58 @@ namespace ConsoleApplication1
                                             }
                                             catch (Exception)
                                             {
-                                                holding = 0;
+                                                hop = true;
+                                            }
+                                            try
+                                            {
+                                                if (board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0)
+                                                {
+                                                    origXY[0] = spaceX;
+                                                    origXY[1] = spaceY;
+                                                    hop = true;
+                                                    turn--;
+                                                }
+                                                else
+                                                {
+                                                    holding = 0;
+                                                    hop = true;
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
                                                 hop = true;
                                             }
 
                                         }
-                                        else if (holding == 2 || holding == 4)
+                                        else if (holding % 2 == 0)
                                         {
+                                            if (hop == true)
+                                            {
+                                                board[origXY[0], origXY[1]] = 0;
+                                            }
                                             player2score++;
                                             try
                                             {
-                                                if ((board[spaceX - 1, spaceY + 1] == 1 && board[spaceX - 2, spaceY + 2] == 0)
-                                                 || (board[spaceX - 1, spaceY - 1] == 1 && board[spaceX - 2, spaceY - 2] == 0))
+                                                if (board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                {
+                                                    origXY[0] = spaceX;
+                                                    origXY[1] = spaceY;
+                                                    hop = true;
+                                                    turn--;
+                                                }
+                                                else
+                                                {
+                                                    holding = 0;
+                                                    hop = true;
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                holding = 0;
+                                            }
+                                            try
+                                            {
+                                                if ((board[spaceX - 1, spaceY - 1] % 2 != 0) && (board[spaceX - 2, spaceY - 2] == 0))
                                                 {
                                                     origXY[0] = spaceX;
                                                     origXY[1] = spaceY;
