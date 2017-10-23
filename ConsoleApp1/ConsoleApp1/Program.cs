@@ -187,11 +187,13 @@ namespace ConsoleApplication1
                     {
                         int boardPiece = board[boardRow, boardColumn];
 
+                        //pick
                         if (holding == 0)
                         {
                             if ((turn % 2 == 0) && (boardPiece % 2 == 0))
                             {
                                 // set origin Black
+                                hop = true;// required to stop game turn updating on keypress
                                 origXY[0] = boardRow;
                                 origXY[1] = boardColumn;
                                 holding = boardPiece;
@@ -201,6 +203,7 @@ namespace ConsoleApplication1
                             else if ((turn % 2 != 0) && (boardPiece % 2 != 0))
                             {
                                 //set origin Red
+                                hop = true;
                                 origXY[0] = boardRow;
                                 origXY[1] = boardColumn;
                                 holding = boardPiece;
@@ -208,12 +211,12 @@ namespace ConsoleApplication1
                                 DrawPieces(board);
                             }
                         }
+                        //place
                         else if (holding != 0)
                         {
                             //set the destination
                             destXY[0] = boardRow;
                             destXY[1] = boardColumn;
-
                             // placing the piece
                             if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] == 0)
                             {
@@ -223,26 +226,17 @@ namespace ConsoleApplication1
                                     board[boardRow, boardColumn] = holding + 2;
                                     holding = 0;
                                     DrawPieces(board);
+                                    hop = false;
 
-                                    if (origXY[0] != destXY[0])
-                                    {
-                                        turn++; Console.SetCursorPosition(31, 30); Console.Write("a");
-                                    }
                                 }
                                 // standard move
                                 else
                                 {
                                     board[boardRow, boardColumn] = holding;
                                     holding = 0;
-                                    if (hop == true)
-                                    {
-                                        board[origXY[0], origXY[1]] = 0;
-                                    }
                                     DrawPieces(board);
-                                    if (origXY[0] != destXY[0])
-                                    {
-                                        turn++; Console.SetCursorPosition(31, 30); Console.Write("b");
-                                    }
+                                    hop = false;
+
                                 }
                             }
                             // taking a piece
@@ -265,198 +259,179 @@ namespace ConsoleApplication1
 
                                     if ((holding == 1 && spaceX == 7) || (holding == 2 && spaceX == 0))
                                     {
+
+                                        if (holding == 1)
+                                        {
+                                            player1score++;
+                                        }
+                                        else if (holding == 2)
+                                        {
+                                            player2score++;
+                                        }
                                         board[spaceX, spaceY] = holding + 2;
                                         board[boardRow, boardColumn] = 0;
-                                        if (hop == true)
-                                        {
-                                            board[origXY[0], origXY[1]] = 0;
-                                            origXY[0] = spaceX;
-                                            origXY[1] = spaceY;
-                                            holding = holding + 2;
-                                        }
+                                        hop = true;
+
+                                        board[origXY[0], origXY[1]] = 0;
+                                        origXY[0] = spaceX;
+                                        origXY[1] = spaceY;
+                                        holding = holding + 2;
 
                                         DrawPieces(board);
-                                        
+
                                     }
                                     else
                                     {
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
-                                        
+                                        hop = true;
                                         switch (holding)
                                         {
                                             case 1:
-                                                if (hop == true)
-                                                {
-                                                    board[origXY[0], origXY[1]] = 0;
-                                                }
-                                        
+                                                board[origXY[0], origXY[1]] = 0;
+
                                                 player1score++;
-                                                try
+                                                if (spaceX <= 5 && spaceY <= 5)
                                                 {
-                                                    if (board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
+                                                    if (board[spaceX + 1, spaceY + 1] != 0 && board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        hop = true;
-                                                        //turn--; 
-                                                        Console.SetCursorPosition(30, 30); Console.Write("1");
                                                     }
                                                     else
                                                     {
+                                                        hop = false;
                                                         holding = 0;
-                                                        //hop = true;
-                                                        //turn++; 
-                                                        Console.SetCursorPosition(31, 30); Console.Write("d");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to jumo to holding red to the right");
 
                                                     }
                                                 }
-                                                catch (Exception)
+                                                else if (spaceX >= 2 && spaceY >= 2)
                                                 {
-                                                    hop = true;
-                                                }
-                                                try
-                                                {
-                                                    if (board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0)
+                                                    if (board[spaceX + 1, spaceY - 1] != 0 && board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        hop = true;
-                                                        //turn--; 
-                                                        Console.SetCursorPosition(30, 30); Console.Write("1");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to jump to holding red to the right33");
                                                     }
                                                     else
                                                     {
+                                                        hop = false;
                                                         holding = 0;
-                                                        //hop = true;
-                                                        //turn++; 
-                                                        Console.SetCursorPosition(31, 30); Console.Write("d");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to jumo to holding red to the right33");
 
                                                     }
                                                 }
-                                                catch (Exception)
+                                                else
                                                 {
-                                                    hop = true;
+                                                    hop = false;
+                                                    Console.SetCursorPosition(30, 30); Console.Write("out of bound holding red to the right 2");
                                                 }
                                                 break;
                                             case 2:
-                                                if (hop == true)
-                                                {
-                                                    board[origXY[0], origXY[1]] = 0;
-                                                }
-                                        
+                                                board[origXY[0], origXY[1]] = 0;
+
                                                 player2score++;
-                                                try
+                                                if (spaceX <= 5 && spaceY <= 5 && spaceX >= 2 && spaceY >= 2)
                                                 {
-                                                    if (board[spaceX - 1, spaceY + 1] % 2 == 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                    if ((board[spaceX - 1, spaceY + 1] != 0 && board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                     || (board[spaceX - 1, spaceY - 1] != 0 && board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0))
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        hop = true;
-                                                        //turn--; 
-                                                        Console.SetCursorPosition(30, 30); Console.Write("1");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to the right holding black");
                                                     }
                                                     else
                                                     {
+                                                        hop = false;
                                                         holding = 0;
-                                                        //hop = true;
-                                                        //turn++; 
-                                                        Console.SetCursorPosition(31, 30); Console.Write("d");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space holding black to the right");
 
                                                     }
                                                 }
-                                                catch (Exception)
+                                                else
                                                 {
-                                                    hop = true;
+                                                    hop = false;
+                                                    Console.SetCursorPosition(30, 30); Console.Write("out of bounds to the right if holding black");
                                                 }
-                                                 try
-                                                {
-                                                    if (board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0)
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        hop = true;
-                                                        //turn--; 
-                                                        Console.SetCursorPosition(30, 30); Console.Write("1");
-                                                    }
-                                                    else
-                                                    {
-                                                        holding = 0;
-                                                        //hop = true;
-                                                        //turn++; 
-                                                        Console.SetCursorPosition(31, 30); Console.Write("d");
 
-                                                    }
-                                                }
-                                                catch (Exception)
-                                                {
-                                                    hop = true;
-                                                }
                                                 break;
                                             case 3:
-                                                if (hop == true)
-                                                {
-                                                    board[origXY[0], origXY[1]] = 0;
-                                                }
-                                        
+                                                board[origXY[0], origXY[1]] = 0;
+
                                                 player1score++;
-                                                try
+                                                if (spaceX <= 5 && spaceY <= 5)
                                                 {
-                                                    if (board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0
-                                                     || board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0)
+                                                    if (board[spaceX + 1, spaceY + 1] != 0 && board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        hop = true;
-                                                        //turn--; 
-                                                        Console.SetCursorPosition(30, 30); Console.Write("3");
+                                                    }
+                                                    else if (board[spaceX + 1, spaceY - 1] != 0 && board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0)
+                                                    {
+                                                        origXY[0] = spaceX;
+                                                        origXY[1] = spaceY;
+                                                    }
+
+                                                    else
+                                                    {
+                                                        hop = false;
+                                                        holding = 0;
+                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to move red king");
+                                                    }
+                                                }
+                                                else if (spaceX >= 2 && spaceY >= 2)
+                                                {
+                                                    if (board[spaceX - 1, spaceY + 1] != 0 && board[spaceX - 1, spaceY + 1] % 2 == 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                    {
+                                                        origXY[0] = spaceX;
+                                                        origXY[1] = spaceY;
+                                                    }
+                                                    else if (board[spaceX - 1, spaceY - 1] != 0 && board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0)
+                                                    {
+                                                        origXY[0] = spaceX;
+                                                        origXY[1] = spaceY;
                                                     }
                                                     else
                                                     {
+                                                        hop = false;
                                                         holding = 0;
-                                                        //hop = true;
-                                                        //turn++; 
-                                                        Console.SetCursorPosition(31, 30); Console.Write("f");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to move red king");
                                                     }
                                                 }
-                                                catch (Exception)
+                                                else
                                                 {
-                                                    hop = true;
+                                                    hop = false;
+                                                    holding = 0;
+                                                    Console.SetCursorPosition(30, 30); Console.Write("cant move outside the bounds of the array");
                                                 }
                                                 break;
                                             case 4:
-                                                if (hop == true)
-                                                {
-                                                    board[origXY[0], origXY[1]] = 0;
-                                                }
-                                        
+                                                board[origXY[0], origXY[1]] = 0;
+
                                                 player2score++;
-                                                try
+                                                if (spaceX <= 5 && spaceY <= 5 && spaceX >= 2 && spaceY >= 2)
                                                 {
-                                                    if (board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0
-                                                     || board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0)
+                                                    if ((board[spaceX + 1, spaceY + 1] != 0 && board[spaceX + 1, spaceY + 1] % 2 != 0 && board[spaceX + 2, spaceY + 2] == 0)
+                                                     || (board[spaceX + 1, spaceY - 1] != 0 && board[spaceX + 1, spaceY - 1] % 2 != 0 && board[spaceX + 2, spaceY - 2] == 0)
+                                                     || (board[spaceX - 1, spaceY + 1] != 0 && board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                     || (board[spaceX - 1, spaceY - 1] != 0 && board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0))
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        hop = true;
-                                                        //turn--; 
-                                                        Console.SetCursorPosition(30, 30); Console.Write("3");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to move black king");
                                                     }
                                                     else
                                                     {
+                                                        hop = false;
                                                         holding = 0;
-                                                        //hop = true;
-                                                        //turn++; 
-                                                        Console.SetCursorPosition(31, 30); Console.Write("f");
+                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to move black king");
                                                     }
                                                 }
-                                                catch (Exception)
+                                                else
                                                 {
-                                                    hop = true;
+                                                    hop = false;
+                                                    Console.SetCursorPosition(30, 30); Console.Write("out of bounds holding black king");
                                                 }
                                                 break;
                                         }
@@ -464,7 +439,14 @@ namespace ConsoleApplication1
                                     }
                                 }
                             }
+
+                            if (hop == false)
+                            {
+                                holding = 0;
+                                turn++;
+                            }
                         }
+
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.SetCursorPosition(15, 18);
                         Console.Write(player1score);
@@ -472,6 +454,12 @@ namespace ConsoleApplication1
                         Console.ForegroundColor = ConsoleColor.Black;
                         Console.SetCursorPosition(15, 19);
                         Console.Write(player2score);
+
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.SetCursorPosition(15, 20);
+                        Console.Write(turn);
+
+
                     }
 
                     /* Move Mechanics */
