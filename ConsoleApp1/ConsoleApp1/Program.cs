@@ -201,6 +201,7 @@ namespace ConsoleApplication1
                             if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] == 0)
                             {
                                 // king move
+
                                 if ((holding == 1 && boardRow == 7) || (holding == 2 && boardRow == 0))
                                 {
                                     board[boardRow, boardColumn] = holding + 2;
@@ -224,6 +225,9 @@ namespace ConsoleApplication1
                                     }
 
                                 }
+
+
+
                             }
                             // taking a piece
                             else if (ValidMove(holding, boardPiece, origXY, destXY, turn) == true
@@ -265,14 +269,15 @@ namespace ConsoleApplication1
                                         {
                                             player2score++;
                                         }
-                                        board[spaceX, spaceY] = holding + 2;
+
+                                        holding = holding + 2;
+                                        board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
                                         hop = true;
 
                                         board[origXY[0], origXY[1]] = 0;
                                         origXY[0] = spaceX;
                                         origXY[1] = spaceY;
-                                        holding = holding + 2;
 
                                         DrawPieces(board);
 
@@ -281,69 +286,56 @@ namespace ConsoleApplication1
                                     {
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
-                                        hop = true;
                                         switch (holding)
                                         {
                                             case 1:
                                                 board[origXY[0], origXY[1]] = 0;
 
                                                 player1score++;
-                                                if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
+                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
                                                 {
-                                                    spaceX = destXY[0];
-                                                    spaceY = destXY[1];
-                                                    
-                                                    if ((board[spaceX + 1, spaceY - 1] != 0 && (board[spaceX + 1, spaceY - 1] % 2) == 0 && board[spaceX + 2, spaceY - 2] == 0)
-                                                     || (board[spaceX + 1, spaceY + 1] != 0 && (board[spaceX + 1, spaceY + 1] % 2) == 0 && board[spaceX + 2, spaceY + 2] == 0))
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to move red (left/right)");
-                                                    }
-                                                    else
-                                                    {
-                                                        hop = false;
-                                                        holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to jump holding red (left/right)");
-                                                    }
+                                                    spaceX = origXY[0];
+                                                    spaceY = origXY[1];
+                                                }
+                                                if ((board[spaceX + 1, spaceY - 1] != 0 && (board[spaceX + 1, spaceY - 1] % 2) == 0 && board[spaceX + 2, spaceY - 2] == 0)
+                                                 || (board[spaceX + 1, spaceY + 1] != 0 && (board[spaceX + 1, spaceY + 1] % 2) == 0 && board[spaceX + 2, spaceY + 2] == 0))
+                                                {
+                                                    origXY[0] = spaceX;
+                                                    origXY[1] = spaceY;
+
+                                                    hop = true;
+                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                 }
                                                 else
                                                 {
                                                     hop = false;
-                                                    Console.SetCursorPosition(30, 30); Console.Write("exit on case 1 no valid moves found");
-
+                                                    holding = 0;
+                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                 }
                                                 break;
                                             case 2:
                                                 board[origXY[0], origXY[1]] = 0;
 
                                                 player2score++;
-                                                if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
+                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
                                                 {
-                                                    spaceX = destXY[0];
-                                                    spaceY = destXY[1];
-
-                                                    if (board[spaceX - 1, spaceY - 1] != 0 && board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY + 1] != 0 && board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
-
-
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to the left holding black");
-                                                    }
-                                                    else
-                                                    {
-                                                        hop = false;
-                                                        holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space holding black to the left");
-
-                                                    }
+                                                    spaceX = origXY[0];
+                                                    spaceY = origXY[1];
+                                                }
+                                                if (board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0
+                                                 || board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
+                                                {
+                                                    origXY[0] = spaceX;
+                                                    origXY[1] = spaceY;
+                                                    hop = true;
+                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                 }
                                                 else
                                                 {
                                                     hop = false;
-                                                    Console.SetCursorPosition(30, 30); Console.Write("exit on case 2 no valid moves found");
+                                                    holding = 0;
+                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
+
                                                 }
 
                                                 break;
@@ -351,62 +343,102 @@ namespace ConsoleApplication1
                                                 board[origXY[0], origXY[1]] = 0;
 
                                                 player1score++;
-                                                if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
+                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
                                                 {
-                                                    spaceX = destXY[0];
-                                                    spaceY = destXY[1];
-                                                    if (board[spaceX + 1, spaceY + 1] != 0 && board[spaceX + 1, spaceY + 1] % 2 != 0 && board[spaceX + 2, spaceY + 2] == 0
-                                                     || board[spaceX + 1, spaceY - 1] != 0 && board[spaceX + 1, spaceY - 1] % 2 != 0 && board[spaceX + 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY + 1] != 0 && board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0
-                                                     || board[spaceX - 1, spaceY - 1] != 0 && board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0)
+                                                    spaceX = origXY[0];
+                                                    spaceY = origXY[1];
+                                                }
+                                                if (boardRow >= 6)
+                                                {
+                                                    if (board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0
+                                                     || board[spaceX - 1, spaceY + 1] % 2 == 0 && board[spaceX - 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to move red king");
+                                                        hop = true;
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                     }
 
                                                     else
                                                     {
                                                         hop = false;
                                                         holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to move red king");
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
+                                                    }
+                                                }
+                                                else if (boardRow <= 1)
+                                                {
+                                                    if (board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0
+                                                     || board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
+                                                    {
+                                                        origXY[0] = spaceX;
+                                                        origXY[1] = spaceY;
+                                                        hop = true;
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
+                                                    }
+                                                    else
+                                                    {
+                                                        hop = false;
+                                                        holding = 0;
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     hop = false;
-                                                    Console.SetCursorPosition(30, 30); Console.Write("exit on case 3 no valid moves found");
-
+                                                    holding = 0;
+                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                 }
                                                 break;
                                             case 4:
                                                 board[origXY[0], origXY[1]] = 0;
 
                                                 player2score++;
-                                                if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
+                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
                                                 {
-                                                    spaceX = destXY[0];
-                                                    spaceY = destXY[1];
-                                                    if ((board[spaceX + 1, spaceY + 1] != 0 && board[spaceX + 1, spaceY + 1] % 2 != 0 && board[spaceX + 2, spaceY + 2] == 0)
-                                                     || (board[spaceX + 1, spaceY - 1] != 0 && board[spaceX + 1, spaceY - 1] % 2 != 0 && board[spaceX + 2, spaceY - 2] == 0)
-                                                     || (board[spaceX - 1, spaceY + 1] != 0 && board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
-                                                     || (board[spaceX - 1, spaceY - 1] != 0 && board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0))
+                                                    spaceX = origXY[0];
+                                                    spaceY = origXY[1];
+                                                }
+                                                if (boardRow >= 6)
+                                                {
+                                                    if (board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0
+                                                     || board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("valid space to move black king");
+                                                        hop = true;
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
+                                                    }
+
+                                                    else
+                                                    {
+                                                        hop = false;
+                                                        holding = 0;
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
+                                                    }
+                                                }
+                                                else if (boardRow <= 1)
+                                                {
+                                                    if (board[spaceX + 1, spaceY - 1] % 2 != 0 && board[spaceX + 2, spaceY - 2] == 0
+                                                     || board[spaceX + 1, spaceY + 1] % 2 != 0 && board[spaceX + 2, spaceY + 2] == 0)
+                                                    {
+                                                        origXY[0] = spaceX;
+                                                        origXY[1] = spaceY;
+                                                        hop = true;
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                     }
                                                     else
                                                     {
                                                         hop = false;
                                                         holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("no valid space to move black king");
+                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     hop = false;
-                                                    Console.SetCursorPosition(30, 30); Console.Write("exit on case 4 no valid moves found");
+                                                    holding = 0;
+                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
                                                 }
                                                 break;
                                         }
@@ -516,14 +548,16 @@ namespace ConsoleApplication1
             bool isValid = false;
             if (holding == 1 && boardPiece != holding)
             {
-                if (((origXY[0] + 1) == destXY[0] && ((origXY[1] - 1) == destXY[1] || (origXY[1] + 1) == destXY[1])) || (origXY[0] == destXY[0] && origXY[1] == destXY[1]))
+                if (((origXY[0] + 1) == destXY[0] && ((origXY[1] - 1) == destXY[1] || (origXY[1] + 1) == destXY[1]))
+                    || (origXY[0] == destXY[0] && origXY[1] == destXY[1]))
                 {
                     isValid = true;
                 }
             }
             else if (holding == 2 && boardPiece != holding)
             {
-                if (((origXY[0] - 1) == destXY[0] && ((origXY[1] - 1) == destXY[1] || (origXY[1] + 1) == destXY[1])) || (origXY[0] == destXY[0] && origXY[1] == destXY[1]))
+                if (((origXY[0] - 1) == destXY[0] && ((origXY[1] - 1) == destXY[1] || (origXY[1] + 1) == destXY[1]))
+                    || (origXY[0] == destXY[0] && origXY[1] == destXY[1]))
                 {
                     isValid = true;
                 }
