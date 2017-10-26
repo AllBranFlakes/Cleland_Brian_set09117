@@ -350,26 +350,26 @@ namespace ConsoleApplication1
                                                 }
                                                 if (boardRow >= 6)
                                                 {
-                                                    if (board[spaceX - 1, spaceY - 1] % 2 == 0 && board[spaceX - 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY + 1] % 2 == 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                    if ((board[spaceX - 1, spaceY - 1] == 2 || board[spaceX - 1, spaceY - 1] == 4) && board[spaceX - 2, spaceY - 2] == 0
+                                                     || (board[spaceX - 1, spaceY + 1] == 2 || board[spaceX - 1, spaceY + 1] == 4) && board[spaceX - 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
                                                         hop = true;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
+                                                        Console.SetCursorPosition(30, 30); Console.Write("here");
                                                     }
 
                                                     else
                                                     {
                                                         hop = false;
                                                         holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
+                                                        Console.SetCursorPosition(30, 30); Console.Write("there");
                                                     }
                                                 }
                                                 else if (boardRow <= 1)
                                                 {
-                                                    if (board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0
-                                                     || board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
+                                                    if ((board[spaceX + 1, spaceY - 1] == 2 || board[spaceX + 1, spaceY - 1] == 4) && board[spaceX + 2, spaceY - 2] == 0
+                                                     || (board[spaceX + 1, spaceY + 1] == 2 || board[spaceX + 1, spaceY + 1] == 4) && board[spaceX + 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
@@ -401,8 +401,8 @@ namespace ConsoleApplication1
                                                 }
                                                 if (boardRow >= 6)
                                                 {
-                                                    if (board[spaceX - 1, spaceY - 1] % 2 != 0 && board[spaceX - 2, spaceY - 2] == 0
-                                                     || board[spaceX - 1, spaceY + 1] % 2 != 0 && board[spaceX - 2, spaceY + 2] == 0)
+                                                    if ((board[spaceX - 1, spaceY - 1] == 1 || board[spaceX - 1, spaceY - 1] == 3) && board[spaceX - 2, spaceY - 2] == 0
+                                                     || (board[spaceX - 1, spaceY + 1] == 1 || board[spaceX - 1, spaceY + 1] == 3) && board[spaceX - 2, spaceY + 2] == 0)
                                                     {
                                                         origXY[0] = spaceX;
                                                         origXY[1] = spaceY;
