@@ -47,14 +47,16 @@ namespace ConsoleApplication1
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 } };*/
 
-            int[,] board = { { 0, 1, 0, 1, 0, 1, 0, 1 },
-                             { 1, 0, 1, 0, 1, 0, 1, 0 },
-                             { 0, 1, 0, 1, 0, 1, 0, 1 },
-                             { 0, 0, 0, 0, 1, 0, 0, 0 },
-                             { 0, 2, 0, 2, 0, 1, 0, 0 },
-                             { 2, 0, 0, 0, 2, 0, 2, 0 },
-                             { 0, 2, 0, 2, 0, 2, 0, 0 },
-                             { 2, 0, 2, 0, 0, 0, 2, 0 } };
+            int[,] board = { { 0, 1, 0, 0, 0, 1, 0, 0 },
+                                         { 1, 0, 1, 0, 1, 0, 1, 0 },
+                                         { 0, 0, 0, 1, 0, 1, 0, 1 },
+                                         { 0, 0, 0, 0, 0, 0, 0, 0 },
+                                         { 0, 2, 0, 2, 0, 1, 0, 0 },
+                                         { 2, 0, 0, 0, 2, 0, 2, 0 },
+                                         { 0, 2, 0, 2, 0, 2, 0, 0 },
+                                         { 2, 0, 2, 0, 0, 0, 2, 0 } };
+
+
 
             /* define variables for cursor movement */
             // define start position (x offset by +3 & y offset by +1 to account for the board layout)
@@ -78,11 +80,27 @@ namespace ConsoleApplication1
             // variables for move list (used for undo/redo and comparison of origin square versus destination square)
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
-
             // player score variables
             int player1score = 0;
             int player2score = 0;
-
+            //do not undo further
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
             // Start the game
             DrawBoard();
             DrawPieces(board);
@@ -239,19 +257,22 @@ namespace ConsoleApplication1
 
 
                                 Console.SetCursorPosition(24, 27);
-                                Console.Write("space x: ");
+                                Console.Write("Row: ");
                                 Console.SetCursorPosition(31, 27);
-                                Console.Write(spaceX);
+                                Console.Write(boardRow);
 
                                 Console.SetCursorPosition(24, 28);
-                                Console.Write("space y: ");
+                                Console.Write("Col: ");
                                 Console.SetCursorPosition(31, 28);
-                                Console.Write(spaceY);
+                                Console.Write(boardColumn);
 
                                 /* stops spaceX & spaceY from running of the ends of the array */
-                                if (spaceX < 0 || spaceY < 0 || spaceX > 7 || spaceY > 7)
+                                if (spaceX < 0 || spaceX > 7)
                                 {
                                     spaceX = destXY[0];
+                                }
+                                if (spaceY < 0 || spaceY > 7)
+                                {
                                     spaceY = destXY[1];
                                 }
 
@@ -273,8 +294,8 @@ namespace ConsoleApplication1
                                         holding = holding + 2;
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
-                                        hop = true;
-
+                                        
+                                        
                                         board[origXY[0], origXY[1]] = 0;
                                         origXY[0] = spaceX;
                                         origXY[1] = spaceY;
@@ -282,165 +303,104 @@ namespace ConsoleApplication1
                                         DrawPieces(board);
 
                                     }
-                                    else
+                                    else 
                                     {
+                                        int adderA = 0;
+                                        int adderB = 0;
+                                        board[origXY[0], origXY[1]] = 0;
                                         board[spaceX, spaceY] = holding;
                                         board[boardRow, boardColumn] = 0;
                                         switch (holding)
                                         {
                                             case 1:
-                                                board[origXY[0], origXY[1]] = 0;
-
+                                                adderA = 1;
+                                                adderB = 1;
                                                 player1score++;
-                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
-                                                {
-                                                    spaceX = origXY[0];
-                                                    spaceY = origXY[1];
-                                                }
-                                                if ((board[spaceX + 1, spaceY - 1] != 0 && (board[spaceX + 1, spaceY - 1] % 2) == 0 && board[spaceX + 2, spaceY - 2] == 0)
-                                                 || (board[spaceX + 1, spaceY + 1] != 0 && (board[spaceX + 1, spaceY + 1] % 2) == 0 && board[spaceX + 2, spaceY + 2] == 0))
-                                                {
-                                                    origXY[0] = spaceX;
-                                                    origXY[1] = spaceY;
-
-                                                    hop = true;
-                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                }
-                                                else
-                                                {
-                                                    hop = false;
-                                                    holding = 0;
-                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                }
                                                 break;
                                             case 2:
-                                                board[origXY[0], origXY[1]] = 0;
-
+                                                adderA = -1;
+                                                adderB = -1;
                                                 player2score++;
-                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
-                                                {
-                                                    spaceX = origXY[0];
-                                                    spaceY = origXY[1];
-                                                }
-                                                if (board[spaceX + 1, spaceY - 1] % 2 == 0 && board[spaceX + 2, spaceY - 2] == 0
-                                                 || board[spaceX + 1, spaceY + 1] % 2 == 0 && board[spaceX + 2, spaceY + 2] == 0)
-                                                {
-                                                    origXY[0] = spaceX;
-                                                    origXY[1] = spaceY;
-                                                    hop = true;
-                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                }
-                                                else
-                                                {
-                                                    hop = false;
-                                                    holding = 0;
-                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
-
-                                                }
-
                                                 break;
                                             case 3:
-                                                board[origXY[0], origXY[1]] = 0;
-
                                                 player1score++;
-                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
-                                                {
-                                                    spaceX = origXY[0];
-                                                    spaceY = origXY[1];
-                                                }
-                                                if (boardRow >= 6)
-                                                {
-                                                    if ((board[spaceX - 1, spaceY - 1] == 2 || board[spaceX - 1, spaceY - 1] == 4) && board[spaceX - 2, spaceY - 2] == 0
-                                                     || (board[spaceX - 1, spaceY + 1] == 2 || board[spaceX - 1, spaceY + 1] == 4) && board[spaceX - 2, spaceY + 2] == 0)
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        hop = true;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("here");
-                                                    }
-
-                                                    else
-                                                    {
-                                                        hop = false;
-                                                        holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write("there");
-                                                    }
-                                                }
-                                                else if (boardRow <= 1)
-                                                {
-                                                    if ((board[spaceX + 1, spaceY - 1] == 2 || board[spaceX + 1, spaceY - 1] == 4) && board[spaceX + 2, spaceY - 2] == 0
-                                                     || (board[spaceX + 1, spaceY + 1] == 2 || board[spaceX + 1, spaceY + 1] == 4) && board[spaceX + 2, spaceY + 2] == 0)
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        hop = true;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                    }
-                                                    else
-                                                    {
-                                                        hop = false;
-                                                        holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    hop = false;
-                                                    holding = 0;
-                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                }
+                                                adderA = 1;
+                                                adderB = -1;
                                                 break;
                                             case 4:
-                                                board[origXY[0], origXY[1]] = 0;
-
                                                 player2score++;
-                                                if (spaceX < 1 || spaceY < 1 || spaceX > 6 || spaceY > 6)
-                                                {
-                                                    spaceX = origXY[0];
-                                                    spaceY = origXY[1];
-                                                }
-                                                if (boardRow >= 6)
-                                                {
-                                                    if ((board[spaceX - 1, spaceY - 1] == 1 || board[spaceX - 1, spaceY - 1] == 3) && board[spaceX - 2, spaceY - 2] == 0
-                                                     || (board[spaceX - 1, spaceY + 1] == 1 || board[spaceX - 1, spaceY + 1] == 3) && board[spaceX - 2, spaceY + 2] == 0)
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        hop = true;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                    }
-
-                                                    else
-                                                    {
-                                                        hop = false;
-                                                        holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                    }
-                                                }
-                                                else if (boardRow <= 1)
-                                                {
-                                                    if (board[spaceX + 1, spaceY - 1] % 2 != 0 && board[spaceX + 2, spaceY - 2] == 0
-                                                     || board[spaceX + 1, spaceY + 1] % 2 != 0 && board[spaceX + 2, spaceY + 2] == 0)
-                                                    {
-                                                        origXY[0] = spaceX;
-                                                        origXY[1] = spaceY;
-                                                        hop = true;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                    }
-                                                    else
-                                                    {
-                                                        hop = false;
-                                                        holding = 0;
-                                                        Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    hop = false;
-                                                    holding = 0;
-                                                    Console.SetCursorPosition(30, 30); Console.Write(hop);
-                                                }
+                                                adderA = -1;
+                                                adderB = 1;
                                                 break;
+                                        }
+
+                                        if ((spaceY == 0 || spaceY == 1) && spaceX >= 2 && spaceX <= 5)
+                                        {
+                                            if (((board[spaceX + adderA, spaceY + 1] != 0 && board[spaceX + adderA, spaceY + 1] % 2 != holding % 2) && board[spaceX + (adderA + adderA), spaceY + 2] == 0)
+                                             || ((board[spaceX + adderB, spaceY + 1] != 0 && board[spaceX + adderB, spaceY + 1] % 2 != holding % 2) && board[spaceX + (adderB + adderB), spaceY + 2] == 0))
+                                            {
+                                                origXY[0] = spaceX;
+                                                origXY[1] = spaceY;
+
+                                                hop = true;
+                                                Console.SetCursorPosition(30, 30); Console.Write("finishes there");
+                                            }
+                                            else
+                                            {
+                                                hop = false;
+                                                holding = 0;
+                                                Console.SetCursorPosition(30, 30); Console.Write("2");
+                                            }
+                                        }
+                                        else if ((spaceY == 6 || spaceY == 7) && spaceX >= 2 && spaceX <= 5)
+                                        {
+                                            if (board[spaceX + adderA, spaceY - 1] != 0 && board[spaceX + adderA, spaceY - 1] % 2 != holding % 2 && board[spaceX + (adderA + adderA), spaceY - 2] == 0
+                                             || board[spaceX + adderB, spaceY - 1] != 0 && board[spaceX + adderB, spaceY - 1] % 2 != holding % 2 && board[spaceX + (adderB + adderB), spaceY - 2] == 0)
+                                            {
+                                                origXY[0] = spaceX;
+                                                origXY[1] = spaceY;
+
+                                                hop = true;
+                                                Console.SetCursorPosition(30, 30); Console.Write("finishes here");
+                                            }
+                                            else
+                                            {
+                                                hop = false;
+                                                holding = 0;
+                                                Console.SetCursorPosition(30, 29); Console.Write(board[spaceX + adderA, spaceY - 1]);
+                                                Console.SetCursorPosition(30, 30); Console.Write(board[spaceX + adderA, spaceY - 1] % 2);
+                                                Console.SetCursorPosition(30, 31); Console.Write(holding % 2);
+                                                Console.SetCursorPosition(30, 32); Console.Write(board[spaceX + (adderA + adderA), spaceY - 2]);
+                                            }
+                                        }
+                                        else if ((spaceY == 2 || spaceY == 3 || spaceY == 4 || spaceY == 5) && spaceX >= 2 && spaceX <= 5)
+                                        {
+                                            if (((board[spaceX + adderA, spaceY - 1] != 0 && board[spaceX + adderA, spaceY - 1] % 2 != holding % 2 && board[spaceX + (adderA + adderA), spaceY - 2] == 0)
+                                              || (board[spaceX + adderB, spaceY - 1] != 0 && board[spaceX + adderB, spaceY - 1] % 2 != holding % 2 && board[spaceX + (adderB + adderB), spaceY - 2] == 0))
+                                              || (board[spaceX + adderA, spaceY + 1] != 0 && board[spaceX + adderA, spaceY + 1] % 2 != holding % 2 && board[spaceX + (adderA + adderA), spaceY + 2] == 0)
+                                              || (board[spaceX + adderB, spaceY + 1] != 0 && board[spaceX + adderB, spaceY + 1] % 2 != holding % 2 && board[spaceX + (adderB + adderB), spaceY + 2] == 0))
+                                            {
+                                                origXY[0] = spaceX;
+                                                origXY[1] = spaceY;
+
+                                                hop = true;
+                                                Console.SetCursorPosition(30, 30); Console.Write("finishes not here");
+                                            }
+                                            else
+                                            {
+                                                hop = false;
+                                                holding = 0;
+                                                Console.SetCursorPosition(30, 29); Console.Write(board[spaceX + adderA, spaceY - 1]);
+                                                Console.SetCursorPosition(30, 30); Console.Write(board[spaceX + adderA, spaceY - 1] % 2);
+                                                Console.SetCursorPosition(30, 31); Console.Write(holding % 2);
+                                                Console.SetCursorPosition(30, 32); Console.Write(board[spaceX + (adderA + adderA), spaceY - 2]);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            hop = false;
+                                            holding = 0;
+                                            Console.SetCursorPosition(30, 30); Console.Write("5");
                                         }
                                         DrawPieces(board);
                                     }
