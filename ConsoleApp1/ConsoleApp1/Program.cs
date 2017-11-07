@@ -124,6 +124,7 @@ namespace ConsoleApplication1
                                 board = (int[,])moveList[(turn - 2)].Clone();
                             }
                         }
+                        turn--;
                         DrawPieces(board);
 
                     }
@@ -179,7 +180,7 @@ namespace ConsoleApplication1
                     if (key == ConsoleKey.Spacebar)
                     {
                         int boardPiece = board[boardRow, boardColumn];
-
+                        
                         //pick
                         if (holding == 0)
                         {
@@ -454,7 +455,6 @@ namespace ConsoleApplication1
 
                             if (hop == false)
                             {
-
                                 moveList.Add(turn, board);
                                 holding = 0;
                                 turn++;
