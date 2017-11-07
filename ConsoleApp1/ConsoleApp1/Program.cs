@@ -5,11 +5,11 @@ using System.Text;
 
 /*
 TO-DO
-Version 0.8
+Version 0.8.1
 
 -needs AI
 -needs list for moves
--needs undo/redo function
+-needs redo function
 -needs save game function
 -needs load game function
 */
@@ -38,7 +38,7 @@ namespace ConsoleApplication1
                 4 - occupied (Black King)
              */
 
-            int[,] board=  { { 0, 1, 0, 1, 0, 1, 0, 1 },
+            int[,] board =  { { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 1, 0, 1, 0, 1, 0, 1, 0 },
                              { 0, 1, 0, 1, 0, 1, 0, 1 },
                              { 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -74,7 +74,11 @@ namespace ConsoleApplication1
             int player2score = 0;
 
             //move list
-            Dictionary<int,int[,]> moveList = new Dictionary<int, int[,]>();
+            Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>();
+            moveList.Add(0, (int[,])board.Clone());
+            //statelist
+            int[] states = new int[4];
+
 
             // Start the game
             DrawBoard();
@@ -111,17 +115,20 @@ namespace ConsoleApplication1
 
                     if (key == ConsoleKey.U)
                     {
-                        if (moveList.ContainsKey(1))
+                        Console.SetCursorPosition(30, 20);
+                        foreach (KeyValuePair<int, int[,]> pair in moveList)
                         {
-                            int topCount = moveList.Count;
-                            Console.Write(topCount);
-                            board = moveList[1];
-                            DrawPieces(board);
+                            Console.WriteLine(pair.Key);
+                            if (moveList.ContainsKey((turn - 2)) == true)
+                            {
+                                board = (int[,])moveList[(turn - 2)].Clone();
+                            }
                         }
-                        
+                        DrawPieces(board);
+
                     }
 
-                    /* this code allows you to see background stuff (for testing purposes only need to remve in final release) */
+                    /* this code allows you to see background stuff (for testing purposes only need to remove in final release) */
                     if (key == ConsoleKey.Enter)
                     {
                         for (int xCount2 = 0; xCount2 <= 7; xCount2++)
@@ -130,7 +137,7 @@ namespace ConsoleApplication1
                             for (int yCount2 = 0; yCount2 <= 7; yCount2++)
                             {
 
-                                Console.SetCursorPosition(yCount2 + 2, xCount2 + 22);
+                                Console.SetCursorPosition(yCount2 + 2, xCount2 + 25);
                                 switch (board[xCount2, yCount2])
                                 {
                                     case 0:
@@ -160,7 +167,7 @@ namespace ConsoleApplication1
 
                         }
 
-                        Console.SetCursorPosition(15, 20);
+                        Console.SetCursorPosition(15, 25);
 
                         Console.Write(player1score);
                         Console.Write(player2score);
@@ -206,7 +213,7 @@ namespace ConsoleApplication1
                             // placing the piece
                             if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] == 0)
                             {
-                                
+
                                 // king move
 
                                 if ((holding == 1 && boardRow == 7) || (holding == 2 && boardRow == 0))
@@ -443,6 +450,7 @@ namespace ConsoleApplication1
                                     }
                                 }
                             }
+
 
                             if (hop == false)
                             {
