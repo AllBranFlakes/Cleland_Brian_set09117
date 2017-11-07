@@ -1,4 +1,4 @@
-Grid Like Arrayed Draughts Organizing System v:0.5 
+Grid Like Arrayed Draughts Organizing System v:0.8 
 
 - Move the cursor with the arrow keys.
 - Press space to select/move.
