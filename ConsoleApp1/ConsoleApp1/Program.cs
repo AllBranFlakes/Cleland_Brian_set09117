@@ -5,11 +5,9 @@ using System.Text;
 
 /*
 TO-DO
-Version 0.8.1
+Version 0.8.4
 
 -needs AI
--needs list for moves
--needs redo function
 -needs save game function
 -needs load game function
 */
@@ -74,10 +72,13 @@ namespace ConsoleApplication1
             int player2score = 0;
             //move list
             Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>();
+
+            int[,] redoMove = new int[8,8];
+
             moveList.Add(1, (int[,])board.Clone());
             //statelist
             int[] states = new int[3];
-
+            int[] redoStates = new int[3];
 
             // Start the game
             DrawBoard();
@@ -114,19 +115,30 @@ namespace ConsoleApplication1
 
                     if (key == ConsoleKey.U)
                     {
-                        Console.SetCursorPosition(30, 30);
-                        Console.WriteLine(turn);
-                        Console.WriteLine(states[0]);
                         foreach (KeyValuePair<int, int[,]> pair in moveList)
                         {
                             if (moveList.ContainsKey(turn-1) == true)
                             {
+                                redoMove = board;
+                                redoStates[0] = turn;
+                                redoStates[1] = player1score;
+                                redoStates[2] = player2score;
                                 board = (int[,])moveList[states[0]].Clone();
                                 turn = states[0];
                                 player1score = states[1];
                                 player2score = states[2];
                             }
                         }
+                        DrawPieces(board);
+                        WriteScores(player1score, player2score, turn);
+                    }
+
+                    if (key == ConsoleKey.R)
+                    {
+                        board = redoMove;
+                        turn = redoStates[0];
+                        player1score = redoStates[1];
+                        player2score = redoStates[2];
                         DrawPieces(board);
                         WriteScores(player1score, player2score, turn);
                     }
@@ -474,7 +486,7 @@ namespace ConsoleApplication1
 
                                 if (moveList.ContainsKey(turn) == true)
                                 {
-                                    moveList[turn] = board;
+                                    moveList[turn] = (int[,])board.Clone();
                                 }
                                 else
                                 {
@@ -615,18 +627,18 @@ namespace ConsoleApplication1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.8.0  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.8.4  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select a piece.");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select the space you want to move it to.");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - ???");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Profit!");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Press U to undo your move");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Press R to redo your move");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select a piece.");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select the space you want to move it to.");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - ???");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Profit!");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
             Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝            - Made by Brian 'BranFlakes' Cleland 2017");
