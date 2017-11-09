@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -73,7 +74,7 @@ namespace ConsoleApplication1
             //move list
             Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>();
 
-            int[,] redoMove = new int[8,8];
+            int[,] redoMove = new int[8, 8];
 
             moveList.Add(1, (int[,])board.Clone());
             //statelist
@@ -113,11 +114,22 @@ namespace ConsoleApplication1
                         boardArrayX = -1; boardArrayY = 0;
                     }
 
+                    if (key == ConsoleKey.S)
+                    {
+                        using (StreamWriter outputFile = new StreamWriter(@"C:\Users\Home\Documents\CheckersSave.csv"))
+                        {
+                            foreach (KeyValuePair<int, int[,]> pair in moveList)
+                            {
+                                outputFile.WriteLine(pair.Key + "," + player1score + "," + player2score + "," + String.Join(",",pair.Value.Cast<int>())); 
+                            }
+                        }
+                    }
+
                     if (key == ConsoleKey.U)
                     {
                         foreach (KeyValuePair<int, int[,]> pair in moveList)
                         {
-                            if (moveList.ContainsKey(turn-1) == true)
+                            if (moveList.ContainsKey(turn - 1) == true)
                             {
                                 redoMove = board;
                                 redoStates[0] = turn;
@@ -143,52 +155,6 @@ namespace ConsoleApplication1
                         WriteScores(player1score, player2score, turn);
                     }
 
-                    /* this code allows you to see background stuff (for testing purposes only need to remove in final release) */
-                    if (key == ConsoleKey.Enter)
-                    {
-                        for (int xCount2 = 0; xCount2 <= 7; xCount2++)
-                        {
-
-                            for (int yCount2 = 0; yCount2 <= 7; yCount2++)
-                            {
-
-                                Console.SetCursorPosition(yCount2 + 2, xCount2 + 25);
-                                switch (board[xCount2, yCount2])
-                                {
-                                    case 0:
-                                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                                        Console.Write("0");
-                                        break;
-                                    case 1:
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("1");
-                                        break;
-                                    case 2:
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("2");
-                                        break;
-                                    case 3:
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write("3");
-                                        break;
-                                    case 4:
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("4");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-
-                        }
-
-                        Console.SetCursorPosition(15, 25);
-
-                        Console.Write(player1score);
-                        Console.Write(player2score);
-                        Console.SetCursorPosition(x, y);
-
-                    }
 
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
@@ -196,7 +162,7 @@ namespace ConsoleApplication1
                         states[0] = turn;
                         states[1] = player1score;
                         states[2] = player2score;
-                        
+
                         int boardPiece = board[boardRow, boardColumn];
 
                         //pick
@@ -478,7 +444,7 @@ namespace ConsoleApplication1
                                     }
                                 }
                             }
-                            
+
                             if (hop == false)
                             {
                                 holding = 0;
