@@ -69,7 +69,7 @@ namespace ConsoleApplication1
             //move list 
             Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>
             {
-                { 1, (int[,])board.Clone() }
+                { 0, (int[,])board.Clone() }
             };
 
             //redo board
@@ -78,6 +78,7 @@ namespace ConsoleApplication1
             //state lists
             int[] states = new int[3];
             int[] redoStates = new int[3];
+
 
             // Start the game
             DrawBoard();
@@ -114,7 +115,7 @@ namespace ConsoleApplication1
 
                     if (key == ConsoleKey.S)
                     {
-                        using (StreamWriter outputFile = new StreamWriter(@"C:\Users\Home\Documents\CheckersSave.csv"))
+                        using (StreamWriter outputFile = new StreamWriter(@".\\CheckersSave.csv"))
                         {
                             //outputFile.WriteLine(turn);
                             //outputFile.WriteLine(player1score);
@@ -129,10 +130,10 @@ namespace ConsoleApplication1
                     if (key == ConsoleKey.L)
                     {
 
-                        using (StreamReader sr = new StreamReader(@"C:\Users\Home\Documents\CheckersSave.csv"))
+                        using (StreamReader sr = new StreamReader(@".\\CheckersSave.csv"))
                         {
                             int[,] newRow = new int[8, 8];
-                            var lineCount = File.ReadLines(@"C:\Users\Home\Documents\CheckersSave.csv").Count();
+                            var lineCount = File.ReadLines(@".\\CheckersSave.csv").Count();
                             string line;
                             int moveCount = 0;
                             while ((line = sr.ReadLine()) != null)
@@ -152,14 +153,11 @@ namespace ConsoleApplication1
                                             }
                                         }
                                     }
-                                    if (moveList.ContainsKey(moveCount) == true)
-                                    {
-                                        moveList[moveCount] = (int[,])newRow.Clone();
-                                    }
-                                    else
+                                    if (moveList.ContainsKey(moveCount) != true)
                                     {
                                         moveList.Add(moveCount, newRow);
                                     }
+                                    moveList[moveCount] = (int[,])newRow.Clone();
                                     moveCount++;
                                 }
                             }
@@ -169,14 +167,14 @@ namespace ConsoleApplication1
 
                     if (key == ConsoleKey.U)
                     {
+                        redoMove = board;
+                        redoStates[0] = turn;
+                        redoStates[1] = player1score;
+                        redoStates[2] = player2score;
                         foreach (KeyValuePair<int, int[,]> pair in moveList)
                         {
                             if (moveList.ContainsKey(turn - 1) == true)
                             {
-                                redoMove = board;
-                                redoStates[0] = turn;
-                                redoStates[1] = player1score;
-                                redoStates[2] = player2score;
                                 board = (int[,])moveList[states[0]].Clone();
                                 turn = states[0];
                                 player1score = states[1];
@@ -196,7 +194,91 @@ namespace ConsoleApplication1
                         DrawPieces(board);
                         WriteScores(player1score, player2score, turn);
                     }
+                    // debug
+                    if (key == ConsoleKey.Enter)
+                    {
 
+                        Console.SetCursorPosition(0, 24);
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("\n\n");
+                        Console.WriteLine("x" + x + " y" + y + " Holding:" + holding + " Turn:" + turn + " s1:" + player1score + " s2:" + player2score + "  " + "states [0]: " + states[0]);
+
+                        for (int p = 0; p < 8; p++)
+                        {
+                            for (int l = 0; l < 8; l++)
+                            {
+                                switch (board[p, l])
+                                {
+                                    case 0:
+                                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                        Console.Write("0 ");
+                                        break;
+                                    case 1:
+                                        Console.ForegroundColor = ConsoleColor.Black;
+                                        Console.Write("1 ");
+                                        break;
+                                    case 2:
+                                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                                        Console.Write("2 ");
+                                        break;
+                                    case 3:
+                                        Console.ForegroundColor = ConsoleColor.White;
+                                        Console.Write("K ");
+                                        break;
+                                    case 4:
+                                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                                        Console.Write("K ");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            Console.Write("\n");
+                        }
+
+                        foreach (KeyValuePair<int, int[,]> pair in moveList)
+                        {
+                            Console.WriteLine(pair.Key);
+
+                            int[,] temp = new int[8, 8];
+
+                            temp = (int[,])moveList[pair.Key].Clone();
+
+                            for (int t = 0; t < 8; t++)
+                            {
+                                for (int g = 0; g < 8; g++)
+                                {
+                                    switch (temp[t, g])
+                                    {
+                                        case 0:
+                                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                                            Console.Write("0 ");
+                                            break;
+                                        case 1:
+                                            Console.ForegroundColor = ConsoleColor.Black;
+                                            Console.Write("1 ");
+                                            break;
+                                        case 2:
+                                            Console.ForegroundColor = ConsoleColor.DarkCyan;
+                                            Console.Write("2 ");
+                                            break;
+                                        case 3:
+                                            Console.ForegroundColor = ConsoleColor.White;
+                                            Console.Write("K ");
+                                            break;
+                                        case 4:
+                                            Console.ForegroundColor = ConsoleColor.DarkCyan;
+                                            Console.Write("K ");
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                Console.Write("\n");
+                            }
+                        }
+                    }
+                    //
 
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
@@ -204,7 +286,6 @@ namespace ConsoleApplication1
                         states[0] = turn;
                         states[1] = player1score;
                         states[2] = player2score;
-
                         int boardPiece = board[boardRow, boardColumn];
 
                         //pick
@@ -219,6 +300,7 @@ namespace ConsoleApplication1
                                 holding = boardPiece;
                                 board[boardRow, boardColumn] = 0;
                                 DrawPieces(board);
+
                             }
                             else
                             if ((turn % 2 != 0) && (boardPiece % 2 != 0))
@@ -230,6 +312,7 @@ namespace ConsoleApplication1
                                 holding = boardPiece;
                                 board[boardRow, boardColumn] = 0;
                                 DrawPieces(board);
+
                             }
                         }
                         //place
@@ -242,6 +325,7 @@ namespace ConsoleApplication1
                             // placing the piece
                             if ((ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && board[boardRow, boardColumn] == 0)
                             {
+
 
                                 // king move
 
@@ -310,7 +394,6 @@ namespace ConsoleApplication1
                                         origXY[1] = spaceY;
 
                                         DrawPieces(board);
-
                                     }
                                     else
                                     {
@@ -491,15 +574,11 @@ namespace ConsoleApplication1
                             {
                                 holding = 0;
                                 turn++;
-
-                                if (moveList.ContainsKey(turn) == true)
+                                if (moveList.ContainsKey(turn) != true)
                                 {
-                                    moveList[turn] = (int[,])board.Clone();
+                                    moveList.Add(turn, (int[,])board.Clone());
                                 }
-                                else
-                                {
-                                    moveList.Add(turn, board);
-                                }
+                                moveList[turn] = (int[,])board.Clone();
                             }
                         }
 
