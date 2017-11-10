@@ -163,6 +163,7 @@ namespace ConsoleApplication1
                                     moveCount++;
                                 }
                             }
+                            DrawPieces(newRow);
                         }
                     }
 
