@@ -8,99 +8,89 @@ namespace ConsoleApp1
 {
     class AI
     {
-        public int score = 0;
-        public int bestscore = 0;
-        public int bestmove = 0;
-        public int nextmove = 0;
-
-        public int MakeMove(int depth)
+        public int[,] AIMove(int[,] board, int turn, int AIplayer)
         {
-            int maxDepth = depth;
-            negaMax(depth, maxDepth);
-            return bestmove;
-        }
+            //coordinates for move to be passed to game
+            int[,] move = { { 0, 0 }, { 0, 0 } };
 
-
-
-        public int EvalGame(int[,] board, int turn) //calculates the score from all the pieces on the board
-        {
-            int score = 0;
-            for (int i = 0; i < 8; i++)
+            //1) Examine each possible AI move
+            int[] orig = { 0, 0, 0 };
+            int[] dest = { 0, 0, 0 };
+            Dictionary<int, int[,]> movePossible = new Dictionary<int, int[,]>();
+            List<int[]> origPossible = new List<int[]>();
+            List<int[]> destPossible = new List<int[]>();
+            //iterate through the board for origin and destination coordinates
+            for (int x = 0; x < 8; x++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int y = 0; y < 8; y++)
                 {
-                    if (board[i, j] != 0)
+                    if (board[x, y] % 2 == AIplayer % 2)
                     {
-                        score += EvalPiece(board[i, j], turn);
+                        orig[0] = x;
+                        orig[1] = y;
+                        orig[2] = board[x, y];
+                        origPossible.Add(orig);
+                    }
+                    if (board[x, y] % 2 != AIplayer % 2 || board[x, y] == 0)
+                    {
+                        dest[0] = x;
+                        dest[1] = y;
+                        dest[2] = board[x, y];
+                        destPossible.Add(dest);
                     }
                 }
             }
-
-            return score;
-        }
-
-        public int EvalPiece(int piece, int turn)
-        {
-            int pieceScore = 0;
-            if (piece%2 != turn%2)
+            //itterate through origin/destination lists to search for valid moves
+            for (var i = 0; i < origPossible.Count; i++)
             {
-                pieceScore = 5;
-            }
-            return pieceScore;
-        }
-
-        private int negaMax(int depth, int maxDepth)
-        {
-           // if (depth <= 0)
-           // {
-           //     return EvalGame();
-           // }
-
-            int max = -200000000;
-
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
+                for (var j = 0; j < destPossible.Count; j++)
                 {
-                    for (int k = 0; k < 8; k++)
+                    if (Game.ValidMove(orig[2], dest[2], origPossible[i], destPossible[j], turn) == true)
                     {
-                        for (int l = 0; l < 8; l++)
+                        int weight = 0;
+                        if (orig[2] == 1 || orig[2] == 3)
                         {
-                            if (GenerateMove(i, j, k, l)) //generates all possible moves
+                            if (dest[2] == 2 || dest[2] == 4)
                             {
-                                //code to move the piece on the board
-                                score = -negaMax(depth - 1, maxDepth);
-
-                                if (score > max)
-                                {
-                                    max = score;
-
-                                    if (depth == maxDepth)
-                                    {
-                                        bestmove = nextmove;
-                                    }
-                                }
-
-                                //code to undo the move
+                                weight = 2;
+                            }
+                            else
+                            {
+                                weight = 1;
                             }
                         }
+                        if (orig[2] == 3 || orig[2] == 4)
+                        {
+                            if (dest[2] == 1 || dest[2] == 3)
+                            {
+                                weight = -2;
+                            }
+                            else
+                            {
+                                weight = -1;
+                            }
+                        }
+                        move[0, 0] = orig[0];
+                        move[0, 1] = orig[1];
+                        move[1, 0] = dest[0];
+                        move[1, 1] = dest[1];
+                        movePossible.Add(weight, move);
                     }
                 }
             }
+            //itterate through possible moves and select the best score by weight
 
-            return max;
-        }
-
-        public bool GenerateMove(int i, int j, int k, int l)
-        {
-            // generate a move
-            if (Game.ValidMove(1,1,[1,1],[1,1],1) == true) //if a legal move
+            foreach (KeyValuePair<int, int[,]> pair in movePossible)
             {
-                return true;
+                if (movePossible.ContainsKey(turn - 1) == true)
+                {
+                    board = (int[,])moveList[states[0]].Clone();
+                    turn = states[0];
+                    player1score = states[1];
+                    player2score = states[2];
+                }
             }
-
-            return false;
+            return move;
         }
-
     }
 }
