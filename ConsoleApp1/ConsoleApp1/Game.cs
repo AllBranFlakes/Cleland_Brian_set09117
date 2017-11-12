@@ -547,7 +547,7 @@ namespace ConsoleApp1
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.SetCursorPosition(1, 18);
-                        Console.Write("->");
+                        Console.Write(" ->");
                         Console.SetCursorPosition(1, 19);
                         Console.Write("   ");
                     }
@@ -607,7 +607,7 @@ namespace ConsoleApp1
             System.Threading.Thread.Sleep(wait * 1000);
         }
 
-        static bool ValidMove(int holding, int boardPiece, int[] origXY, int[] destXY, int turn)
+        public static bool ValidMove(int holding, int boardPiece, int[] origXY, int[] destXY, int turn)
         {
             bool isValid = false;
             if (holding == 1 && boardPiece != holding)
