@@ -11,7 +11,6 @@ namespace ConsoleApp1
         public static int[,] AIMove(int[,] board, int turn)
         {
             bool moveFound = false;
-            int moveCount = 0;
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
             int[,] move = new int[2, 2];
