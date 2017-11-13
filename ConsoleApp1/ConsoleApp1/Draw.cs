@@ -5,28 +5,26 @@ namespace ConsoleApp1
     class Draw
     {
 
-        public static void DrawTitle(bool AIPlayer, int AIColour)
+        public static void DrawTitle(int AItype)
         {
             string GameType = "";
-            if (AIPlayer == false)
+            if (AItype == 0)
             {
                 GameType = "Player Vs Player";
             }
-            else if (AIPlayer == true)
+            else if (AItype == 1)
             {
-                if (AIColour == 1)
-                {
-                    GameType = "Player Vs CPU (Red)";
-                }
-                else if (AIColour == 2)
-                {
-                    GameType = "Player Vs CPU (Black)";
-                }
-                else if (AIColour ==3)
-                {
-                    GameType = "CPU Vs CPU";
-                }
+                GameType = "Player Vs CPU (Red)";
             }
+            else if (AItype == 2)
+            {
+                GameType = "Player Vs CPU (Black)";
+            }
+            else if (AItype == 3)
+            {
+                GameType = "CPU Vs CPU";
+            }
+
 
             Console.WriteLine(@"            ________      ___           ________      ________      ________      ________      ");
             Console.WriteLine(@"           |\   ____\    |\  \         |\   __  \    |\   ___ \    |\   __  \    |\   ____\     ");
@@ -45,7 +43,7 @@ namespace ConsoleApp1
             Console.WriteLine("                     4: CPU Vs CPU");
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("                   Current Game Type: "+ GameType);
+            Console.WriteLine("                   Current Game Type: " + GameType);
             Console.WriteLine("");
             Console.WriteLine("                   L: Load previous game");
             Console.WriteLine("                   S: Start Game");
@@ -56,7 +54,7 @@ namespace ConsoleApp1
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("                                         - Made by B.Cleland 2017 (A division of Aperture Science");
+            Console.WriteLine("                                         - Made by B.Cleland 2017 (A division of Aperture Science)");
             Console.WriteLine();
         }
         public static void DrawBoard()
@@ -136,6 +134,22 @@ namespace ConsoleApp1
                     }
                 }
             }
+        }
+
+        public static void WriteScores(int player1score, int player2score, int turn)
+        {
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(15, 18);
+            Console.Write(player1score);
+
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(15, 19);
+            Console.Write(player2score);
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.SetCursorPosition(15, 20);
+            Console.Write(turn);
         }
     }
 }

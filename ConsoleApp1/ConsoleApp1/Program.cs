@@ -44,12 +44,11 @@ namespace ConsoleApplication1
 
             bool play = true;
 
-            //bool for ai
-            bool AIPlayer = false;
+            //int for AItype
             int AIGameType = 0;
 
 
-            Draw.DrawTitle(AIPlayer, AIGameType);
+            Draw.DrawTitle(AIGameType);
             while (play == true)
             {
                 if (Console.KeyAvailable)
@@ -60,49 +59,45 @@ namespace ConsoleApplication1
                     if (key == ConsoleKey.S)
                     {
                         Console.Clear();
-                        Game.MainGame(AIPlayer, AIGameType, board, moveList);
+                        Game.MainGame(AIGameType, board, moveList);
                     }
                     if (key == ConsoleKey.Q)
                     {
                         Console.Clear();
                         Console.SetCursorPosition(45, 10);
                         Console.Write("Thanks and goodbye!");
-                        Game.Thinking(5);
+                        AI.Thinking(5);
                         play = false;
                     }
                     if (key == ConsoleKey.D1)
                     {
                         // Player Vs Player
                         Console.Clear();
-                        AIPlayer = false;
                         AIGameType = 0;
-                        Draw.DrawTitle(AIPlayer, AIGameType);
+                        Draw.DrawTitle(AIGameType);
                     }
                     if (key == ConsoleKey.D2)
                     {
                         // Player Vs CPU(Red)
                         Console.Clear();
-                        AIPlayer = true;
                         AIGameType = 1;
-                        Draw.DrawTitle(AIPlayer, AIGameType);
+                        Draw.DrawTitle(AIGameType);
                     }
 
                     if (key == ConsoleKey.D3)
                     {
                         // Player Vs CPU(Black)
                         Console.Clear();
-                        AIPlayer = true;
                         AIGameType = 2;
-                        Draw.DrawTitle(AIPlayer, AIGameType);
+                        Draw.DrawTitle(AIGameType);
                     }
 
                     if (key == ConsoleKey.D4)
                     {
                         // CPU Vs CPU
                         Console.Clear();
-                        AIPlayer = true;
                         AIGameType = 3;
-                        Draw.DrawTitle(AIPlayer, AIGameType);
+                        Draw.DrawTitle(AIGameType);
                     }
 
                     if (key == ConsoleKey.L)
