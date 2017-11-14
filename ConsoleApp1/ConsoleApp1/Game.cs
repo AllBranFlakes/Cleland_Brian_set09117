@@ -16,7 +16,7 @@ namespace ConsoleApp1
             Console.Clear();
             Console.SetWindowSize(110, 35);
 
-            Sound.Play(2);
+            Sound.Play(1);
 
             //variables for moving through the board
             int moveX = 0;
@@ -51,7 +51,7 @@ namespace ConsoleApp1
             //AI Variable
             bool play = true;
             bool AITurn = false;
-            int[,] AIMove = new int[2, 2];
+            int[] AIMove = { 0, 0, 0, 0 };
 
             //set move list
             moveList.Add(turn, board);
@@ -83,22 +83,23 @@ namespace ConsoleApp1
 
                 if (AITurn == true)
                 {
-                    AIMove = (int[,])AI.AIMove(board, turn).Clone();
+                    AIMove = (int[])AI.AIMove(board, turn).Clone();
+                    //AI.Thinking(1);
                     states[0] = turn;
                     states[1] = player1score;
                     states[2] = player2score;
-                    holding = board[AIMove[0, 0], AIMove[0, 1]];
-                    int boardPiece = board[AIMove[1, 0], AIMove[1, 1]];
+                    holding = board[AIMove[0], AIMove[1]];
+                    int boardPiece = board[AIMove[2], AIMove[3]];
 
                     // set origin AI
                     hop = true;// required to stop game turn updating erroneously
-                    origXY[0] = AIMove[0, 0];
-                    origXY[1] = AIMove[0, 1];
+                    origXY[0] = AIMove[0];
+                    origXY[1] = AIMove[1];
                     board[origXY[0], origXY[1]] = 0;
 
                     // set destination AI
-                    destXY[0] = AIMove[1, 0];
-                    destXY[1] = AIMove[1, 1];
+                    destXY[0] = AIMove[2];
+                    destXY[1] = AIMove[3];
                     // placing the piece
                     if ((Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true) && boardPiece == 0)
                     {
@@ -136,11 +137,11 @@ namespace ConsoleApp1
                         /* stops spaceX & spaceY from running of the ends of the array */
                         if (spaceX < 0 || spaceX > 7)
                         {
-                            spaceX = destXY[0];
+                            spaceX = origXY[0];
                         }
                         if (spaceY < 0 || spaceY > 7)
                         {
-                            spaceY = destXY[1];
+                            spaceY = origXY[1];
                         }
 
                         if (board[spaceX, spaceY] == 0)
@@ -356,10 +357,6 @@ namespace ConsoleApp1
 
                     }
                     Draw.WriteScores(player1score, player2score, turn);
-                }
-                else if (AITurn == false)
-                {
-
                 }
                 if (Console.KeyAvailable)
                 {
@@ -597,11 +594,11 @@ namespace ConsoleApp1
                                 /* stops spaceX & spaceY from running of the ends of the array */
                                 if (spaceX < 0 || spaceX > 7)
                                 {
-                                    spaceX = destXY[0];
+                                    spaceX = origXY[0];
                                 }
                                 if (spaceY < 0 || spaceY > 7)
                                 {
-                                    spaceY = destXY[1];
+                                    spaceY = origXY[1];
                                 }
 
                                 if (board[spaceX, spaceY] == 0)

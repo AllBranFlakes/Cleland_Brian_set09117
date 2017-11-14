@@ -7,7 +7,11 @@ namespace ConsoleApp1
 
         public static void DrawTitle(int AItype)
         {
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
             string GameType = "";
+
             if (AItype == 0)
             {
                 GameType = "Player Vs Player";

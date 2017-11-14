@@ -24,7 +24,7 @@ namespace ConsoleApplication1
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Clear();
             Console.SetWindowSize(110, 35);
-            Sound.Play(1);
+            Sound.Play(2);
 
             //define the board structure (0 = empty | 1 = Red | 2 = Black | 3 = Red King | 4 = Black King)
             int[,] board =  {{ 0, 1, 0, 1, 0, 1, 0, 1 },
@@ -35,6 +35,7 @@ namespace ConsoleApplication1
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 }};
+            
 
             //move list 
             Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>
@@ -66,7 +67,8 @@ namespace ConsoleApplication1
                         Console.Clear();
                         Console.SetCursorPosition(45, 10);
                         Console.Write("Thanks and goodbye!");
-                        AI.Thinking(5);
+                        Sound.Play(3);
+                        AI.Thinking(60);
                         play = false;
                     }
                     if (key == ConsoleKey.D1)

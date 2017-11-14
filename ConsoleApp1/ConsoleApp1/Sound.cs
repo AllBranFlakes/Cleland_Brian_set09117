@@ -7,7 +7,7 @@ namespace ConsoleApp1
     {
         public static void Play(int selection)
         {
-            if (selection == 1)
+            if (selection == 3)
             {
                 SoundPlayer player = new SoundPlayer();
                 player.Stop();
@@ -19,7 +19,14 @@ namespace ConsoleApp1
                 SoundPlayer player = new SoundPlayer();
                 player.Stop();
                 player.SoundLocation = AppDomain.CurrentDomain.BaseDirectory + @".\\4mtking.WAV";
-                player.Play();
+                player.PlayLooping();
+            }
+            else if (selection == 1)
+            {
+                SoundPlayer player = new SoundPlayer();
+                player.Stop();
+                player.SoundLocation = AppDomain.CurrentDomain.BaseDirectory + @".\\on9C.WAV";
+                player.PlayLooping();
             }
         }
     }

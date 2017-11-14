@@ -8,11 +8,11 @@ namespace ConsoleApp1
 {
     class AI
     {
-        public static int[,] AIMove(int[,] board, int turn)
+        public static int[] AIMove(int[,] board, int turn)
         {
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
-            int[,] move = new int[2, 2];
+            List<int[]> moveList = new List<int[]>();
 
 
             for (int x = 0; x < 8; x++)
@@ -34,12 +34,14 @@ namespace ConsoleApp1
                                     int holding = board[x, y];
                                     int boardPiece = board[j, k];
 
-                                    if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true)
+                                    if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true && (boardPiece != holding || (boardPiece % 2 != holding % 2 && boardPiece != 0)))
                                     {
-                                        move[0, 0] = origXY[0];
-                                        move[0, 1] = origXY[1];
-                                        move[1, 0] = destXY[0];
-                                        move[1, 1] = destXY[1];
+                                        int[] move = { 0, 0, 0, 0 };
+                                        move[0] = origXY[0];
+                                        move[1] = origXY[1];
+                                        move[2] = destXY[0];
+                                        move[3] = destXY[1];
+                                        moveList.Add(move);
                                     }
                                 }
                             }
@@ -61,12 +63,15 @@ namespace ConsoleApp1
                                     int holding = board[x, y];
                                     int boardPiece = board[j, k];
 
-                                    if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true)
+                                    if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true && (boardPiece != holding || (boardPiece % 2 != holding % 2 && boardPiece != 0)))
                                     {
-                                        move[0, 0] = origXY[0];
-                                        move[0, 1] = origXY[1];
-                                        move[1, 0] = destXY[0];
-                                        move[1, 1] = destXY[1];
+                                        int[] move = { 0, 0, 0, 0 };
+                                        move[0] = origXY[0];
+                                        move[1] = origXY[1];
+                                        move[2] = destXY[0];
+                                        move[3] = destXY[1];
+                                        moveList.Add(move);
+
                                     }
                                 }
                             }
@@ -74,7 +79,32 @@ namespace ConsoleApp1
                     }
                 }
             }
-            return move;
+            /*
+            int score = 0;
+            int weight = 0;
+            foreach (int[,] item in moveList)
+            {
+                weight = item[2, 0] - item[2, 1];
+                if (weight < score)
+                {
+                    move[0, 0] = item[0,0];
+                    move[0, 1] = item[0,1];
+                    move[1, 0] = item[1,0];
+                    move[1, 1] = item[1,1];
+                }
+                else
+                {
+                    score = weight;
+                }
+            }*/
+            Random r = new Random();
+            int rInt = r.Next(moveList.Count-1);
+
+            int[] temp = { 0, 0, 0, 0 };
+            temp = (int[])moveList[rInt].Clone();
+
+           
+            return temp;
         }
 
         public static void Thinking(int wait)
