@@ -58,7 +58,7 @@ namespace ConsoleApp1
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("                                         - Made by B.Cleland 2017 (A division of Aperture Science)");
+            Console.WriteLine("                                         - Made by B.Cleland 2017 (A Division of Aperture Science)");
             Console.WriteLine();
         }
         public static void DrawBoard()
@@ -72,7 +72,7 @@ namespace ConsoleApp1
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Press U to undo or R to redo your move");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Press S to save or L to load");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Press S to save");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select a piece.");
@@ -139,10 +139,48 @@ namespace ConsoleApp1
                 }
             }
         }
+        public static int GetScore1(int[,]board)
+        {
+            int player1score = 12;
+            int adjust1score = 0;
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+
+                    if (board[x, y] == 2 || board[x, y] == 4)
+                    {
+                        adjust1score++;
+                    }
+
+                }
+            }
+            player1score = player1score - adjust1score;
+            return player1score;
+        }
+
+        public static int GetScore2(int[,] board)
+        {
+            int player2score = 12;
+            int adjust2score = 0;
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+
+                    if (board[x, y] == 1 || board[x, y] == 3)
+                    {
+                        adjust2score++;
+                    }
+
+                }
+            }
+            player2score = player2score - adjust2score;
+            return player2score;
+        }
 
         public static void WriteScores(int player1score, int player2score, int turn)
         {
-
             Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(15, 18);
             Console.Write(player1score);
@@ -154,6 +192,25 @@ namespace ConsoleApp1
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(15, 20);
             Console.Write(turn);
+
+            /* Player Turn Indicator */
+            if ((turn % 2) != 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.SetCursorPosition(1, 18);
+                Console.Write(" ->");
+                Console.SetCursorPosition(1, 19);
+                Console.Write("   ");
+            }
+            else if ((turn % 2) == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.SetCursorPosition(1, 18);
+                Console.Write("   ");
+                Console.SetCursorPosition(1, 19);
+                Console.Write(" ->");
+            }
         }
     }
 }
+

@@ -4,19 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-/*
-TO-DO
-Version 0.9.0
-
--needs AI
-*/
-
-
 namespace ConsoleApplication1
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(String[] args)
         {
             //set title and console window display 
             Console.Title = "G.L.A.D.O.S.";

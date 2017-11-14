@@ -98,18 +98,34 @@ namespace ConsoleApp1
                 }
             }*/
             Random r = new Random();
-            int rInt = r.Next(moveList.Count-1);
 
+            int rInt = r.Next(moveList.Count);
             int[] temp = { 0, 0, 0, 0 };
-            temp = (int[])moveList[rInt].Clone();
-
+            if (moveList.Count != 0)
+            {
+                if (rInt != 0)
+                {
+                    temp = (int[])moveList[rInt].Clone();
+                }
+                else if (rInt == 0)
+                {
+                    temp = (int[])moveList[0].Clone();
+                }
+            }
+            else
+            {
+                temp[0] = 0;
+                temp[1] = 0;
+                temp[2] = 0;
+                temp[3] = 0;
+            }
            
             return temp;
         }
 
         public static void Thinking(int wait)
         {
-            System.Threading.Thread.Sleep(wait * 1000);
+            System.Threading.Thread.Sleep(wait * 100);
         }
     }
 }
