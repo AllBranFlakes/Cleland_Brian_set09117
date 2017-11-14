@@ -41,5 +41,35 @@ namespace ConsoleApp1
 
             return isValid;
         }
+        public static bool WinChecks(bool play, int[,] gameBoard, int player1score, int player2score)
+        {
+            if (player2score == 12)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(35, 10); Console.Write("                                  ");
+                Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
+                Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
+                Console.SetCursorPosition(35, 13); Console.Write(" ║        Player 2 Wins        ║░ ");
+                Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║░ ");
+                Console.SetCursorPosition(35, 15); Console.Write(" ╚═════════════════════════════╝░ ");
+                Console.SetCursorPosition(35, 16); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
+            }
+            if (player1score == 12)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(35, 10); Console.Write("                                  ");
+                Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
+                Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
+                Console.SetCursorPosition(35, 13); Console.Write(" ║        Player 1 Wins        ║░ ");
+                Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║░ ");
+                Console.SetCursorPosition(35, 15); Console.Write(" ╚═════════════════════════════╝░ ");
+                Console.SetCursorPosition(35, 16); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
+            }
+            Draw.DrawPieces(gameBoard);
+            // 5 second pause timer
+            AI.Thinking(50);
+            play = false;
+            return play;
+        }
     }
 }

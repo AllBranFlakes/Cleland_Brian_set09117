@@ -7,9 +7,9 @@ namespace ConsoleApp1
 
         public static void DrawTitle(int AItype)
         {
-            Console.Clear();
-            Console.BackgroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
+            Console.Clear();
             string GameType = "";
 
             if (AItype == 0)
@@ -28,37 +28,36 @@ namespace ConsoleApp1
             {
                 GameType = "CPU Vs CPU";
             }
-
-
-            Console.WriteLine(@"            ________      ___           ________      ________      ________      ________      ");
-            Console.WriteLine(@"           |\   ____\    |\  \         |\   __  \    |\   ___ \    |\   __  \    |\   ____\     ");
-            Console.WriteLine(@"           \ \  \___|    \ \  \        \ \  \|\  \   \ \  \_|\ \   \ \  \|\  \   \ \  \___|_    ");
-            Console.WriteLine(@"            \ \  \  ___   \ \  \        \ \   __  \   \ \  \ \\ \   \ \  \\\  \   \ \_____  \   ");
-            Console.WriteLine(@"             \ \  \|\  \ __\ \  \____  __\ \  \ \  \ __\ \  \_\\ \ __\ \  \\\  \ __\|____|\  \  ");
-            Console.WriteLine(@"              \ \_______\\__\ \_______\\__\ \__\ \__\\__\ \_______\\__\ \_______\\__\____\_\  \ ");
-            Console.WriteLine(@"               \|_______\|__|\|_______\|__|\|__|\|__\|__|\|_______\|__|\|_______\|__|\_________\");
-            Console.WriteLine(@"                                                                                    \|_________|");
+            
+            Console.WriteLine(@"                  ___           ___       ___           ___           ___           ___     ");
+            Console.WriteLine(@"                 /\  \         /\__\     /\  \         /\  \         /\  \         /\  \    ");
+            Console.WriteLine(@"                /::\  \       /:/  /    /::\  \       /::\  \       /::\  \       /::\  \   ");
+            Console.WriteLine(@"               /:/\:\  \     /:/  /    /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/\ \  \  ");
+            Console.WriteLine(@"              /:/  \:\  \   /:/  /    /::\~\:\  \   /:/  \:\__\   /:/  \:\  \   _\:\~\ \  \ ");
+            Console.WriteLine(@"             /:/__/_\:\__\ /:/__/    /:/\:\ \:\__\ /:/__/ \:|__| /:/__/ \:\__\ /\ \:\ \ \__\");
+            Console.WriteLine(@"             \:\  /\ \/__/ \:\  \    \/__\:\/:/  / \:\  \ /:/  / \:\  \ /:/  / \:\ \:\ \/__/");
+            Console.WriteLine(@"              \:\ \:\__\    \:\  \        \::/  /   \:\  /:/  /   \:\  /:/  /   \:\ \:\__\  ");
+            Console.WriteLine(@"               \:\/:/  /     \:\  \       /:/  /     \:\/:/  /     \:\/:/  /     \:\/:/  /  ");
+            Console.WriteLine(@"                \::/  /       \:\__\     /:/  /       \::/__/       \::/  /       \::/  /   ");
+            Console.WriteLine(@"                 \/__/         \/__/     \/__/         ~~            \/__/         \/__/    ");
+            Console.WriteLine("");
+            Console.WriteLine("                                   ╔═══════════════════════════════╗");
+            Console.WriteLine("                                   ║       Select Game Type:       ║");
+            Console.WriteLine("                                   ╚═══════════════════════════════╝");
+            Console.WriteLine("");
+            Console.WriteLine("                                        1: Player Vs Player");
+            Console.WriteLine("                                        2: Player Vs CPU (Red)");
+            Console.WriteLine("                                        3: Player Vs CPU (Black)");
+            Console.WriteLine("                                        4: CPU Vs CPU");
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("                   Select Game Type:");
-            Console.WriteLine("                     1: Player Vs Player");
-            Console.WriteLine("                     2: Player Vs CPU (Red)");
-            Console.WriteLine("                     3: Player Vs CPU (Black)");
-            Console.WriteLine("                     4: CPU Vs CPU");
+            Console.WriteLine("                                  Current Game Type: " + GameType);
             Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("                   Current Game Type: " + GameType);
-            Console.WriteLine("");
-            Console.WriteLine("                   L: Load previous game");
-            Console.WriteLine("                   S: Start Game");
+            Console.WriteLine("                                   [L: Load game]    [S: Start Game]");
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("                                         - Made by B.Cleland 2017 (A Division of Aperture Science)");
+            Console.WriteLine("                        - Made by B.Cleland 2017 (A Division of Aperture Science)");
             Console.WriteLine();
         }
         public static void DrawBoard()
@@ -67,7 +66,7 @@ namespace ConsoleApp1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:0.9.0  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:1.0.0  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
@@ -86,7 +85,7 @@ namespace ConsoleApp1
 
 
             // set player score and turn tracker
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("     Player 1: 0");
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("     Player 2: 0");
@@ -115,7 +114,7 @@ namespace ConsoleApp1
                             break;
                         case 1:
                             Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write("■");
                             break;
                         case 2:
@@ -125,7 +124,7 @@ namespace ConsoleApp1
                             break;
                         case 3:
                             Console.SetCursorPosition((yCount * 4) + 4, (xCount * 2) + 1);
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.Write("K");
                             break;
                         case 4:
@@ -181,7 +180,7 @@ namespace ConsoleApp1
 
         public static void WriteScores(int player1score, int player2score, int turn)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.SetCursorPosition(15, 18);
             Console.Write(player1score);
 

@@ -79,24 +79,7 @@ namespace ConsoleApp1
                     }
                 }
             }
-            /*
-            int score = 0;
-            int weight = 0;
-            foreach (int[,] item in moveList)
-            {
-                weight = item[2, 0] - item[2, 1];
-                if (weight < score)
-                {
-                    move[0, 0] = item[0,0];
-                    move[0, 1] = item[0,1];
-                    move[1, 0] = item[1,0];
-                    move[1, 1] = item[1,1];
-                }
-                else
-                {
-                    score = weight;
-                }
-            }*/
+            
             Random r = new Random();
 
             int rInt = r.Next(moveList.Count);

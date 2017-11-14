@@ -12,10 +12,10 @@ namespace ConsoleApplication1
         {
             //set title and console window display 
             Console.Title = "G.L.A.D.O.S.";
-            Console.BackgroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Clear();
-            Console.SetWindowSize(110, 35);
+            Console.SetWindowSize(105, 32);
             Sound.Play(2);
 
             //define the board structure (0 = empty | 1 = Red | 2 = Black | 3 = Red King | 4 = Black King)
@@ -27,7 +27,7 @@ namespace ConsoleApplication1
                              { 2, 0, 2, 0, 2, 0, 2, 0 },
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 }};
-            
+
 
             //move list 
             Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>
@@ -60,7 +60,7 @@ namespace ConsoleApplication1
                         Console.SetCursorPosition(45, 10);
                         Console.Write("Thanks and goodbye!");
                         Sound.Play(3);
-                        AI.Thinking(60);
+                        AI.Thinking(74);
                         play = false;
                     }
                     if (key == ConsoleKey.D1)
@@ -99,49 +99,32 @@ namespace ConsoleApplication1
                         //Load previous game
                         using (StreamReader sr = new StreamReader(@".\\CheckersSave.csv"))
                         {
-
-                            // Get the file's text.
-                            string whole_file = System.IO.File.ReadAllText(@".\\CheckersSave.csv");
-
-                            // Split into lines.
-                            whole_file = whole_file.Replace('\n', '\r');
-                            string[] lines = whole_file.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-                            // See how many turns and items there are.
-                            int num_turns = lines.Length;
-                            int num_items = lines[0].Split(',').Length;
-
-                            //
                             int[,] newRow = new int[8, 8];
                             var lineCount = File.ReadLines(@".\\CheckersSave.csv").Count();
                             string line;
                             int moveCount = 0;
-                            while ((line = sr.ReadLine()) != null)
+                            while ((line = sr.ReadLine()) != null && moveCount != lineCount)
                             {
-                                while (moveCount != lineCount)
+                                int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                int counter = 0;
+                                while (counter < 64)
                                 {
-                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                    int counter = 0;
-                                    while (counter < 64)
+                                    for (int j = 0; j < 8; j++)
                                     {
-                                        for (int j = 0; j < 8; j++)
+                                        for (int k = 0; k < 8; k++)
                                         {
-                                            for (int k = 0; k < 8; k++)
-                                            {
-                                                newRow[j, k] = ia[counter];
-                                                counter++;
-                                            }
+                                            newRow[j, k] = ia[counter];
+                                            counter++;
                                         }
                                     }
-                                    if (moveList.ContainsKey(moveCount) != true)
-                                    {
-                                        moveList.Add(moveCount, newRow);
-                                    }
-                                    moveList[moveCount] = (int[,])newRow.Clone();
-                                    moveCount++;
                                 }
+                                if (moveList.ContainsKey(moveCount) != true)
+                                {
+                                    moveList.Add(moveCount, newRow);
+                                }
+                                moveList[moveCount] = (int[,])newRow.Clone();
+                                moveCount++;
                             }
-                            Draw.DrawPieces(newRow);
                         }
                     }
                 }

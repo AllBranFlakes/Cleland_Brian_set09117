@@ -8,15 +8,10 @@ namespace ConsoleApp1
     class Game
     {
         public static void MainGame(int AIPlayer, int[,] board, Dictionary<int, int[,]> moveList)
-        {
-            //set title and console window display 
-            Console.Title = "G.L.A.D.O.S.";
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
+        { 
             Console.Clear();
-            Console.SetWindowSize(110, 35);
 
-            Sound.Play(1);
+            //Sound.Play(1);
             int[,] gameBoard = board.Clone() as int[,];
             int[,] boardReset = board.Clone() as int[,];
             //variables for moving through the board
@@ -88,9 +83,8 @@ namespace ConsoleApp1
 
                 if (AITurn == true)
                 {
-
                     AIMove = (int[])AI.AIMove(gameBoard, turn).Clone();
-                    //AI.Thinking(1);
+                    AI.Thinking(1);
                     if (AIMove[0] == 0 && AIMove[1] == 0 && AIMove[2] == 0 && AIMove[3] == 0)
                     {
                         play = false;
@@ -102,7 +96,7 @@ namespace ConsoleApp1
                     int boardPiece = gameBoard[AIMove[2], AIMove[3]];
 
                     // set origin AI
-                    //hop = true;// required to stop game turn updating erroneously
+                    hop = true;// required to stop game turn updating erroneously
                     origXY[0] = AIMove[0];
                     origXY[1] = AIMove[1];
                     gameBoard[origXY[0], origXY[1]] = 0;
@@ -119,7 +113,10 @@ namespace ConsoleApp1
                             gameBoard[destXY[0], destXY[1]] = holding + 2;
                             holding = 0;
                             Draw.DrawPieces(gameBoard);
-                            hop = false;
+                            if (origXY[0] != destXY[0])
+                            {
+                                hop = false;
+                            }
                         }
                         // standard move
                         else
@@ -136,7 +133,7 @@ namespace ConsoleApp1
                     // taking a piece
                     else
                     if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true
-                            && boardPiece != 0)
+                            && boardPiece != 0 && (boardPiece!=holding && boardPiece != holding-2))
                     {
                         int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                         int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
@@ -144,7 +141,6 @@ namespace ConsoleApp1
                         /* stops spaceX & spaceY from running of the ends of the array */
                         if (spaceX < 0 || spaceX > 7 || spaceY < 0 || spaceY > 7)
                         {
-
                         }
                         else
                         {
@@ -353,30 +349,14 @@ namespace ConsoleApp1
                     }
 
                     /* Win Conditions */
-                    if (player1score == 12)
+                   
+                    if (player1score == 12 || player2score == 12)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.SetCursorPosition(47, 13);
-
-                        Console.Write("Player 1 Wins!");
-                        // 5 second pause timer
-                        AI.Thinking(50);
-
+                        play=Validate.WinChecks(play,gameBoard,player1score,player2score);
                         moveList.Clear();
-                        play = false;
                     }
-                    if (player2score == 12)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.SetCursorPosition(47, 13);
 
-                        Console.Write("Player 2 Wins!");
-                        // 5 second pause timer
-                        AI.Thinking(50);
-
-                        moveList.Clear();
-                        play = false;
-                    }
+                    Draw.WriteScores(player1score, player2score, turn);
                 }
                
 
@@ -440,12 +420,6 @@ namespace ConsoleApp1
                             }
                         }
                         Draw.DrawPieces(gameBoard);
-                        if (AITurn == true)
-                        {
-                            player1score = Draw.GetScore1(gameBoard);
-                            player2score = Draw.GetScore2(gameBoard);
-                            Draw.WriteScores(player1score, player2score, turn);
-                        }
                     }
 
                     if (key == ConsoleKey.R)
@@ -455,99 +429,11 @@ namespace ConsoleApp1
                         player1score = redoStates[1];
                         player2score = redoStates[2];
                         Draw.DrawPieces(gameBoard);
-
-                        player1score = Draw.GetScore1(gameBoard);
-                        player2score = Draw.GetScore2(gameBoard);
-                        Draw.WriteScores(player1score, player2score, turn);
                     }
-                    // debug
-                    if (key == ConsoleKey.Enter)
-                    {
-
-                        Console.SetCursorPosition(0, 24);
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine("\n\n");
-                        Console.WriteLine("x" + x + " y" + y + " Holding:" + holding + " Turn:" + turn + " s1:" + player1score + " s2:" + player2score + "  " + "states [0]: " + states[0]);
-
-                        for (int p = 0; p < 8; p++)
-                        {
-                            for (int l = 0; l < 8; l++)
-                            {
-                                switch (gameBoard[p, l])
-                                {
-                                    case 0:
-                                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                        Console.Write("0 ");
-                                        break;
-                                    case 1:
-                                        Console.ForegroundColor = ConsoleColor.Black;
-                                        Console.Write("1 ");
-                                        break;
-                                    case 2:
-                                        Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                        Console.Write("2 ");
-                                        break;
-                                    case 3:
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                        Console.Write("K ");
-                                        break;
-                                    case 4:
-                                        Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                        Console.Write("K ");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            Console.Write("\n");
-                        }
-
-                        foreach (KeyValuePair<int, int[,]> pair in moveList)
-                        {
-                            Console.WriteLine(pair.Key);
-
-                            int[,] temp = new int[8, 8];
-
-                            temp = (int[,])moveList[pair.Key].Clone();
-
-                            for (int t = 0; t < 8; t++)
-                            {
-                                for (int g = 0; g < 8; g++)
-                                {
-                                    switch (temp[t, g])
-                                    {
-                                        case 0:
-                                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                                            Console.Write("0 ");
-                                            break;
-                                        case 1:
-                                            Console.ForegroundColor = ConsoleColor.Black;
-                                            Console.Write("1 ");
-                                            break;
-                                        case 2:
-                                            Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                            Console.Write("2 ");
-                                            break;
-                                        case 3:
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                            Console.Write("K ");
-                                            break;
-                                        case 4:
-                                            Console.ForegroundColor = ConsoleColor.DarkCyan;
-                                            Console.Write("K ");
-                                            break;
-                                    }
-                                }
-                                Console.Write("\n");
-                            }
-                        }
-                    }
-                    //
-
+                    
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
                     {
-
                         player1score = Draw.GetScore1(gameBoard);
                         player2score = Draw.GetScore2(gameBoard);
                         Draw.WriteScores(player1score, player2score, turn);
@@ -600,7 +486,10 @@ namespace ConsoleApp1
                                     gameBoard[boardRow, boardColumn] = holding + 2;
                                     holding = 0;
                                     Draw.DrawPieces(gameBoard);
-                                    hop = false;
+                                    if (origXY[0] != destXY[0])
+                                    {
+                                        hop = false;
+                                    }
                                 }
                                 // standard move
                                 else
@@ -617,7 +506,7 @@ namespace ConsoleApp1
                             // taking a piece
                             else
                             if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true
-                                    && boardPiece != 0)
+                                    && boardPiece != 0 && (boardPiece != holding && boardPiece != holding - 2))
                             {
                                 int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                                 int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
@@ -839,8 +728,8 @@ namespace ConsoleApp1
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.SetCursorPosition(47, 13);
-
                             Console.Write("Player 1 Wins!");
+                            Draw.DrawPieces(gameBoard);
                             // 5 second pause timer
                             AI.Thinking(5);
 
@@ -851,8 +740,8 @@ namespace ConsoleApp1
                         {
                             Console.ForegroundColor = ConsoleColor.Black;
                             Console.SetCursorPosition(47, 13);
-
                             Console.Write("Player 2 Wins!");
+                            Draw.DrawPieces(gameBoard);
                             // 5 second pause timer
                             AI.Thinking(5);
 
