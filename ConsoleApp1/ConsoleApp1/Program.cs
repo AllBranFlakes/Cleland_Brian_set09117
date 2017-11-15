@@ -93,37 +93,121 @@ namespace ConsoleApplication1
                         AIGameType = 3;
                         Draw.DrawTitle(AIGameType);
                     }
+                    
 
                     if (key == ConsoleKey.L)
                     {
+
                         //Load previous game
-                        using (StreamReader sr = new StreamReader(@".\\CheckersSave.csv"))
+                        // if save slots are implemented prompt for which game is to be loaded 1,2 or 3
+                        int choice = 0;
+                        Draw.SaveLoad();
+                        if (choice == 1)
                         {
-                            int[,] newRow = new int[8, 8];
-                            var lineCount = File.ReadLines(@".\\CheckersSave.csv").Count();
-                            string line;
-                            int moveCount = 0;
-                            while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                            using (StreamReader sr = new StreamReader(@".\\CheckersSave1.csv"))
                             {
-                                int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                int counter = 0;
-                                while (counter < 64)
+                                int[,] newRow = new int[8, 8];
+                                var lineCount = File.ReadLines(@".\\CheckersSave1.csv").Count();
+                                if (lineCount != 0)
                                 {
-                                    for (int j = 0; j < 8; j++)
+                                    string line;
+                                    int moveCount = 0;
+                                    while ((line = sr.ReadLine()) != null && moveCount != lineCount)
                                     {
-                                        for (int k = 0; k < 8; k++)
+                                        int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                        int counter = 0;
+                                        while (counter < 64)
                                         {
-                                            newRow[j, k] = ia[counter];
-                                            counter++;
+                                            for (int j = 0; j < 8; j++)
+                                            {
+                                                for (int k = 0; k < 8; k++)
+                                                {
+                                                    newRow[j, k] = ia[counter];
+                                                    counter++;
+                                                }
+                                            }
                                         }
+                                        if (moveList.ContainsKey(moveCount) != true)
+                                        {
+                                            moveList.Add(moveCount, newRow);
+                                        }
+                                        moveList[moveCount] = (int[,])newRow.Clone();
+                                        moveCount++;
+                                        Draw.LoadSuccess();
                                     }
                                 }
-                                if (moveList.ContainsKey(moveCount) != true)
+                            }
+                        }
+                        if (choice == 2)
+                        {
+                            using (StreamReader sr = new StreamReader(@".\\CheckersSave2.csv"))
+                            {
+                                int[,] newRow = new int[8, 8];
+                                var lineCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
+                                if (lineCount != 0)
                                 {
-                                    moveList.Add(moveCount, newRow);
+                                    string line;
+                                    int moveCount = 0;
+                                    while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                    {
+                                        int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                        int counter = 0;
+                                        while (counter < 64)
+                                        {
+                                            for (int j = 0; j < 8; j++)
+                                            {
+                                                for (int k = 0; k < 8; k++)
+                                                {
+                                                    newRow[j, k] = ia[counter];
+                                                    counter++;
+                                                }
+                                            }
+                                        }
+                                        if (moveList.ContainsKey(moveCount) != true)
+                                        {
+                                            moveList.Add(moveCount, newRow);
+                                        }
+                                        moveList[moveCount] = (int[,])newRow.Clone();
+                                        moveCount++;
+                                        Draw.LoadSuccess();
+                                    }
                                 }
-                                moveList[moveCount] = (int[,])newRow.Clone();
-                                moveCount++;
+                            }
+                        }
+                        if (choice == 3)
+                        {
+                            using (StreamReader sr = new StreamReader(@".\\CheckersSave2.csv"))
+                            {
+                                int[,] newRow = new int[8, 8];
+                                var lineCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
+                                if (lineCount != 0)
+                                {
+                                    string line;
+                                    int moveCount = 0;
+                                    while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                    {
+                                        int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                        int counter = 0;
+                                        while (counter < 64)
+                                        {
+                                            for (int j = 0; j < 8; j++)
+                                            {
+                                                for (int k = 0; k < 8; k++)
+                                                {
+                                                    newRow[j, k] = ia[counter];
+                                                    counter++;
+                                                }
+                                            }
+                                        }
+                                        if (moveList.ContainsKey(moveCount) != true)
+                                        {
+                                            moveList.Add(moveCount, newRow);
+                                        }
+                                        moveList[moveCount] = (int[,])newRow.Clone();
+                                        moveCount++;
+                                        Draw.LoadSuccess();
+                                    }
+                                }
                             }
                         }
                     }

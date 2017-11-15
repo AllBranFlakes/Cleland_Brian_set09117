@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace ConsoleApp1
 {
@@ -7,6 +10,7 @@ namespace ConsoleApp1
 
         public static void DrawTitle(int AItype)
         {
+            // include save game slots? show three boxes scan the csv's if the csv is empty show the box as empty otherwise show number of turns
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Clear();
@@ -28,7 +32,7 @@ namespace ConsoleApp1
             {
                 GameType = "CPU Vs CPU";
             }
-            
+
             Console.WriteLine(@"                  ___           ___       ___           ___           ___           ___     ");
             Console.WriteLine(@"                 /\  \         /\__\     /\  \         /\  \         /\  \         /\  \    ");
             Console.WriteLine(@"                /::\  \       /:/  /    /::\  \       /::\  \       /::\  \       /::\  \   ");
@@ -138,7 +142,7 @@ namespace ConsoleApp1
                 }
             }
         }
-        public static int GetScore1(int[,]board)
+        public static int GetScore1(int[,] board)
         {
             int player1score = 12;
             int adjust1score = 0;
@@ -176,6 +180,97 @@ namespace ConsoleApp1
             }
             player2score = player2score - adjust2score;
             return player2score;
+        }
+
+        public static void SaveLoad()
+        {
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(35, 10); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║        Select a slot        ║  ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║   [Slot 1]                  ║░ ");
+            Console.SetCursorPosition(35, 16); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 17); Console.Write(" ║   [Slot 2]                  ║░ ");
+            Console.SetCursorPosition(35, 18); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 19); Console.Write(" ║   [Slot 3]                  ║░ ");
+            Console.SetCursorPosition(35, 20); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 21); Console.Write(" ╚═════════════════════════════╝░ ");
+            Console.SetCursorPosition(35, 22); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
+            using (StreamReader sr1 = new StreamReader(@".\\CheckersSave1.csv"))
+            {
+                int lineCount1 = File.ReadLines(@".\\CheckersSave1.csv").Count();
+                if (lineCount1 != 0)
+                {
+
+                    Console.SetCursorPosition(51, 15); Console.Write(" - Turn " + lineCount1 + "-");
+                }
+                else
+                {
+                    Console.SetCursorPosition(51, 15); Console.Write(" - empty - ");
+                }
+            }
+            using (StreamReader sr2 = new StreamReader(@".\\CheckersSave2.csv"))
+            {
+                int lineCount2 = File.ReadLines(@".\\CheckersSave2.csv").Count();
+                if (lineCount2 != 0)
+                {
+
+                    Console.SetCursorPosition(51, 17); Console.Write(" - Turn " + lineCount2 + "-");
+                }
+                else
+                {
+                    Console.SetCursorPosition(51, 17); Console.Write(" - empty - ");
+                }
+            }
+            using (StreamReader sr3 = new StreamReader(@".\\CheckersSave3.csv"))
+            {
+                int lineCount3 = File.ReadLines(@".\\CheckersSave3.csv").Count();
+                if (lineCount3 != 0)
+                {
+                    Console.SetCursorPosition(51, 19); Console.Write(" - Turn " + lineCount3 + "-");
+                }
+                else
+                {
+                    Console.SetCursorPosition(51, 19); Console.Write(" - empty - ");
+                }
+            }
+        }
+        public static void LoadSuccess()
+        {
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(35, 10); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 16); Console.Write(" ║       Save Game Loaded      ║░ ");
+            Console.SetCursorPosition(35, 17); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 18); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 19); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 20); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 21); Console.Write(" ╚═════════════════════════════╝░ ");
+            Console.SetCursorPosition(35, 22); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
+        }
+
+        public static void SaveSuccess()
+        {
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(35, 10); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 16); Console.Write(" ║         Game  Saved         ║░ ");
+            Console.SetCursorPosition(35, 17); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 18); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 19); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 20); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 21); Console.Write(" ╚═════════════════════════════╝░ ");
+            Console.SetCursorPosition(35, 22); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
         }
 
         public static void WriteScores(int player1score, int player2score, int turn)

@@ -8,7 +8,7 @@ namespace ConsoleApp1
     class Game
     {
         public static void MainGame(int AIPlayer, int[,] board, Dictionary<int, int[,]> moveList)
-        { 
+        {
             Console.Clear();
 
             //Sound.Play(1);
@@ -133,7 +133,7 @@ namespace ConsoleApp1
                     // taking a piece
                     else
                     if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true
-                            && boardPiece != 0 && (boardPiece!=holding && boardPiece != holding-2))
+                            && boardPiece != 0 && (boardPiece != holding && boardPiece != holding - 2))
                     {
                         int spaceX = (destXY[0] + (destXY[0] - origXY[0]));
                         int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
@@ -349,16 +349,16 @@ namespace ConsoleApp1
                     }
 
                     /* Win Conditions */
-                   
+
                     if (player1score == 12 || player2score == 12)
                     {
-                        play=Validate.WinChecks(play,gameBoard,player1score,player2score);
+                        play = Validate.WinChecks(play, gameBoard, player1score, player2score);
                         moveList.Clear();
                     }
 
                     Draw.WriteScores(player1score, player2score, turn);
                 }
-               
+
 
 
                 Console.SetCursorPosition(x, y);
@@ -390,18 +390,8 @@ namespace ConsoleApp1
 
                     if (key == ConsoleKey.S)
                     {
-                        using (StreamWriter outputFile = new StreamWriter(@".\\CheckersSave.csv"))
-                        {
-                            //outputFile.WriteLine(turn);
-                            //outputFile.WriteLine(player1score);
-                            //outputFile.WriteLine(player2score);
-                            foreach (KeyValuePair<int, int[,]> pair in moveList)
-                            {
-                                outputFile.WriteLine(String.Join(",", pair.Value.Cast<int>()));
-                            }
-                        }
+                        Draw.SaveLoad();
                     }
-
 
                     if (key == ConsoleKey.U)
                     {
@@ -430,7 +420,7 @@ namespace ConsoleApp1
                         player2score = redoStates[2];
                         Draw.DrawPieces(gameBoard);
                     }
-                    
+
                     // Player interaction code
                     if (key == ConsoleKey.Spacebar)
                     {
@@ -514,7 +504,7 @@ namespace ConsoleApp1
                                 /* stops spaceX & spaceY from running of the ends of the array */
                                 if (spaceX < 0 || spaceX > 7 || spaceY < 0 || spaceY > 7)
                                 {
-                                    
+
                                 }
                                 else
                                 {
@@ -773,7 +763,7 @@ namespace ConsoleApp1
                     }
 
 
-                   
+
                 }
             }
 
