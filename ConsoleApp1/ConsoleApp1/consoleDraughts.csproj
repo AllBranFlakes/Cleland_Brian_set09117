@@ -48,16 +48,24 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sound.cs" />
+    <Compile Include="sourcecode\AI.cs" />
+    <Compile Include="sourcecode\Draw.cs" />
+    <Compile Include="sourcecode\Game.cs" />
+    <Compile Include="sourcecode\Move.cs" />
+    <Compile Include="sourcecode\Piece.cs" />
+    <Compile Include="sourcecode\Program.cs" />
+    <Compile Include="sourcecode\Sound.cs" />
+    <Compile Include="sourcecode\Validate.cs" />
     <Compile Include="Validate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Executable1\" />
+    <Folder Include="executable\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Report\TextFile1.txt" />
+    <Content Include="report\TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
