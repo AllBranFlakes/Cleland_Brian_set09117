@@ -54,7 +54,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Executable\" />
+    <Folder Include="Executable1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Report\TextFile1.txt" />
