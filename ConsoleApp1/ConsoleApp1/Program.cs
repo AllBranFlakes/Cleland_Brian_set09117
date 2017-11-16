@@ -28,6 +28,7 @@ namespace ConsoleApplication1
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 }};
 
+            int speed = 5;
 
             //move list 
             Dictionary<int, int[,]> moveList = new Dictionary<int, int[,]>
@@ -41,7 +42,7 @@ namespace ConsoleApplication1
             int AIGameType = 0;
 
 
-            Draw.DrawTitle(AIGameType);
+            Draw.DrawTitle(AIGameType,speed);
             while (play == true)
             {
                 if (Console.KeyAvailable)
@@ -52,7 +53,7 @@ namespace ConsoleApplication1
                     if (key == ConsoleKey.S)
                     {
                         Console.Clear();
-                        Game.MainGame(AIGameType, board, moveList);
+                        Game.MainGame(AIGameType, board, moveList, speed);
                     }
                     if (key == ConsoleKey.Q)
                     {
@@ -68,14 +69,14 @@ namespace ConsoleApplication1
                         // Player Vs Player
                         Console.Clear();
                         AIGameType = 0;
-                        Draw.DrawTitle(AIGameType);
+                        Draw.DrawTitle(AIGameType,speed);
                     }
                     if (key == ConsoleKey.D2)
                     {
                         // Player Vs CPU(Red)
                         Console.Clear();
                         AIGameType = 1;
-                        Draw.DrawTitle(AIGameType);
+                        Draw.DrawTitle(AIGameType, speed);
                     }
 
                     if (key == ConsoleKey.D3)
@@ -83,7 +84,7 @@ namespace ConsoleApplication1
                         // Player Vs CPU(Black)
                         Console.Clear();
                         AIGameType = 2;
-                        Draw.DrawTitle(AIGameType);
+                        Draw.DrawTitle(AIGameType, speed);
                     }
 
                     if (key == ConsoleKey.D4)
@@ -91,122 +92,154 @@ namespace ConsoleApplication1
                         // CPU Vs CPU
                         Console.Clear();
                         AIGameType = 3;
-                        Draw.DrawTitle(AIGameType);
+                        Draw.DrawTitle(AIGameType, speed);
                     }
-                    
+
+                    if (key == ConsoleKey.LeftArrow)
+                    {
+                        if (speed == 1)
+                        {
+                            speed = 5;
+                        }
+                        else
+                        {
+                            speed = 10;
+                        }
+                        Console.Clear();
+                        Draw.DrawTitle(AIGameType, speed);
+                    }
+                    if (key == ConsoleKey.RightArrow)
+                    {
+                        if (speed == 10)
+                        {
+                            speed = 5;
+                        }
+                        else
+                        {
+                            speed = 1;
+                        }
+                        Console.Clear();
+                        Draw.DrawTitle(AIGameType, speed);
+                    }
 
                     if (key == ConsoleKey.L)
                     {
-
-                        //Load previous game
-                        // if save slots are implemented prompt for which game is to be loaded 1,2 or 3
-                        int choice = 0;
                         Draw.SaveLoad();
-                        if (choice == 1)
+                    }
+                    
+                    if (key== ConsoleKey.NumPad1)
+                    {
+                        using (StreamReader sr = new StreamReader(@".\\CheckersSave1.csv"))
                         {
-                            using (StreamReader sr = new StreamReader(@".\\CheckersSave1.csv"))
+                            int[,] newRow = new int[8, 8];
+                            var lineCount = File.ReadLines(@".\\CheckersSave1.csv").Count();
+                            if (lineCount != 0)
                             {
-                                int[,] newRow = new int[8, 8];
-                                var lineCount = File.ReadLines(@".\\CheckersSave1.csv").Count();
-                                if (lineCount != 0)
+                                string line;
+                                int moveCount = 0;
+                                while ((line = sr.ReadLine()) != null && moveCount != lineCount)
                                 {
-                                    string line;
-                                    int moveCount = 0;
-                                    while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                    int counter = 0;
+                                    while (counter < 64)
                                     {
-                                        int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                        int counter = 0;
-                                        while (counter < 64)
+                                        for (int j = 0; j < 8; j++)
                                         {
-                                            for (int j = 0; j < 8; j++)
+                                            for (int k = 0; k < 8; k++)
                                             {
-                                                for (int k = 0; k < 8; k++)
-                                                {
-                                                    newRow[j, k] = ia[counter];
-                                                    counter++;
-                                                }
+                                                newRow[j, k] = ia[counter];
+                                                counter++;
                                             }
                                         }
-                                        if (moveList.ContainsKey(moveCount) != true)
-                                        {
-                                            moveList.Add(moveCount, newRow);
-                                        }
-                                        moveList[moveCount] = (int[,])newRow.Clone();
-                                        moveCount++;
-                                        Draw.LoadSuccess();
                                     }
+                                    if (moveList.ContainsKey(moveCount) != true)
+                                    {
+                                        moveList.Add(moveCount, newRow);
+                                    }
+                                    moveList[moveCount] = (int[,])newRow.Clone();
+                                    moveCount++;
+                                    Draw.LoadSuccess();
+                                    AI.Thinking(3);
+                                    Console.Clear();
+                                    Draw.DrawTitle(0, speed);
                                 }
                             }
                         }
-                        if (choice == 2)
+                    }
+                    if (key == ConsoleKey.NumPad2)
+                    {
+                        using (StreamReader sr = new StreamReader(@".\\CheckersSave2.csv"))
                         {
-                            using (StreamReader sr = new StreamReader(@".\\CheckersSave2.csv"))
+                            int[,] newRow = new int[8, 8];
+                            var lineCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
+                            if (lineCount != 0)
                             {
-                                int[,] newRow = new int[8, 8];
-                                var lineCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
-                                if (lineCount != 0)
+                                string line;
+                                int moveCount = 0;
+                                while ((line = sr.ReadLine()) != null && moveCount != lineCount)
                                 {
-                                    string line;
-                                    int moveCount = 0;
-                                    while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                    int counter = 0;
+                                    while (counter < 64)
                                     {
-                                        int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                        int counter = 0;
-                                        while (counter < 64)
+                                        for (int j = 0; j < 8; j++)
                                         {
-                                            for (int j = 0; j < 8; j++)
+                                            for (int k = 0; k < 8; k++)
                                             {
-                                                for (int k = 0; k < 8; k++)
-                                                {
-                                                    newRow[j, k] = ia[counter];
-                                                    counter++;
-                                                }
+                                                newRow[j, k] = ia[counter];
+                                                counter++;
                                             }
                                         }
-                                        if (moveList.ContainsKey(moveCount) != true)
-                                        {
-                                            moveList.Add(moveCount, newRow);
-                                        }
-                                        moveList[moveCount] = (int[,])newRow.Clone();
-                                        moveCount++;
-                                        Draw.LoadSuccess();
                                     }
+                                    if (moveList.ContainsKey(moveCount) != true)
+                                    {
+                                        moveList.Add(moveCount, newRow);
+                                    }
+                                    moveList[moveCount] = (int[,])newRow.Clone();
+                                    moveCount++;
+                                    Draw.LoadSuccess();
+                                    AI.Thinking(3);
+                                    Console.Clear();
+                                    Draw.DrawTitle(0, speed);
                                 }
                             }
                         }
-                        if (choice == 3)
+                    }
+                    if (key == ConsoleKey.NumPad3)
+                    {
+                        using (StreamReader sr = new StreamReader(@".\\CheckersSave3.csv"))
                         {
-                            using (StreamReader sr = new StreamReader(@".\\CheckersSave2.csv"))
+                            int[,] newRow = new int[8, 8];
+                            var lineCount = File.ReadLines(@".\\CheckersSave3.csv").Count();
+                            if (lineCount != 0)
                             {
-                                int[,] newRow = new int[8, 8];
-                                var lineCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
-                                if (lineCount != 0)
+                                string line;
+                                int moveCount = 0;
+                                while ((line = sr.ReadLine()) != null && moveCount != lineCount)
                                 {
-                                    string line;
-                                    int moveCount = 0;
-                                    while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                    int counter = 0;
+                                    while (counter < 64)
                                     {
-                                        int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                        int counter = 0;
-                                        while (counter < 64)
+                                        for (int j = 0; j < 8; j++)
                                         {
-                                            for (int j = 0; j < 8; j++)
+                                            for (int k = 0; k < 8; k++)
                                             {
-                                                for (int k = 0; k < 8; k++)
-                                                {
-                                                    newRow[j, k] = ia[counter];
-                                                    counter++;
-                                                }
+                                                newRow[j, k] = ia[counter];
+                                                counter++;
                                             }
                                         }
-                                        if (moveList.ContainsKey(moveCount) != true)
-                                        {
-                                            moveList.Add(moveCount, newRow);
-                                        }
-                                        moveList[moveCount] = (int[,])newRow.Clone();
-                                        moveCount++;
-                                        Draw.LoadSuccess();
                                     }
+                                    if (moveList.ContainsKey(moveCount) != true)
+                                    {
+                                        moveList.Add(moveCount, newRow);
+                                    }
+                                    moveList[moveCount] = (int[,])newRow.Clone();
+                                    moveCount++;
+                                    Draw.LoadSuccess();
+                                    AI.Thinking(3);
+                                    Console.Clear();
+                                    Draw.DrawTitle(0, speed);
                                 }
                             }
                         }

@@ -7,7 +7,7 @@ namespace ConsoleApp1
 {
     class Game
     {
-        public static void MainGame(int AIPlayer, int[,] board, Dictionary<int, int[,]> moveList)
+        public static void MainGame(int AIPlayer, int[,] board, Dictionary<int, int[,]> moveList, int speed)
         {
             Console.Clear();
 
@@ -31,7 +31,7 @@ namespace ConsoleApp1
 
             //int for game states
             int holding = 0;
-            int turn = 1;
+            int turn = moveList.Count();
             int player1score = 0;
             int player2score = 0;
             int[] states = new int[3];
@@ -50,8 +50,11 @@ namespace ConsoleApp1
             int[] AIMove = { 0, 0, 0, 0 };
 
             //set move list
-            moveList.Add(turn, gameBoard);
-
+            if (moveList.ContainsKey(turn) == true)
+            {
+                gameBoard = (int[,])moveList[turn].Clone();
+            }
+            
             // Start the game
             Draw.DrawBoard();
             Draw.DrawPieces(gameBoard);
@@ -84,7 +87,7 @@ namespace ConsoleApp1
                 if (AITurn == true)
                 {
                     AIMove = (int[])AI.AIMove(gameBoard, turn).Clone();
-                    AI.Thinking(1);
+                    AI.Thinking(speed);
                     if (AIMove[0] == 0 && AIMove[1] == 0 && AIMove[2] == 0 && AIMove[3] == 0)
                     {
                         play = false;
@@ -391,6 +394,57 @@ namespace ConsoleApp1
                     if (key == ConsoleKey.S)
                     {
                         Draw.SaveLoad();
+                    }
+
+                    if (key == ConsoleKey.NumPad1)
+                    {
+                        using (StreamWriter outputFile = new StreamWriter(@".\\CheckersSave1.csv"))
+                        {
+                            foreach (KeyValuePair<int, int[,]> pair in moveList)
+                            {
+                                outputFile.WriteLine(String.Join(",", pair.Value.Cast<int>()));
+                            }
+                        }
+                        Draw.SaveSuccess();
+                        AI.Thinking(3);
+                        Console.Clear();
+                        Draw.DrawBoard();
+                        Draw.DrawPieces(gameBoard);
+                        Draw.WriteScores(player1score, player2score, turn);
+                    }
+
+                    if (key == ConsoleKey.NumPad2)
+                    {
+                        using (StreamWriter outputFile = new StreamWriter(@".\\CheckersSave2.csv"))
+                        {
+                            foreach (KeyValuePair<int, int[,]> pair in moveList)
+                            {
+                                outputFile.WriteLine(String.Join(",", pair.Value.Cast<int>()));
+                            }
+                        }
+                        Draw.SaveSuccess();
+                        AI.Thinking(3);
+                        Console.Clear();
+                        Draw.DrawBoard();
+                        Draw.DrawPieces(gameBoard);
+                        Draw.WriteScores(player1score, player2score, turn);
+                    }
+
+                    if (key == ConsoleKey.NumPad3)
+                    {
+                        using (StreamWriter outputFile = new StreamWriter(@".\\CheckersSave3.csv"))
+                        {
+                            foreach (KeyValuePair<int, int[,]> pair in moveList)
+                            {
+                                outputFile.WriteLine(String.Join(",", pair.Value.Cast<int>()));
+                            }
+                        }
+                        Draw.SaveSuccess();
+                        AI.Thinking(3);
+                        Console.Clear();
+                        Draw.DrawBoard();
+                        Draw.DrawPieces(gameBoard);
+                        Draw.WriteScores(player1score, player2score, turn);
                     }
 
                     if (key == ConsoleKey.U)
@@ -716,10 +770,8 @@ namespace ConsoleApp1
                         /* Win Conditions */
                         if (player1score == 12)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.SetCursorPosition(47, 13);
-                            Console.Write("Player 1 Wins!");
                             Draw.DrawPieces(gameBoard);
+                            Draw.PlayerWin(1);
                             // 5 second pause timer
                             AI.Thinking(5);
 
@@ -728,10 +780,8 @@ namespace ConsoleApp1
                         }
                         if (player2score == 12)
                         {
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.SetCursorPosition(47, 13);
-                            Console.Write("Player 2 Wins!");
                             Draw.DrawPieces(gameBoard);
+                            Draw.PlayerWin(2);
                             // 5 second pause timer
                             AI.Thinking(5);
 
@@ -772,7 +822,7 @@ namespace ConsoleApp1
 
             AI.Thinking(2);
             moveList.Clear();
-            Draw.DrawTitle(AIPlayer);
+            Draw.DrawTitle(AIPlayer,speed);
         }
     }
 }

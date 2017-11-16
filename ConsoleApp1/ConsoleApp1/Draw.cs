@@ -8,13 +8,14 @@ namespace ConsoleApp1
     class Draw
     {
 
-        public static void DrawTitle(int AItype)
+        public static void DrawTitle(int AItype, int Speed)
         {
             // include save game slots? show three boxes scan the csv's if the csv is empty show the box as empty otherwise show number of turns
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Clear();
             string GameType = "";
+            string GameSpeed = "";
 
             if (AItype == 0)
             {
@@ -54,16 +55,32 @@ namespace ConsoleApp1
             Console.WriteLine("                                        3: Player Vs CPU (Black)");
             Console.WriteLine("                                        4: CPU Vs CPU");
             Console.WriteLine("");
-            Console.WriteLine("");
             Console.WriteLine("                                  Current Game Type: " + GameType);
             Console.WriteLine("");
             Console.WriteLine("                                   [L: Load game]    [S: Start Game]");
             Console.WriteLine("");
+            Console.WriteLine("                                              Game Speed");
+            Console.WriteLine("                                 (adjust with left/right arrow keys)");
             Console.WriteLine("");
+            if (Speed == 10)
+            {
+                GameSpeed = "Slow Potatoes";
+                Console.SetCursorPosition(44, 27); Console.WriteLine(GameSpeed);
+            }
+            else if (Speed == 5)
+            {
+                GameSpeed = "Casual chips";
+                Console.SetCursorPosition(45, 27); Console.WriteLine(GameSpeed);
+            }
+            else if (Speed == 1)
+            {
+                GameSpeed = "WHOAH THERE SPUDDY!";
+                Console.SetCursorPosition(42, 27); Console.WriteLine(GameSpeed);
+            }
             Console.WriteLine("");
             Console.WriteLine("                        - Made by B.Cleland 2017 (A Division of Aperture Science)");
-            Console.WriteLine();
         }
+
         public static void DrawBoard()
         {
             // draw play area
@@ -84,7 +101,7 @@ namespace ConsoleApp1
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Profit!");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
-            Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝            - Made by Brian 'BranFlakes' Cleland 2017");
+            Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝");
             Console.WriteLine();
 
 
@@ -185,11 +202,12 @@ namespace ConsoleApp1
         public static void SaveLoad()
         {
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(35, 10); Console.Write("                                  ");
-            Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
-            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 13); Console.Write(" ║        Select a slot        ║  ");
-            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║  ");
+            Console.SetCursorPosition(35, 9); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 10); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║        Select a slot        ║░ ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║    NumPad 1,2 or 3 choose   ║░ ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 15); Console.Write(" ║   [Slot 1]                  ║░ ");
             Console.SetCursorPosition(35, 16); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 17); Console.Write(" ║   [Slot 2]                  ║░ ");
@@ -240,13 +258,14 @@ namespace ConsoleApp1
         public static void LoadSuccess()
         {
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(35, 10); Console.Write("                                  ");
-            Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
-            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 15); Console.Write(" ║                             ║░ ");
-            Console.SetCursorPosition(35, 16); Console.Write(" ║       Save Game Loaded      ║░ ");
+            Console.SetCursorPosition(35, 9); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 10); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║       Save Game Loaded      ║░ ");
+            Console.SetCursorPosition(35, 16); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 17); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 18); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 19); Console.Write(" ║                             ║░ ");
@@ -258,16 +277,36 @@ namespace ConsoleApp1
         public static void SaveSuccess()
         {
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(35, 10); Console.Write("                                  ");
-            Console.SetCursorPosition(35, 11); Console.Write(" ╔═════════════════════════════╗  ");
-            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║  ");
-            Console.SetCursorPosition(35, 15); Console.Write(" ║                             ║░ ");
-            Console.SetCursorPosition(35, 16); Console.Write(" ║         Game  Saved         ║░ ");
+            Console.SetCursorPosition(35, 9); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 10); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║         Game  Saved         ║░ ");
+            Console.SetCursorPosition(35, 16); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 17); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 18); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 19); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 20); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 21); Console.Write(" ╚═════════════════════════════╝░ ");
+            Console.SetCursorPosition(35, 22); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
+        }
+
+        public static void PlayerWin(int player)
+        {
+            if (player == 1)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
+            Console.SetCursorPosition(35, 9); Console.Write("                                  ");
+            Console.SetCursorPosition(35, 10); Console.Write(" ╔═════════════════════════════╗  ");
+            Console.SetCursorPosition(35, 11); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║     Player "+player+" Wins       ║░ ");
             Console.SetCursorPosition(35, 20); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 21); Console.Write(" ╚═════════════════════════════╝░ ");
             Console.SetCursorPosition(35, 22); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
