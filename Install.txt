@@ -1,0 +1,30 @@
+Console Draughts v1.0.1
+
+Written by : Brian CLeland
+Student ID : 40322683
+
+SET09117 - Algorithms & Data Structures
+
+To install:
+  - Copy the application file "ConsoleDraughts.exe" and associated Resource Folder to target directory
+  - Run the application by double clicking the executable file.
+
+Dependencies: 
+  - The application requires three save files in CSV format 
+  - The application requires three WAV files for background music
+
+Game Menus:
+  -Title Screen:  Includes
+                  - Game options (Player Vs Player, Player Vs CPU Red, Player Vs CPU Black, CPU Vs CPU)
+                  - Load game
+                  - Start new game
+                  - Change AI speed
+                  - Quit Application
+  -Main Game Screen: Includes
+                  - Pick and Place pieces (Space Bar)
+                  - Move Cursor (Arrow Keys)
+                  - Undo Move (U Key)
+                  - Redo Move (R Key)
+                  - Quit to Title (Q Key)
+  -Load and Save Screen: Includes
+                  - Load from/Save to game slot (F1,F2 or F3 Keys)
