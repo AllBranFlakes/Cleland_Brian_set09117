@@ -97,13 +97,13 @@ namespace ConsoleApp1
                     holding = gameBoard[AIMove[0], AIMove[1]];
                     int boardPiece = gameBoard[AIMove[2], AIMove[3]];
 
-                    // set origin AI
+                    // set AI origin
                     hop = true;// required to stop game turn updating erroneously
                     origXY[0] = AIMove[0];
                     origXY[1] = AIMove[1];
                     gameBoard[origXY[0], origXY[1]] = 0;
 
-                    // set destination AI
+                    // set AI destination
                     destXY[0] = AIMove[2];
                     destXY[1] = AIMove[3];
                     // placing the piece
@@ -141,10 +141,7 @@ namespace ConsoleApp1
                         int spaceY = (destXY[1] + (destXY[1] - origXY[1]));
 
                         /* stops spaceX & spaceY from running of the ends of the array */
-                        if (spaceX < 0 || spaceX > 7 || spaceY < 0 || spaceY > 7)
-                        {
-                        }
-                        else
+                        try
                         {
                             if (gameBoard[spaceX, spaceY] == 0)
                             {
@@ -333,6 +330,10 @@ namespace ConsoleApp1
                                 }
                             }
                         }
+                        catch (Exception)
+                        {
+                            hop = false;
+                        }
 
                         player1score = Draw.GetScore1(gameBoard);
                         player2score = Draw.GetScore2(gameBoard);
@@ -445,11 +446,11 @@ namespace ConsoleApp1
                         Draw.DrawPieces(gameBoard);
                         Draw.WriteScores(player1score, player2score, turn);
                     }
-                    
+
                     if (key == ConsoleKey.U)
                     {
                         redoBoard = gameBoard;
-                        redoState = turn;        
+                        redoState = turn;
                         foreach (KeyValuePair<int, int[,]> pair in moveList)
                         {
                             if (moveList.ContainsKey((turn - 1)) == true)

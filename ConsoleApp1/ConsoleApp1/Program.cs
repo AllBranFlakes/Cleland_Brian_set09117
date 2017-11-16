@@ -69,8 +69,8 @@ namespace ConsoleApplication1
                     if (key == ConsoleKey.Q)
                     {
                         Console.Clear();
-                        Console.SetCursorPosition(45, 10);
-                        Console.Write("Thanks and goodbye!");
+                        Console.SetCursorPosition(42, 10);
+                        Console.WriteLine("Thanks and goodbye!");
                         Sound.Play(3);
                         AI.Thinking(74);
                         play = false;

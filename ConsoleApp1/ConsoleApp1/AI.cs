@@ -36,7 +36,7 @@ namespace ConsoleApp1
                                     {
                                         weight = 1;
                                     }
-                                    if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true && (score < weight) && (boardPiece != holding || (boardPiece % 2 != holding % 2 && boardPiece != 0)))
+                                    if (Validate.ValidMove(holding, boardPiece, origXY, destXY, turn) == true && (score < weight) && (boardPiece != holding || boardPiece % 2 != holding % 2))
                                     {
                                         score = weight;
                                         int[] move = { 0, 0, 0, 0 };
