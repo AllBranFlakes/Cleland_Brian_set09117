@@ -57,7 +57,7 @@ namespace ConsoleApp1
             Console.WriteLine("");
             Console.WriteLine("                                  Current Game Type: " + GameType);
             Console.WriteLine("");
-            Console.WriteLine("                                   [L: Load game]    [S: Start Game]");
+            Console.WriteLine("                                   [L: Load game]      [N: New Game]");
             Console.WriteLine("");
             Console.WriteLine("                                              Game Speed");
             Console.WriteLine("                                 (adjust with left/right arrow keys)");
@@ -87,19 +87,19 @@ namespace ConsoleApp1
 
             Console.WriteLine("  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║         ╔════════════════════════════════════════════════════════╗");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:1.0.0  ║");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣         ║  Grid Like Arrayed Draughts Organizing System v:1.0.1  ║");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║         ╚════════════════════════════════════════════════════════╝");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Move the cursor with the arrow keys.");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Press space to select/move.");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Press U to undo or R to redo your move");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Press S to save");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            [Arrow Keys] Move the cursor");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            [Space]      Select / Move");
             Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            [U]ndo       [R]edo");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            [S]ave       [Q]uit");
             Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select a piece.");
-            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select the space you want to move it to.");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - ???");
-            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - Profit!");
-            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            How to play:");
+            Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║            - Select a piece.");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Select the space you want to move it to.");
+            Console.WriteLine("  ║   ║░░░║   ║░░░║   ║░░░║   ║░░░║            - ???");
+            Console.WriteLine("  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣            - Profit!");
             Console.WriteLine("  ║░░░║   ║░░░║   ║░░░║   ║░░░║   ║");
             Console.WriteLine("  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝");
             Console.WriteLine();
@@ -264,7 +264,7 @@ namespace ConsoleApp1
             Console.SetCursorPosition(35, 12); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 14); Console.Write(" ║                             ║░ ");
-            Console.SetCursorPosition(35, 15); Console.Write(" ║       Save Game Loaded      ║░ ");
+            Console.SetCursorPosition(35, 15); Console.Write(" ║      Save Game Loading      ║░ ");
             Console.SetCursorPosition(35, 16); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 17); Console.Write(" ║                             ║░ ");
             Console.SetCursorPosition(35, 18); Console.Write(" ║                             ║░ ");
@@ -306,10 +306,10 @@ namespace ConsoleApp1
             Console.SetCursorPosition(35, 9); Console.Write("                                  ");
             Console.SetCursorPosition(35, 10); Console.Write(" ╔═════════════════════════════╗  ");
             Console.SetCursorPosition(35, 11); Console.Write(" ║                             ║░ ");
-            Console.SetCursorPosition(35, 15); Console.Write(" ║     Player "+player+" Wins       ║░ ");
-            Console.SetCursorPosition(35, 20); Console.Write(" ║                             ║░ ");
-            Console.SetCursorPosition(35, 21); Console.Write(" ╚═════════════════════════════╝░ ");
-            Console.SetCursorPosition(35, 22); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
+            Console.SetCursorPosition(35, 12); Console.Write(" ║     Player "+player+" Wins       ║░ ");
+            Console.SetCursorPosition(35, 13); Console.Write(" ║                             ║░ ");
+            Console.SetCursorPosition(35, 14); Console.Write(" ╚═════════════════════════════╝░ ");
+            Console.SetCursorPosition(35, 15); Console.Write("    ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ");
         }
 
         public static void WriteScores(int player1score, int player2score, int turn)

@@ -28,6 +28,16 @@ namespace ConsoleApplication1
                              { 0, 2, 0, 2, 0, 2, 0, 2 },
                              { 2, 0, 2, 0, 2, 0, 2, 0 }};
 
+
+            int[,] newBoard =  {{ 0, 1, 0, 1, 0, 1, 0, 1 },
+                             { 1, 0, 1, 0, 1, 0, 1, 0 },
+                             { 0, 1, 0, 1, 0, 1, 0, 1 },
+                             { 0, 0, 0, 0, 0, 0, 0, 0 },
+                             { 0, 0, 0, 0, 0, 0, 0, 0 },
+                             { 2, 0, 2, 0, 2, 0, 2, 0 },
+                             { 0, 2, 0, 2, 0, 2, 0, 2 },
+                             { 2, 0, 2, 0, 2, 0, 2, 0 }};
+
             int speed = 5;
 
             //move list 
@@ -42,7 +52,7 @@ namespace ConsoleApplication1
             int AIGameType = 0;
 
 
-            Draw.DrawTitle(AIGameType,speed);
+            Draw.DrawTitle(AIGameType, speed);
             while (play == true)
             {
                 if (Console.KeyAvailable)
@@ -50,10 +60,11 @@ namespace ConsoleApplication1
                     ConsoleKeyInfo info = Console.ReadKey(true);
                     ConsoleKey key = info.Key;
 
-                    if (key == ConsoleKey.S)
+                    if (key == ConsoleKey.N)
                     {
                         Console.Clear();
-                        Game.MainGame(AIGameType, board, moveList, speed);
+                        moveList.Clear();
+                        Game.MainGame(AIGameType, newBoard, moveList, speed);
                     }
                     if (key == ConsoleKey.Q)
                     {
@@ -69,7 +80,7 @@ namespace ConsoleApplication1
                         // Player Vs Player
                         Console.Clear();
                         AIGameType = 0;
-                        Draw.DrawTitle(AIGameType,speed);
+                        Draw.DrawTitle(AIGameType, speed);
                     }
                     if (key == ConsoleKey.D2)
                     {
@@ -126,123 +137,133 @@ namespace ConsoleApplication1
                     {
                         Draw.SaveLoad();
                     }
-                    
-                    if (key== ConsoleKey.NumPad1)
+
+                    if (key == ConsoleKey.NumPad1)
                     {
                         using (StreamReader sr = new StreamReader(@".\\CheckersSave1.csv"))
                         {
-                            int[,] newRow = new int[8, 8];
-                            var lineCount = File.ReadLines(@".\\CheckersSave1.csv").Count();
-                            if (lineCount != 0)
+
+                            string file = System.IO.File.ReadAllText(@".\\CheckersSave1.csv");
+                            file = file.Replace('\n', '\r');
+                            string[] lines = file.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                            int[,] tempBoard = new int[8, 8];
+                            var saveCount = File.ReadLines(@".\\CheckersSave1.csv").Count();
+                            string line;
+                            int lineCount = 0;
+                            while ((line = sr.ReadLine()) != null && saveCount != lineCount)
                             {
-                                string line;
-                                int moveCount = 0;
-                                while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+
+                                int[] tempPieceValue = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                int counter = 0;
+                                while (counter < 64)
                                 {
-                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                    int counter = 0;
-                                    while (counter < 64)
+                                    for (int j = 0; j < 8; j++)
                                     {
-                                        for (int j = 0; j < 8; j++)
+                                        for (int k = 0; k < 8; k++)
                                         {
-                                            for (int k = 0; k < 8; k++)
-                                            {
-                                                newRow[j, k] = ia[counter];
-                                                counter++;
-                                            }
+                                            tempBoard[j, k] = tempPieceValue[counter];
+                                            counter++;
                                         }
                                     }
-                                    if (moveList.ContainsKey(moveCount) != true)
-                                    {
-                                        moveList.Add(moveCount, newRow);
-                                    }
-                                    moveList[moveCount] = (int[,])newRow.Clone();
-                                    moveCount++;
-                                    Draw.LoadSuccess();
-                                    AI.Thinking(3);
-                                    Console.Clear();
-                                    Draw.DrawTitle(0, speed);
                                 }
+                                if (moveList.ContainsKey(lineCount) != true)
+                                {
+                                    moveList.Add(lineCount, (int[,])tempBoard.Clone());
+                                }
+                                moveList[lineCount] = (int[,])tempBoard.Clone();
+                                board = tempBoard;
+                                lineCount++;
                             }
+                            Draw.LoadSuccess();
+                            AI.Thinking(10);
+                            Console.Clear();
+                            Game.MainGame(AIGameType, board, moveList, speed);
                         }
                     }
                     if (key == ConsoleKey.NumPad2)
                     {
                         using (StreamReader sr = new StreamReader(@".\\CheckersSave2.csv"))
                         {
-                            int[,] newRow = new int[8, 8];
-                            var lineCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
-                            if (lineCount != 0)
+
+                            string file = System.IO.File.ReadAllText(@".\\CheckersSave2.csv");
+                            file = file.Replace('\n', '\r');
+                            string[] lines = file.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                            int[,] tempBoard = new int[8, 8];
+                            var saveCount = File.ReadLines(@".\\CheckersSave2.csv").Count();
+                            string line;
+                            int lineCount = 0;
+                            while ((line = sr.ReadLine()) != null && saveCount != lineCount)
                             {
-                                string line;
-                                int moveCount = 0;
-                                while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                int[] tempPieceValue = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                int counter = 0;
+                                while (counter < 64)
                                 {
-                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                    int counter = 0;
-                                    while (counter < 64)
+                                    for (int j = 0; j < 8; j++)
                                     {
-                                        for (int j = 0; j < 8; j++)
+                                        for (int k = 0; k < 8; k++)
                                         {
-                                            for (int k = 0; k < 8; k++)
-                                            {
-                                                newRow[j, k] = ia[counter];
-                                                counter++;
-                                            }
+                                            tempBoard[j, k] = tempPieceValue[counter];
+                                            counter++;
                                         }
                                     }
-                                    if (moveList.ContainsKey(moveCount) != true)
-                                    {
-                                        moveList.Add(moveCount, newRow);
-                                    }
-                                    moveList[moveCount] = (int[,])newRow.Clone();
-                                    moveCount++;
-                                    Draw.LoadSuccess();
-                                    AI.Thinking(3);
-                                    Console.Clear();
-                                    Draw.DrawTitle(0, speed);
                                 }
+                                if (moveList.ContainsKey(lineCount) != true)
+                                {
+                                    moveList.Add(lineCount, (int[,])tempBoard.Clone());
+                                }
+                                moveList[lineCount] = (int[,])tempBoard.Clone();
+                                board = tempBoard;
+                                lineCount++;
                             }
+                            Draw.LoadSuccess();
+                            AI.Thinking(10);
+                            Console.Clear();
+                            Game.MainGame(AIGameType, board, moveList, speed);
                         }
                     }
+
                     if (key == ConsoleKey.NumPad3)
                     {
                         using (StreamReader sr = new StreamReader(@".\\CheckersSave3.csv"))
                         {
-                            int[,] newRow = new int[8, 8];
-                            var lineCount = File.ReadLines(@".\\CheckersSave3.csv").Count();
-                            if (lineCount != 0)
+                            string file = System.IO.File.ReadAllText(@".\\CheckersSave3.csv");
+                            file = file.Replace('\n', '\r');
+                            string[] lines = file.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                            int[,] tempBoard = new int[8, 8];
+                            var saveCount = File.ReadLines(@".\\CheckersSave3.csv").Count();
+                            string line;
+                            int lineCount = 0;
+                            while ((line = sr.ReadLine()) != null && saveCount != lineCount)
                             {
-                                string line;
-                                int moveCount = 0;
-                                while ((line = sr.ReadLine()) != null && moveCount != lineCount)
+                                int[] tempPieceValue = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
+                                int counter = 0;
+                                while (counter < 64)
                                 {
-                                    int[] ia = line.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                                    int counter = 0;
-                                    while (counter < 64)
+                                    for (int j = 0; j < 8; j++)
                                     {
-                                        for (int j = 0; j < 8; j++)
+                                        for (int k = 0; k < 8; k++)
                                         {
-                                            for (int k = 0; k < 8; k++)
-                                            {
-                                                newRow[j, k] = ia[counter];
-                                                counter++;
-                                            }
+                                            tempBoard[j, k] = tempPieceValue[counter];
+                                            counter++;
                                         }
                                     }
-                                    if (moveList.ContainsKey(moveCount) != true)
-                                    {
-                                        moveList.Add(moveCount, newRow);
-                                    }
-                                    moveList[moveCount] = (int[,])newRow.Clone();
-                                    moveCount++;
-                                    Draw.LoadSuccess();
-                                    AI.Thinking(3);
-                                    Console.Clear();
-                                    Draw.DrawTitle(0, speed);
                                 }
+                                if (moveList.ContainsKey(lineCount) != true)
+                                {
+                                    moveList.Add(lineCount, (int[,])tempBoard.Clone());
+                                }
+                                moveList[lineCount] = (int[,])tempBoard.Clone();
+                                board = tempBoard;
+                                lineCount++;
                             }
                         }
+                        Draw.LoadSuccess();
+                        AI.Thinking(10);
+                        Console.Clear();
+                        Game.MainGame(AIGameType, board, moveList, speed);
                     }
                 }
             }

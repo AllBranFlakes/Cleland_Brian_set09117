@@ -31,35 +31,36 @@ namespace ConsoleApp1
 
             //int for game states
             int holding = 0;
-            int turn = moveList.Count();
+            int turn = 0;
+            if (moveList.Count == 0)
+            {
+                turn = 1;
+            }
+            else
+            {
+                turn = moveList.Count;
+            }
             int player1score = 0;
             int player2score = 0;
-            int[] states = new int[3];
 
             //variables for move list (used for undo/redo and comparison of origin square versus destination square)
             int[] origXY = { 0, 0 };
             int[] destXY = { 0, 0 };
 
-            //redo variables
-            int[,] redoMove = new int[8, 8];
-            int[] redoStates = new int[3];
+            //variables for Redo
+            int[,] redoBoard = gameBoard;
+            int redoState = 1;
 
             //AI Variable
             bool play = true;
             bool AITurn = false;
             int[] AIMove = { 0, 0, 0, 0 };
 
-            //set move list
-            if (moveList.ContainsKey(turn) == true)
-            {
-                gameBoard = (int[,])moveList[turn].Clone();
-            }
-            
             // Start the game
             Draw.DrawBoard();
             Draw.DrawPieces(gameBoard);
             Console.SetCursorPosition(4, 1);
-
+            Draw.WriteScores(player1score, player2score, turn);
             // main game loop
             while (play == true)
             {
@@ -90,11 +91,9 @@ namespace ConsoleApp1
                     AI.Thinking(speed);
                     if (AIMove[0] == 0 && AIMove[1] == 0 && AIMove[2] == 0 && AIMove[3] == 0)
                     {
+                        moveList.Clear();
                         play = false;
                     }
-                    states[0] = turn;
-                    states[1] = player1score;
-                    states[2] = player2score;
                     holding = gameBoard[AIMove[0], AIMove[1]];
                     int boardPiece = gameBoard[AIMove[2], AIMove[3]];
 
@@ -446,33 +445,37 @@ namespace ConsoleApp1
                         Draw.DrawPieces(gameBoard);
                         Draw.WriteScores(player1score, player2score, turn);
                     }
-
+                    
                     if (key == ConsoleKey.U)
                     {
-                        redoMove = gameBoard;
-                        redoStates[0] = turn;
-                        redoStates[1] = player1score;
-                        redoStates[2] = player2score;
+                        redoBoard = gameBoard;
+                        redoState = turn;        
                         foreach (KeyValuePair<int, int[,]> pair in moveList)
                         {
-                            if (moveList.ContainsKey(turn - 1) == true)
+                            if (moveList.ContainsKey((turn - 1)) == true)
                             {
-                                gameBoard = (int[,])moveList[states[0]].Clone();
-                                turn = states[0];
-                                player1score = states[1];
-                                player2score = states[2];
+                                gameBoard = (int[,])moveList[(turn - 1)].Clone();
                             }
                         }
                         Draw.DrawPieces(gameBoard);
+                        player1score = Draw.GetScore1(gameBoard);
+                        player2score = Draw.GetScore2(gameBoard);
+                        Draw.WriteScores(player1score, player2score, turn);
                     }
 
                     if (key == ConsoleKey.R)
                     {
-                        gameBoard = redoMove;
-                        turn = redoStates[0];
-                        player1score = redoStates[1];
-                        player2score = redoStates[2];
+                        gameBoard = redoBoard;
+                        turn = redoState;
+                        player1score = Draw.GetScore1(board);
+                        player2score = Draw.GetScore2(board);
                         Draw.DrawPieces(gameBoard);
+                    }
+
+                    if (key == ConsoleKey.Q)
+                    {
+                        moveList.Clear();
+                        play = false;
                     }
 
                     // Player interaction code
@@ -481,9 +484,6 @@ namespace ConsoleApp1
                         player1score = Draw.GetScore1(gameBoard);
                         player2score = Draw.GetScore2(gameBoard);
                         Draw.WriteScores(player1score, player2score, turn);
-                        states[0] = turn;
-                        states[1] = player1score;
-                        states[2] = player2score;
                         int boardPiece = gameBoard[boardRow, boardColumn];
 
                         //pick
@@ -822,7 +822,7 @@ namespace ConsoleApp1
 
             AI.Thinking(2);
             moveList.Clear();
-            Draw.DrawTitle(AIPlayer,speed);
+            Draw.DrawTitle(AIPlayer, speed);
         }
     }
 }
